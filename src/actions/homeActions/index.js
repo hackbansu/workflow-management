@@ -7,7 +7,7 @@ const { UPDATE_DATA_REQUESTED, UPDATE_DATA_FAILURE, UPDATE_DATA_SUCCESS } = home
 export const updateData = () => dispatch => {
     dispatch({
         type: UPDATE_DATA_REQUESTED,
-        data_1: 20,
+        data1: 20,
     });
 
     const CurrentWeatherUrl = 'http://' + constants.API_URL + '/current.js';
@@ -17,20 +17,20 @@ export const updateData = () => dispatch => {
             if (!response.ok) {
                 dispatch({
                     type: UPDATE_DATA_FAILURE,
-                    data_1: 21,
+                    data1: 21,
                     isError: true,
                 });
             }
 
             dispatch({
                 type: UPDATE_DATA_SUCCESS,
-                data_1: 22,
+                data1: 22,
             });
         })
         .catch(err => {
             dispatch({
                 type: UPDATE_DATA_FAILURE,
-                data_1: 21,
+                data1: 21,
                 isError: true,
             });
         });

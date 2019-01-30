@@ -5,6 +5,8 @@
     },
     "extends": "eslint-config-airbnb",
     "rules": {
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+        "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }],
         // To be re-considered.
         "no-unused-vars": [
             0,

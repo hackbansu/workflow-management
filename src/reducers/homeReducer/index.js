@@ -11,20 +11,20 @@ export default (state = initialState, action) => {
         return {
             ...state,
             isError: action.isError,
-            data_1: action.data_1,
+            data1: action.data1,
         };
 
     case UPDATE_DATA_FAILURE:
         return {
             ...state,
             isError: action.isError,
-            data_1: action.data_1,
+            data1: action.data1,
         };
 
     case UPDATE_DATA_SUCCESS:
         return {
             ...state,
-            data_1: action.data_1,
+            data1: action.data1,
             isError: action.isError,
         };
 

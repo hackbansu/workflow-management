@@ -21,11 +21,11 @@ export class Home extends React.Component {
     }
 
     render() {
-        const { data_1 } = this.props;
+        const { data1 } = this.props;
         return (
             <div>
                 <div>
-                    <Dummy data_1={data_1} />
+                    <Dummy data1={data1} />
                 </div>
             </div>
         );
@@ -33,17 +33,16 @@ export class Home extends React.Component {
 }
 
 Home.propTypes = {
-    data_1: PropTypes.number,
-    updateData: PropTypes.func,
+    data1: PropTypes.number,
+    updateData: PropTypes.func.isRequired,
 };
 
 Home.defaultProps = {
-    data_1: 10,
-    updateData: () => {},
+    data1: 10,
 };
 
 const mapStateToProps = state => ({
-    data_1: state.homeReducer.data_1,
+    data1: state.homeReducer.data1,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

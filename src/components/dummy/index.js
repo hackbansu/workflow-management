@@ -8,7 +8,8 @@ export default class Dummy extends React.Component {
     }
 
     render() {
-        return <p className="card-text">{this.props.data1}</p>;
+        const { data1 } = this.props;
+        return <p className="card-text">{data1}</p>;
     }
 }
 

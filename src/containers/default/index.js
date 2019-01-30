@@ -1,14 +1,16 @@
-import React from 'react'
+import React from 'react';
 
 export default class Status extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {};
     }
 
     render() {
-        return (<div>
-            <span>Unkown Page</span>
-        </div>)
+        return (
+            <div>
+                <span>Unkown Page</span>
+            </div>
+        );
     }
 }

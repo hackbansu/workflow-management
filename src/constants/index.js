@@ -1,3 +1,1 @@
-export default {
-    API_URL: 'api.apixu.com/v1',
-};
+export default {};

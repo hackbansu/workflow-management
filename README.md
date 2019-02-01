@@ -4,13 +4,22 @@
 
 ## Software requirements
 
-1. latest stable realease of Node.js ([download](https://nodejs.org/en/download/))
-2. yarn ([link](https://yarnpkg.com/en/docs/install#debian-stable))
+1. NVM ([link](https://github.com/creationix/nvm)) 
+2. Node.js LTS
+    
+    install using the following command
+    ```
+    nvm install v10.15.0
+    ```
+3. yarn ([link](https://yarnpkg.com/en/docs/install#debian-stable))
 
 ## Setup Instructions
-1. Clone this repository
+1. Open terminal in the project directory
 
-2. Open a terminal window inside the cloned directory.
+2. Activate the node.js version installed using the following command
+```
+nvm use v10.15.0
+```
 
 3. Install the required packages using the following command
 ```
@@ -23,4 +32,4 @@ Run the application using the following command:
 yarn start
 ```
 
-The application will open up in a browser window or tab.
+The application will automatically open up in a browser window or logon to **localhost:3000**

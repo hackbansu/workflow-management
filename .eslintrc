@@ -1,0 +1,101 @@
+{
+    "env": {
+        "jest": true,
+        "browser": true
+    },
+    "extends": "eslint-config-airbnb",
+    "rules": {
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+        "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION__"] }],
+        // To be re-considered.
+        "no-unused-vars": [
+            0,
+            {
+                "vars": "all",
+                "args": "after-used",
+                "varsIgnorePattern": "React"
+            }
+        ],
+        "max-len": [1, {
+            "code": 120,
+            "tabWidth": 4
+          }],
+        "indent": ["error", 4],
+        "react/jsx-indent": ["error", 4],
+        "prefer-template": 0,
+        "import/prefer-default-export": 0,
+        "no-trailing-spaces": 1,
+        "comma-dangle": ["error", {
+            "arrays": "always-multiline",
+            "objects": "always-multiline",
+            "imports": "never",
+            "exports": "never",
+            "functions": "ignore"
+        }],
+        "arrow-body-style": ["error", "as-needed"],
+        "quotes": [1, "single"],
+        "no-unused-expressions": 0,
+        "react/destructuring-assignment": [1, "always"],
+        "react/jsx-first-prop-new-line": 0,
+        "jsx-a11y/label-has-for": 0,
+        "object-curly-newline": 0,
+        "react/jsx-max-props-per-line": [1, { "maximum": 4, "when": "multiline" }],
+        "jsx-a11y/label-has-associated-control": 0,
+        "react/jsx-indent-props": [2, "first"],
+        "class-methods-use-this": 0,
+        "react/no-did-update-set-state": 1,
+        "no-unneeded-ternary": 1,
+        "react/no-string-refs": 1,
+        "jsx-a11y/anchor-is-valid": 0,
+        "jsx-a11y/media-has-caption": 0,
+        "jsx-a11y/no-static-element-interactions": 0,
+        "jsx-a11y/click-events-have-key-events": 0,
+        "jsx-a11y/no-noninteractive-element-interactions": 0,
+        "react/no-array-index-key": 1,
+        "no-param-reassign": 0,
+        "no-plusplus": 0,
+        "no-lonely-if": 1,
+        "arrow-parens": 0,
+        "import/no-cycle": 1,
+        "no-restricted-syntax": 0,
+        "react/prefer-stateless-function": 0,
+        "react/prop-types": 1,
+        "no-shadow": "off",
+        "single":"single",
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "linebreak-style": "off",
+        "import/no-named-as-default": 0,
+        "react/forbid-prop-types": [<enabled>, { "forbid": [<string>], checkContextTypes: <boolean>, checkChildContextTypes: <boolean> }],
+        "prefer-destructuring": ["error", {"object": true, "array": false}],
+        "radix": 0
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": ["node_modules", "src"]
+            },
+            "configurable": {
+                "cssFiles": "./src/styles",
+                "actions": "./src/actions",
+                "assets": "./srcassets",
+                "components": "./src/components",
+                "reducers": "./src/reducers",
+                "scenes": "./src/scenes",
+                "services": "./src/services",
+                "store": "./src/store",
+                "classes": "./src/utils/classes",
+                "constants": "./src/utils/constants",
+                "helperUtils": "./src/utils/helpers/utils",
+                "routes": "./src/utils/routes",
+                "validations": "./src/utils/validation"
+              }
+        }
+    },
+    "globals": {
+        "window": true,
+        "document": true,
+        "sinon": true,
+        "mockStore": true
+    },
+    "parser": "babel-eslint"
+}

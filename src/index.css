@@ -1,3 +1,7 @@
+*{
+  box-sizing: border-box;
+}
+
 html {
   font-size: 100%;
 }
@@ -14,12 +18,4 @@ body {
 
 button:disabled {
   opacity: 0.5;
-}
-
-.overlay {
-  /* Height & width depends on how you want to reveal the overlay (see JS below) */
-  display: block;
-}
-.no-overlay {
-  display: none;
 }

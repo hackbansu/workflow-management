@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const PageBanner = ({ text }) => <h4>{text}</h4>;
+export const Toast = ({ text }) => <h4>{text}</h4>;
 
-PageBanner.propTypes = {
+Toast.propTypes = {
     text: PropTypes.string.isRequired,
 };
+
+export default Toast;

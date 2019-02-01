@@ -18,11 +18,11 @@ export class LoginPage extends React.Component {
         this.state = {};
         this.onSubmit = (email, password) => {
             const { changeLoaderState } = this.props;
-            const data = { username: email, password };
+            const data = { email, password };
 
             changeLoaderState('visible');
 
-            fetch('localhost:8000/auth/login', {
+            fetch('http://2e75f37f.ngrok.io/api/user/login/', {
                 // optional fetch options
                 body: JSON.stringify(data), // you may send any data, encoded as you wish. shall match content-type
                 cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -49,6 +49,7 @@ export class LoginPage extends React.Component {
                 })
                 .then((myJson) => {
                     // use parseed result
+                    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$444");
                     console.log(myJson);
                 })
                 .catch(err => {

@@ -33,7 +33,7 @@ export class LoginForm extends React.Component {
                         email:
                         <input
                             type="email"
-                            name="username"
+                            name="email"
                             placeholder="eg. user@example.com"
                             onChange={e => this.setState({ email: e.target.value })}
                         />

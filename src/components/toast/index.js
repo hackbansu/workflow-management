@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Toast = ({ text }) => <h4>{text}</h4>;
+import './index.scss';
+
+export const Toast = ({ toastClass, text }) => (
+    <div className={toastClass}>
+        <h4 className="toast">{text}</h4>
+    </div>
+);
 
 Toast.propTypes = {
     text: PropTypes.string.isRequired,

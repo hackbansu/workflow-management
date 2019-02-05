@@ -1,6 +1,6 @@
 import actions from 'constants/actions.js';
 
-const { CHANGE_TOAST_STATE } = actions;
+const { CHANGE_TOAST_STATE } = actions.common;
 
 const initialState = {
     class: 'invisible',

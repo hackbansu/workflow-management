@@ -1,6 +1,6 @@
 import actions from 'constants/actions.js';
 
-const { UPDATE_TOKEN } = actions;
+const { UPDATE_TOKEN } = actions.common;
 
 const initialState = {
     token: '',

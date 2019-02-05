@@ -3,7 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { changeLoaderStateAction, changeToastStateAction, updateToken } from 'actions/loginActions';
+import { updateTokenAction } from 'actions/login';
+import { changeLoaderStateAction, changeToastStateAction } from 'actions/common';
+
+import { makeLoginRequest } from 'services/auth';
 
 // importing components
 import LoginForm from 'components/loginForm';
@@ -13,64 +16,33 @@ import Loader from 'components/loader';
 
 import './index.scss';
 
-function onSubmit(email, password) {
-    const { changeLoaderState, changeToastStateAction, updateToken } = this.props;
-    const data = { email, password };
-
-    // dispatch action to show loader
-    changeLoaderState('visible');
-
-    fetch('http://2e75f37f.ngrok.io/api/user/login/', {
-        // optional fetch options
-        body: JSON.stringify(data), // you may send any data, encoded as you wish. shall match content-type
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        headers: {
-            'content-type': 'application/json',
-        },
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        redirect: 'follow', // *manual, follow, error
-        referrer: 'no-referrer', // *client, no-referrer
-    })
-        .then(response => {
-            // manipulate response object
-            // check status @ response.status etc.
-            console.log(response);
-            changeLoaderState('invisible');
-            if (response.status !== 200) {
-                console.log('inside');
-                changeToastStateAction('visible', 'invalid credentials');
-                return null;
-            }
-
-            return response.json(); // parses json
-        })
-        .then(myJson => {
-            if (!myJson) {
-                return;
-            }
-            // use parseed result
-            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$444');
-            console.log(myJson);
-
-            // dispatch action to update token
-            updateToken(myJson.token);
-
-            this.props.history.push('/home');
-        })
-        .catch(err => {
-            changeLoaderState('invisible');
-        });
-}
-
 export class LoginPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.onSubmit = onSubmit.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
-    componentDidMount() {}
+    onSubmit = (email, password) => {
+        const { changeLoaderState, updateToken, history } = this.props;
+
+        // dispatch action to show loader
+        changeLoaderState('visible');
+
+        makeLoginRequest(email, password).then(obj => {
+            changeLoaderState('invisible');
+
+            if (!obj) {
+                return;
+            }
+
+            const { response, body } = obj;
+
+            // dispatch action to update token
+            updateToken(body.token);
+            history.push('/home');
+        });
+    };
 
     render() {
         const { loaderClass, toast } = this.props;
@@ -93,6 +65,9 @@ LoginPage.propTypes = {
         class: PropTypes.string,
         text: PropTypes.string,
     }),
+    changeLoaderState: PropTypes.func.isRequired,
+    updateToken: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
 };
 
 LoginPage.defaultProps = {
@@ -113,8 +88,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-    changeToastStateAction: (value, text) => dispatch(changeToastStateAction(value, text)),
-    updateToken: value => dispatch(updateToken(value)),
+    changeToastState: (value, text) => dispatch(changeToastStateAction(value, text)),
+    updateToken: value => dispatch(updateTokenAction(value)),
 });
 
 export default connect(

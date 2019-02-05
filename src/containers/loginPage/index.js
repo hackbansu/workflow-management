@@ -11,7 +11,6 @@ import './index.scss';
 // importing components
 import LoginForm from 'components/loginForm';
 import PageBanner from 'components/pageBanner';
-import Toast from 'components/toast';
 import Loader from 'components/loader';
 
 /**
@@ -57,14 +56,13 @@ export class LoginPage extends React.Component {
      * function to render the component.
      */
     render() {
-        const { loaderClass, toast } = this.props;
+        const { loaderClass } = this.props;
         return (
             <div className="login-page">
                 <div className="container">
                     <PageBanner text="Login" />
                     <LoginForm onSubmit={this.onSubmit} />
                     <Loader loaderClass={loaderClass} />
-                    <Toast toastClass={toast.class} text={toast.text} />
                 </div>
             </div>
         );
@@ -73,10 +71,6 @@ export class LoginPage extends React.Component {
 
 LoginPage.propTypes = {
     loaderClass: PropTypes.string,
-    toast: PropTypes.shape({
-        class: PropTypes.string,
-        text: PropTypes.string,
-    }),
     changeLoaderState: PropTypes.func.isRequired,
     updateToken: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -84,18 +78,10 @@ LoginPage.propTypes = {
 
 LoginPage.defaultProps = {
     loaderClass: 'invisible',
-    toast: {
-        class: 'invisible',
-        text: 'There is no text here',
-    },
 };
 
 const mapStateToProps = state => ({
     loaderClass: state.loader.class,
-    toast: {
-        class: state.toast.class,
-        text: state.toast.text,
-    },
 });
 
 const mapDispatchToProps = dispatch => ({

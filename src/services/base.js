@@ -12,7 +12,8 @@ const { dispatch } = store;
  * @param {string} token - token of the user to send
  */
 export function makeApiRequest(url, method = 'GET', data = {}) {
-    const token = store.currentUser.token ? 'Token ' + store.currentUser.token : '';
+    // const token = store.currentUser.token ? 'Token ' + store.currentUser.token : '';
+    const token = '';
 
     return fetch(url, {
         // optional fetch options

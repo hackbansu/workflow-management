@@ -69,7 +69,9 @@ export class LoginForm extends React.Component {
     }
 }
 
-LoginForm.propTypes = {};
+LoginForm.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+};
 
 LoginForm.defaultProps = {};
 

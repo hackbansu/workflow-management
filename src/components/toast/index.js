@@ -17,6 +17,7 @@ export const Toast = ({ toastClass, text }) => {
 };
 
 Toast.propTypes = {
+    toastClass: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
 };
 

@@ -4,6 +4,9 @@ import { Route, Switch } from 'react-router-dom';
 import LoginPage from '../loginPage';
 import Default from '../default';
 
+/**
+ * App component.
+ */
 const App = () => (
     <div>
         <main>

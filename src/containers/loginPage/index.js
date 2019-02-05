@@ -1,12 +1,12 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React from 'react';
 
-import { updateTokenAction } from 'actions/login';
 import { changeLoaderStateAction, changeToastStateAction } from 'actions/common';
-
+import { updateTokenAction } from 'actions/login';
 import { makeLoginRequest } from 'services/auth';
+import './index.scss';
 
 // importing components
 import LoginForm from 'components/loginForm';
@@ -14,21 +14,30 @@ import PageBanner from 'components/pageBanner';
 import Toast from 'components/toast';
 import Loader from 'components/loader';
 
-import './index.scss';
-
+/**
+ * Login page component.
+ */
 export class LoginPage extends React.Component {
+    /**
+     * Constructor for the component.
+     * @param {object} props - props object for the component.
+     */
     constructor(props) {
         super(props);
         this.state = {};
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    /**
+     * function to submit login request.
+     */
     onSubmit = (email, password) => {
         const { changeLoaderState, updateToken, history } = this.props;
 
         // dispatch action to show loader
         changeLoaderState('visible');
 
+        // call the service function
         makeLoginRequest(email, password).then(obj => {
             changeLoaderState('invisible');
 
@@ -44,6 +53,9 @@ export class LoginPage extends React.Component {
         });
     };
 
+    /**
+     * function to render the component.
+     */
     render() {
         const { loaderClass, toast } = this.props;
         return (

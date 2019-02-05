@@ -6,6 +6,9 @@ const initialState = {
     token: '',
 };
 
+/**
+ * Reducer for current user actions.
+ */
 export default (state = initialState, action) => {
     switch (action.type) {
     case UPDATE_TOKEN:

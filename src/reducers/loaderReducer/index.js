@@ -6,6 +6,9 @@ const initialState = {
     class: 'invisible',
 };
 
+/**
+ * Reducer for loader actions.
+ */
 export default (state = initialState, action) => {
     switch (action.type) {
     case CHANGE_LOADER_STATE:

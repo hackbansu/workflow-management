@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 import './index.scss';
 
+/**
+ * Functional component for toast.
+ * @param {object} param0 - props object for the component.
+ */
 export const Toast = ({ toastClass, text }) => {
     const className = toastClass + ' toast-cover';
     return (

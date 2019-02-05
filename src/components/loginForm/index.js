@@ -5,7 +5,14 @@ import PropTypes from 'prop-types';
 
 import './index.scss';
 
+/**
+ * Class component for login form
+ */
 export class LoginForm extends React.Component {
+    /**
+     * Constructor for the component.
+     * @param {object} props - props object for the component.
+     */
     constructor(props) {
         super(props);
         this.state = {
@@ -16,12 +23,20 @@ export class LoginForm extends React.Component {
         this.submitForm = this.submitForm.bind(this);
     }
 
+    /**
+     * Function to submit the login form.
+     * @param {string} email - email entered by the user.
+     * @param {string} password - password entered by the user.
+     */
     submitForm = (email, password) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
         onSubmit(email, password);
     };
 
+    /**
+     * Function to return the component rendering.
+     */
     render() {
         const { email, password } = this.state;
 

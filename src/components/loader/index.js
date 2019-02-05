@@ -5,17 +5,14 @@ import PropTypes from 'prop-types';
 
 import './index.scss';
 
-export default class Loader extends React.Component {
-    render() {
-        let { loaderClass } = this.props;
-        loaderClass += ' loader-cover';
-        return (
-            <div className={loaderClass}>
-                <div className="loader" />
-            </div>
-        );
-    }
-}
+export const Loader = ({ loaderClass }) => {
+    loaderClass += ' loader-cover';
+    return (
+        <div className={loaderClass}>
+            <div className="loader" />
+        </div>
+    );
+};
 
 Loader.propTypes = {
     loaderClass: PropTypes.string,
@@ -24,3 +21,5 @@ Loader.propTypes = {
 Loader.defaultProps = {
     loaderClass: 'invisible',
 };
+
+export default Loader;

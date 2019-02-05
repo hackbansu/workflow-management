@@ -19,7 +19,7 @@ export function makeApiRequest(url, method = 'GET', data = {}, token = '') {
         .then(response => response.json().then(body => ({ response, body })))
         .then(({ response, body }) => {
             if (response.status !== 200) {
-                dispatch(changeToastStateAction('visible', body.data.non_key_error_fields[0]));
+                dispatch(changeToastStateAction('visible', body.detail ? body.detail : 'error occured'));
                 setTimeout(() => {
                     dispatch(changeToastStateAction('invisible', ''));
                 }, 3000);

@@ -13,15 +13,14 @@ export class LoginForm extends React.Component {
             password: null,
         };
 
-        const { onSubmit } = this.props;
-
-        this.submitForm = (email, password) => ev => {
-            ev.preventDefault();
-            onSubmit(email, password);
-        };
+        this.submitForm = this.submitForm.bind(this);
     }
 
-    componentDidMount() {}
+    submitForm = (email, password) => ev => {
+        const { onSubmit } = this.props;
+        ev.preventDefault();
+        onSubmit(email, password);
+    };
 
     render() {
         const { email, password } = this.state;

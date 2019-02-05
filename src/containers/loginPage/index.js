@@ -11,6 +11,8 @@ import PageBanner from 'components/pageBanner';
 import Toast from 'components/toast';
 import Loader from 'components/loader';
 
+import './index.scss';
+
 function onSubmit(email, password) {
     const { changeLoaderState, changeToastStateAction, updateToken } = this.props;
     const data = { email, password };
@@ -73,11 +75,13 @@ export class LoginPage extends React.Component {
     render() {
         const { loaderClass, toast } = this.props;
         return (
-            <div className="container">
-                <PageBanner text="Login" />
-                <LoginForm onSubmit={this.onSubmit} />
-                <Loader loaderClass={loaderClass} />
-                <Toast toastClass={toast.class} text={toast.text} />
+            <div className="login-page">
+                <div className="container">
+                    <PageBanner text="Login" />
+                    <LoginForm onSubmit={this.onSubmit} />
+                    <Loader loaderClass={loaderClass} />
+                    <Toast toastClass={toast.class} text={toast.text} />
+                </div>
             </div>
         );
     }

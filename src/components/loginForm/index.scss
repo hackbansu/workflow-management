@@ -1,5 +1,5 @@
 .login-form-cover {
-    background-color: rgba(25, 66, 201, 0.6);
+    background-color: rgba(197, 36, 36, 0.836);
     height: 300px;
     width: 400px;
     margin: 0 auto;
@@ -7,9 +7,23 @@
     form{
         height: 100%;
         width: 100%;
+        color: white;
+        font-weight: bold;
+        padding-top: 40px;
 
-        input{
+        > label, > input{
+            display: block;
+            width: 100%;
+            text-align: center;
             margin: 0 auto;
+
+            input{
+                margin: 10px;
+            }
+        }
+
+        > input{
+            width: 30%
         }
     }
 }

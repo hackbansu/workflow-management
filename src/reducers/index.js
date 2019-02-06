@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
-import homeReducer from './homeReducer';
+import currentUserReducer from './currentUserReducer';
+import loaderReducer from './loaderReducer';
+import toastReducer from './toastReducer';
 
 const a = 'fdd';
 
 export default combineReducers({
-    homeReducer,
+    currentUser: currentUserReducer,
+    loader: loaderReducer,
+    toast: toastReducer,
 });

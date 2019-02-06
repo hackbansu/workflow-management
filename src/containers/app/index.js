@@ -1,17 +1,57 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Home from '../home';
-import Default from '../default';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-const App = () => (
-    <div>
-        <main>
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route component={Default} />
-            </Switch>
-        </main>
-    </div>
-);
+import LoginPage from 'containers/loginPage';
+import Default from 'containers/default';
+import Toast from 'components/toast';
 
-export default App;
+/**
+ * App component.
+ */
+export class App extends React.Component {
+    render() {
+        const { toast } = this.props;
+
+        return (
+            <div>
+                <main>
+                    <Switch>
+                        <Route exact path="/" component={LoginPage} />
+                        <Route component={Default} />
+                    </Switch>
+                    <Toast toastClass={toast.class} text={toast.text} />
+                </main>
+            </div>
+        );
+    }
+}
+
+App.propTypes = {
+    toast: PropTypes.shape({
+        class: PropTypes.string,
+        text: PropTypes.string,
+    }),
+};
+
+App.defaultProps = {
+    toast: {
+        class: 'invisible',
+        text: 'There is no text here',
+    },
+};
+
+const mapStateToProps = state => ({
+    toast: {
+        class: state.toast.class,
+        text: state.toast.text,
+    },
+});
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);

@@ -3,7 +3,10 @@ import { Route, Switch, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+// importing containers for routing
 import Default from 'containers/default';
+import Profile from 'containers/profile';
+
 import { makeLogoutRequest } from 'services/auth';
 import { changeLoaderStateAction } from 'actions/common';
 import { logoutAction } from 'actions/user';
@@ -59,10 +62,10 @@ export class Home extends React.Component {
 
                             <ul className="list-unstyled components">
                                 <li className="active">
-                                    <a href="/dashboard">Dashboard</a>
+                                    <Link to="/dashboard">Dashboard</Link>
                                 </li>
                                 <li>
-                                    <Link to="/dashboard">Workflows</Link>
+                                    <Link to="/workflows">Workflows</Link>
                                 </li>
                                 <li>
                                     <Link to="/users">Users</Link>
@@ -94,6 +97,7 @@ export class Home extends React.Component {
                         </nav>
                         <div id="content">
                             <Switch>
+                                <Route exact path="/profile" component={Profile} />
                                 <Route component={Default} />
                             </Switch>
                         </div>

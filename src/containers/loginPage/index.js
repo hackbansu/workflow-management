@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 
 import { changeLoaderStateAction } from 'actions/common';
-import { updateTokenAction } from 'actions/user';
+import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
 import './index.scss';
 
@@ -12,7 +12,6 @@ import './index.scss';
 import LoginForm from 'components/loginForm';
 import PageBanner from 'components/pageBanner';
 import Loader from 'components/loader';
-import { updateProfile } from '../../actions/user';
 
 /**
  * Login page component.
@@ -32,7 +31,7 @@ export class LoginPage extends React.Component {
      * function to submit login request.
      */
     onSubmit = (email, password) => {
-        const { changeLoaderState, updateToken, history } = this.props;
+        const { changeLoaderState, updateToken, updateProfile, history } = this.props;
 
         // dispatch action to show loader
         changeLoaderState('visible');
@@ -81,6 +80,7 @@ LoginPage.propTypes = {
     loaderClass: PropTypes.string,
     changeLoaderState: PropTypes.func.isRequired,
     updateToken: PropTypes.func.isRequired,
+    updateProfile: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
 };
 
@@ -95,6 +95,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
     updateToken: value => dispatch(updateTokenAction(value)),
+    updateProfile: (firstName, lastName, profilePhoto, email, id) => dispatch(updateProfileAction(firstName, lastName, profilePhoto, email, id)),
 });
 
 export default connect(

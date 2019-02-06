@@ -6,5 +6,6 @@ export default {
     user: {
         UPDATE_TOKEN: 'UPDATE_TOKEN',
         UPDATE_PROFILE: 'UPDATE_PROFILE',
+        LOGOUT: 'LOGOUT',
     },
 };

@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Default from 'containers/default';
+import { makeLogoutRequest } from 'services/auth';
+import { changeLoaderStateAction } from 'actions/common';
+import { logoutAction } from 'actions/user';
 
 import './index.scss';
 
@@ -11,6 +14,36 @@ import './index.scss';
  * Home component.
  */
 export class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onLogoutClick = this.onLogoutClick.bind(this);
+    }
+
+    onLogoutClick = () => {
+        const { changeLoaderState, logout, history } = this.props;
+
+        // dispatch action to show loader
+        changeLoaderState('visible');
+
+        // delete the token from local storage
+        localStorage.removeItem('token');
+
+        // call the service function
+        makeLogoutRequest().then(obj => {
+            changeLoaderState('invisible');
+
+            if (!obj) {
+                return;
+            }
+
+            // dispatch action to logout user
+            logout();
+
+            // redirect to login page
+            history.push('/login');
+        });
+    };
+
     render() {
         const { currentUser } = this.props;
         const { firstName, lastName } = currentUser;
@@ -26,30 +59,32 @@ export class Home extends React.Component {
 
                             <ul className="list-unstyled components">
                                 <li className="active">
-                                    <a href="#">Dashboard</a>
+                                    <a href="/dashboard">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="#">Workflows</a>
+                                    <a href="/workflows">Workflows</a>
                                 </li>
                                 <li>
-                                    <a href="#">Users</a>
+                                    <a href="/users">Users</a>
                                 </li>
                                 <li>
-                                    <a href="#">Company</a>
+                                    <a href="/company">Company</a>
                                 </li>
                                 <li>
-                                    <a href="#">Invites</a>
+                                    <a href="/invites">Invites</a>
                                 </li>
                                 <li>
-                                    <a href="#">Templates</a>
+                                    <a href="/templates">Templates</a>
                                 </li>
                             </ul>
                             <ul className="list-unstyled profile-components">
                                 <li>
-                                    <a href="#">{firstName}</a>
+                                    <a href="/profile">{firstName}</a>
                                 </li>
                                 <li>
-                                    <a href="#">Logout</a>
+                                    <a href="#" onClick={this.onLogoutClick}>
+                                        Logout
+                                    </a>
                                 </li>
                             </ul>
                         </nav>
@@ -67,6 +102,9 @@ export class Home extends React.Component {
 
 Home.propTypes = {
     currentUser: PropTypes.object.isRequired,
+    changeLoaderState: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
 };
 
 Home.defaultProps = {};
@@ -75,7 +113,10 @@ const mapStateToProps = state => ({
     currentUser: state.currentUser,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
+    logout: () => dispatch(logoutAction()),
+});
 
 export default connect(
     mapStateToProps,

@@ -23,8 +23,7 @@ function showToast(text) {
  * @param {string} token - token of the user to send
  */
 export function makeApiRequest(url, method = 'GET', data = {}) {
-    // const token = store.currentUser.token ? 'Token ' + store.currentUser.token : '';
-    const token = '';
+    const token = store.getState().currentUser.token ? 'Token ' + store.getState().currentUser.token : '';
 
     return fetch(url, {
         // optional fetch options
@@ -41,12 +40,13 @@ export function makeApiRequest(url, method = 'GET', data = {}) {
         .then(({ response, body }) => {
             if (response.status !== 200) {
                 // show error in toast msg
-                showToast(body.detail ? body.detail : 'error occured');
+                let errormsg = body.detail;
+                if (errormsg.constructor === Array) {
+                    errormsg = errormsg[0];
+                }
+                showToast(errormsg);
                 return null;
             }
-
-            // show success message in toast
-            showToast('Login Successful');
 
             return { response, body };
         })

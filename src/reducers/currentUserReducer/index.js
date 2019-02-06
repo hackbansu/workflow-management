@@ -1,6 +1,6 @@
 import actions from 'constants/actions.js';
 
-const { UPDATE_TOKEN, UPDATE_PROFILE } = actions.user;
+const { UPDATE_TOKEN, UPDATE_PROFILE, LOGOUT } = actions.user;
 
 const initialState = {
     token: '',
@@ -16,6 +16,9 @@ export default (state = initialState, action) => {
             ...state,
             token: action.token,
         };
+
+    case LOGOUT:
+        return {};
 
     case UPDATE_PROFILE:
         return {

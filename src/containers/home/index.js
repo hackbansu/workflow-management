@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -62,29 +62,33 @@ export class Home extends React.Component {
                                     <a href="/dashboard">Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="/workflows">Workflows</a>
+                                    <Link to="/dashboard">Workflows</Link>
                                 </li>
                                 <li>
-                                    <a href="/users">Users</a>
+                                    <Link to="/users">Users</Link>
                                 </li>
                                 <li>
-                                    <a href="/company">Company</a>
+                                    <Link to="/company">Company</Link>
                                 </li>
                                 <li>
-                                    <a href="/invites">Invites</a>
+                                    <Link to="/invites">Invites</Link>
                                 </li>
                                 <li>
-                                    <a href="/templates">Templates</a>
+                                    <Link to="/templates">Templates</Link>
                                 </li>
                             </ul>
                             <ul className="list-unstyled profile-components">
                                 <li>
-                                    <a href="/profile">{firstName}</a>
+                                    <Link to="/profile">
+                                        {firstName}
+                                        {' '}
+                                        {lastName}
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" onClick={this.onLogoutClick}>
+                                    <Link to="" onClick={this.onLogoutClick}>
                                         Logout
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </nav>

@@ -26,7 +26,7 @@ export class App extends React.Component {
                         <PrivateRoute path="/" component={Home} token={token} />
                         <Route component={Default} />
                     </Switch>
-                    <Toast toastClass={toast.class} text={toast.text} />
+                    <Toast show={toast.show} text={toast.text} />
                 </main>
             </div>
         );
@@ -35,7 +35,7 @@ export class App extends React.Component {
 
 App.propTypes = {
     toast: PropTypes.shape({
-        class: PropTypes.string,
+        show: PropTypes.bool,
         text: PropTypes.string,
     }),
     token: PropTypes.string,
@@ -43,7 +43,7 @@ App.propTypes = {
 
 App.defaultProps = {
     toast: {
-        class: 'invisible',
+        show: false,
         text: 'There is no text here',
     },
     token: '',
@@ -51,7 +51,7 @@ App.defaultProps = {
 
 const mapStateToProps = state => ({
     toast: {
-        class: state.toast.class,
+        show: state.toast.show,
         text: state.toast.text,
     },
     token: state.currentUser.token,

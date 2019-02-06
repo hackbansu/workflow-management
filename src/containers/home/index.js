@@ -12,6 +12,9 @@ import './index.scss';
  */
 export class Home extends React.Component {
     render() {
+        const { currentUser } = this.props;
+        const { firstName, lastName } = currentUser;
+
         return (
             <div>
                 <main>
@@ -43,7 +46,7 @@ export class Home extends React.Component {
                             </ul>
                             <ul className="list-unstyled profile-components">
                                 <li>
-                                    <a href="#">Profile</a>
+                                    <a href="#">{firstName}</a>
                                 </li>
                                 <li>
                                     <a href="#">Logout</a>
@@ -62,11 +65,15 @@ export class Home extends React.Component {
     }
 }
 
-Home.propTypes = {};
+Home.propTypes = {
+    currentUser: PropTypes.object.isRequired,
+};
 
 Home.defaultProps = {};
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    currentUser: state.currentUser,
+});
 
 const mapDispatchToProps = dispatch => ({});
 

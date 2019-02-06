@@ -13,4 +13,4 @@ export const changeLoaderStateAction = value => ({ type: CHANGE_LOADER_STATE, cl
  * @param {string} value - css class to be set on the toast
  * @param {string} text - text to be set on toast
  */
-export const changeToastStateAction = (value, text) => ({ type: CHANGE_TOAST_STATE, class: value, text });
+export const changeToastStateAction = (show, text) => ({ type: CHANGE_TOAST_STATE, show, text });

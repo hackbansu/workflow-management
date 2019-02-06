@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction, changeToastStateAction } from 'actions/common';
+import { changeLoaderStateAction } from 'actions/common';
 import { updateTokenAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
 import './index.scss';
@@ -46,14 +46,14 @@ export class LoginPage extends React.Component {
             }
 
             const { response, body } = obj;
-            const { token, email, id } = body;
+            const { token, email, id, first_name: firstName, last_name: lastName, profile_photo: profilePhoto } = body;
 
             // save token to local storage
             localStorage.setItem('token', token);
 
             // dispatch action to update user token and data
             updateToken(token);
-            updateProfile(body.first_name, body.last_name, body.profile_photo, email, id);
+            updateProfile(firstName, lastName, profilePhoto, email, id);
 
             // redirect to home page
             history.push('/');
@@ -94,7 +94,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-    changeToastState: (value, text) => dispatch(changeToastStateAction(value, text)),
     updateToken: value => dispatch(updateTokenAction(value)),
 });
 

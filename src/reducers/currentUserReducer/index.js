@@ -1,6 +1,6 @@
 import actions from 'constants/actions.js';
 
-const { UPDATE_TOKEN } = actions.common;
+const { UPDATE_TOKEN, UPDATE_PROFILE } = actions.user;
 
 const initialState = {
     token: '',
@@ -15,6 +15,16 @@ export default (state = initialState, action) => {
         return {
             ...state,
             token: action.token,
+        };
+
+    case UPDATE_PROFILE:
+        return {
+            ...state,
+            firstName: action.firstName,
+            lastName: action.lastName,
+            profilePhoto: action.profilePhoto,
+            email: action.email,
+            id: action.id,
         };
 
     default:

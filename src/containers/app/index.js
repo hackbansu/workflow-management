@@ -3,24 +3,27 @@ import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { updateTokenAction } from 'actions/user';
+
 import LoginPage from 'containers/loginPage';
 import Home from 'containers/home';
 import Default from 'containers/default';
 import Toast from 'components/toast';
+import PrivateRoute from 'components/privateRoute';
 
 /**
  * App component.
  */
 export class App extends React.Component {
     render() {
-        const { toast } = this.props;
+        const { toast, token } = this.props;
 
         return (
             <div>
                 <main>
                     <Switch>
-                        <Route exact path="/" component={Home} />
                         <Route exact path="/login" component={LoginPage} />
+                        <PrivateRoute path="/" component={Home} token={token} />
                         <Route component={Default} />
                     </Switch>
                     <Toast toastClass={toast.class} text={toast.text} />
@@ -35,6 +38,7 @@ App.propTypes = {
         class: PropTypes.string,
         text: PropTypes.string,
     }),
+    token: PropTypes.string,
 };
 
 App.defaultProps = {
@@ -42,6 +46,7 @@ App.defaultProps = {
         class: 'invisible',
         text: 'There is no text here',
     },
+    token: '',
 };
 
 const mapStateToProps = state => ({
@@ -49,6 +54,7 @@ const mapStateToProps = state => ({
         class: state.toast.class,
         text: state.toast.text,
     },
+    token: state.currentUser.token,
 });
 
 const mapDispatchToProps = dispatch => ({});

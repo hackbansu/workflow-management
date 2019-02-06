@@ -6,5 +6,5 @@ import { makeApiRequest } from 'services/base';
  * @param {string} password - password to send in the login request.
  */
 export function makeLoginRequest(email, password) {
-    return makeApiRequest('https://344cbec3.ngrok.io/api/user/login/', 'POST', { email, password });
+    return makeApiRequest('https://59810038.ngrok.io/api/user/login/', 'POST', { email, password });
 }

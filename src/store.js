@@ -7,6 +7,9 @@ import rootReducer from './reducers';
 export const history = createHistory();
 
 const initialState = {
+    currentUser: {
+        token: localStorage.getItem('token'),
+    },
 };
 const enhancers = [];
 const middleware = [thunk, routerMiddleware(history)];

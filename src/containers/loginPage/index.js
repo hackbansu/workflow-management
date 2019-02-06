@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 
 import { changeLoaderStateAction, changeToastStateAction } from 'actions/common';
-import { updateTokenAction } from 'actions/login';
+import { updateTokenAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
 import './index.scss';
 
@@ -12,6 +12,7 @@ import './index.scss';
 import LoginForm from 'components/loginForm';
 import PageBanner from 'components/pageBanner';
 import Loader from 'components/loader';
+import { updateProfile } from '../../actions/user';
 
 /**
  * Login page component.
@@ -45,10 +46,17 @@ export class LoginPage extends React.Component {
             }
 
             const { response, body } = obj;
+            const { token, email, id } = body;
 
-            // dispatch action to update token
-            updateToken(body.token);
-            history.push('/home');
+            // save token to local storage
+            localStorage.setItem('token', token);
+
+            // dispatch action to update user token and data
+            updateToken(token);
+            updateProfile(body.first_name, body.last_name, body.profile_photo, email, id);
+
+            // redirect to home page
+            history.push('/');
         });
     };
 

@@ -9,7 +9,7 @@ import './index.scss';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const FormField = ({ name, inputName, type, placeholder, value, onChange }) => {
+export const FormField = ({ name, inputName, type, placeholder, value, onChange, disabled }) => {
     const id = inputName + '3';
     return (
         <div className="form-group row">
@@ -25,6 +25,7 @@ export const FormField = ({ name, inputName, type, placeholder, value, onChange 
                     className="form-control"
                     id={id}
                     onChange={onChange}
+                    disabled={disabled}
                 />
             </div>
         </div>
@@ -38,10 +39,12 @@ FormField.propTypes = {
     placeholder: PropTypes.string.isRequired,
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.string,
 };
 
 FormField.defaultProps = {
     value: null,
+    disabled: '',
 };
 
 export default FormField;

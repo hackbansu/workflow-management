@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 import './index.scss';
 
+import FormField from 'components/formField';
+
 /**
  * Class component for login form
  */
@@ -49,69 +51,42 @@ export class ProfileForm extends React.Component {
             <div>
                 <form method="post" onSubmit={this.submitForm(password, firstName, lastName)}>
                     {/* email */}
-                    <div className="form-group row">
-                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">
-                            Email
-                        </label>
-                        <div className="col-sm-10">
-                            <input
-                                value={email}
-                                disabled
-                                type="email"
-                                name="email"
-                                className="form-control"
-                                id="inputEmail3"
-                                onChange={e => this.setState({ email: e.target.value })}
-                            />
-                        </div>
-                    </div>
+                    <FormField
+                        name="Email"
+                        inputName="email"
+                        type="email"
+                        placeholder="eg. user@example.com"
+                        value={email}
+                        onChange={e => this.setState({ email: e.target.value })}
+                        disabled="disabled"
+                    />
                     {/* password */}
-                    <div className="form-group row">
-                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">
-                            Password
-                        </label>
-                        <div className="col-sm-10">
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control"
-                                id="inputPassword3"
-                                onChange={e => this.setState({ password: e.target.value })}
-                            />
-                        </div>
-                    </div>
+                    <FormField
+                        name="Password"
+                        inputName="password"
+                        type="password"
+                        placeholder=""
+                        value={null}
+                        onChange={e => this.setState({ password: e.target.value })}
+                    />
                     {/* first name */}
-                    <div className="form-group row">
-                        <label htmlFor="inputFName3" className="col-sm-2 col-form-label">
-                            First Name
-                        </label>
-                        <div className="col-sm-10">
-                            <input
-                                value={firstName}
-                                type="text"
-                                name="firstName"
-                                className="form-control"
-                                id="inputFName3"
-                                onChange={e => this.setState({ firstName: e.target.value })}
-                            />
-                        </div>
-                    </div>
+                    <FormField
+                        name="First Name"
+                        inputName="firstName"
+                        type="text"
+                        placeholder="eg. nitin"
+                        value={firstName}
+                        onChange={e => this.setState({ firstName: e.target.value })}
+                    />
                     {/* last name */}
-                    <div className="form-group row">
-                        <label htmlFor="inputLName3" className="col-sm-2 col-form-label">
-                            Last Name
-                        </label>
-                        <div className="col-sm-10">
-                            <input
-                                value={lastName}
-                                type="text"
-                                name="lastName"
-                                className="form-control"
-                                id="inputLName3"
-                                onChange={e => this.setState({ lastName: e.target.value })}
-                            />
-                        </div>
-                    </div>
+                    <FormField
+                        name="Last Name"
+                        inputName="lastName"
+                        type="text"
+                        placeholder="eg. singh"
+                        value={lastName}
+                        onChange={e => this.setState({ lastName: e.target.value })}
+                    />
                     {/* profile photo */}
                     {/* <div className="input-group mb-3">
                         <div className="input-group-prepend">

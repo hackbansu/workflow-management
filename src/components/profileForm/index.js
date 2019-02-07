@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import './index.scss';
 
 import FormField from 'components/formField';
+import FormSubmitButton from 'components/formSubmitButton';
 
 /**
  * Class component for login form
@@ -100,13 +101,7 @@ export class ProfileForm extends React.Component {
                         </div>
                     </div> */}
                     {/* update profile button */}
-                    <div className="form-group row">
-                        <div className="col-sm-10">
-                            <button type="submit" className="btn btn-primary">
-                                Update
-                            </button>
-                        </div>
-                    </div>
+                    <FormSubmitButton name="Update" />
                 </form>
             </div>
         );

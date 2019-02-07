@@ -74,8 +74,6 @@ export class Signup extends React.Component {
             const { company, user, designation, status, is_admin: isAdmin } = body;
 
             const { token, id, first_name: firstName, last_name: lastName, profile_photo: profilePhoto, email } = user;
-            // save token to local storage
-            localStorage.setItem('token', token);
 
             // dispatch action to update user token and data
             updateToken(token);

@@ -7,5 +7,6 @@ export default {
         UPDATE_TOKEN: 'UPDATE_TOKEN',
         UPDATE_PROFILE: 'UPDATE_PROFILE',
         LOGOUT: 'LOGOUT',
+        UPDATE_COMPANY: 'UPDATE_COMPANY',
     },
 };

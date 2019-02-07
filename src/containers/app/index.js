@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { updateTokenAction } from 'actions/user';
 
 import LoginPage from 'containers/loginPage';
+import Signup from 'containers/signup';
 import Home from 'containers/home';
 import Default from 'containers/default';
 import Toast from 'components/toast';
@@ -23,6 +24,7 @@ export class App extends React.Component {
                 <main>
                     <Switch>
                         <Route exact path="/login" component={LoginPage} />
+                        <Route exact path="/signup" component={Signup} />
                         <PrivateRoute path="/" component={Home} token={token} />
                         <Route component={Default} />
                     </Switch>

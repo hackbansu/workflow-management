@@ -24,7 +24,6 @@ function showToast(text) {
  */
 export function makeApiRequest(url, method = 'GET', data = undefined) {
     url = constants.API_URL + url;
-    console.log('url :', url);
     const token = store.getState().currentUser.token ? 'Token ' + store.getState().currentUser.token : '';
 
     let body;

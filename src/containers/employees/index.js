@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import React from 'react';
 
 import { updateEmployeesAction } from 'actions/employees';
@@ -30,8 +31,33 @@ export class Profile extends React.Component {
 
             const { response, body } = obj;
 
+            const data = body.map(emp => {
+                const {
+                    first_name: firstName,
+                    last_name: lastName,
+                    email,
+                    profile_photo: profilePhoto,
+                    id: userId,
+                } = emp.user;
+                const { designation, is_admin: isAdmin, status, id: employeeId } = emp;
+    
+                return {
+                    user: {
+                        firstName,
+                        lastName,
+                        profilePhoto,
+                        email,
+                        id: userId,
+                    },
+                    designation,
+                    isAdmin,
+                    status,
+                    id: employeeId,
+                };
+            });
+
             // dispatch action to update employees
-            updateEmployees(body);
+            updateEmployees(data);
         });
     }
 
@@ -52,10 +78,12 @@ export class Profile extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {employees.map((data, idx) => (
-                        <tr key={data.user.first_name + data.user.last_name + data.designation}>
-                            <td>{data.user.first_name}</td>
-                            <td>{data.user.last_name}</td>
+                    {employees.map(data => (
+                        <tr key={data.user.firstName + data.user.lastName + data.designation}>
+                            <td>
+                                <Link to={'/employee/' + data.id}>{data.user.firstName}</Link>
+                            </td>
+                            <td>{data.user.lastName}</td>
                             <td>{data.designation}</td>
                         </tr>
                     ))}

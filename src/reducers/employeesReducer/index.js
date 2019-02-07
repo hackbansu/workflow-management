@@ -10,10 +10,7 @@ const initialState = [];
 export default (state = initialState, action) => {
     switch (action.type) {
     case UPDATE_EMPLOYEES:
-        return [
-            ...state,
-            ...action.data,
-        ];
+        return [...action.data];
 
     default:
         return state;

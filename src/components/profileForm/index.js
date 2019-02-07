@@ -18,12 +18,15 @@ export class ProfileForm extends React.Component {
      */
     constructor(props) {
         super(props);
-        const { email, firstName, lastName } = this.props;
+        const { email, firstName, lastName, isAdmin, designation, status } = this.props;
         this.state = {
             email,
             password: null,
             firstName,
             lastName,
+            isAdmin,
+            designation,
+            status,
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -46,7 +49,7 @@ export class ProfileForm extends React.Component {
      * Function to return the component rendering.
      */
     render() {
-        const { email, password, firstName, lastName } = this.state;
+        const { email, password, firstName, lastName, isAdmin, designation, status } = this.state;
 
         return (
             <div>
@@ -67,7 +70,6 @@ export class ProfileForm extends React.Component {
                         inputName="password"
                         type="password"
                         placeholder=""
-                        value={null}
                         onChange={e => this.setState({ password: e.target.value })}
                     />
                     {/* first name */}
@@ -87,6 +89,35 @@ export class ProfileForm extends React.Component {
                         placeholder="eg. singh"
                         value={lastName}
                         onChange={e => this.setState({ lastName: e.target.value })}
+                    />
+                    {/* designation */}
+                    <FormField
+                        name="Designation"
+                        inputName="designation"
+                        type="text"
+                        placeholder="eg. CEO"
+                        value={designation}
+                        onChange={e => this.setState({ designation: e.target.value })}
+                        disabled="disabled"
+                    />
+                    {/* status */}
+                    <FormField
+                        name="Status"
+                        inputName="status"
+                        type="number"
+                        placeholder="eg. active"
+                        value={status.toString()}
+                        onChange={e => this.setState({ status: e.target.value })}
+                        disabled="disabled"
+                    />
+                    {/* isAdmin */}
+                    <FormField
+                        name="Admin"
+                        inputName="isAdmin"
+                        type="checkbox"
+                        onChange={e => this.setState({ isAdmin: e.target.value })}
+                        disabled="disabled"
+                        checked={isAdmin ? 'checked' : ''}
                     />
                     {/* profile photo */}
                     {/* <div className="input-group mb-3">
@@ -113,9 +144,14 @@ ProfileForm.propTypes = {
     firstName: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
+    isAdmin: PropTypes.bool,
+    designation: PropTypes.string.isRequired,
+    status: PropTypes.number.isRequired,
 };
 
-ProfileForm.defaultProps = {};
+ProfileForm.defaultProps = {
+    isAdmin: false,
+};
 
 const mapStateToProps = state => ({});
 

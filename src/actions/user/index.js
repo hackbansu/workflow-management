@@ -18,7 +18,7 @@ export const updateProfileAction = (
     id,
     isAdmin = false,
     designation = '',
-    status = 2
+    status = -1
 ) => ({
     type: UPDATE_PROFILE,
     firstName,
@@ -31,16 +31,7 @@ export const updateProfileAction = (
     status,
 });
 
-export const updateCompanyAction = (
-    id,
-    name,
-    address,
-    city,
-    state,
-    logo,
-    status,
-    links,
-) => ({
+export const updateCompanyAction = (id, name, address, city, state, logo, status, links) => ({
     type: UPDATE_COMPANY,
     id,
     name,

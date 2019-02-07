@@ -1,5 +1,5 @@
 import { changeToastStateAction } from 'actions/common';
-
+import constants from 'constants/index.js';
 import store from '../store';
 
 const { dispatch } = store;
@@ -22,13 +22,20 @@ function showToast(text) {
  * @param {object} data - data to send in case of POST request
  * @param {string} token - token of the user to send
  */
-export function makeApiRequest(url, method = 'GET', data = {}) {
+export function makeApiRequest(url, method = 'GET', data = undefined) {
+    url = constants.API_URL + url;
+    console.log('url :', url);
     const token = store.getState().currentUser.token ? 'Token ' + store.getState().currentUser.token : '';
+
+    let body;
+    if (data) {
+        body = JSON.stringify(data);
+    }
 
     return fetch(url, {
         // optional fetch options
         method,
-        body: JSON.stringify(data), // you may send any data, encoded as you wish. shall match content-type
+        body, // you may send any data, encoded as you wish. shall match content-type
         headers: {
             'content-type': 'application/json',
             Authorization: token,

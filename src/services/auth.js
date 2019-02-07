@@ -1,15 +1,12 @@
 import { makeApiRequest } from 'services/base';
 
-
-const apiUrl = 'https://44d1e408.ngrok.io';
-
 /**
  * Utility function to send the login POST request to the server.
  * @param {string} email - email to send in the login request.
  * @param {string} password - password to send in the login request.
  */
 export function makeLoginRequest(email, password) {
-    return makeApiRequest(apiUrl + '/api/user/login/', 'POST', { email, password });
+    return makeApiRequest('user/login/', 'POST', { email, password });
 }
 
 /**
@@ -26,7 +23,7 @@ export function makeUpdateRequest(password, firstName, lastName, userId) {
         ...(password.length !== 0 && { password }),
     };
 
-    return makeApiRequest(apiUrl + '/api/user/' + userId + '/', 'PATCH', data);
+    return makeApiRequest('user/profile/', 'PATCH', data);
 }
 
 /**
@@ -35,12 +32,12 @@ export function makeUpdateRequest(password, firstName, lastName, userId) {
  */
 export function makeSignupRequest(data) {
     console.log('data :', data);
-    return makeApiRequest(apiUrl + '/api/company/', 'POST', data);
+    return makeApiRequest('company/', 'POST', data);
 }
 
 /**
  * Utility function to send the logout request to the server.
  */
 export function makeLogoutRequest() {
-    return makeApiRequest(apiUrl + '/api/user/logout/', 'DELETE');
+    return makeApiRequest('user/logout/', 'DELETE');
 }

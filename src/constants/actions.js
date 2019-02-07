@@ -9,4 +9,7 @@ export default {
         LOGOUT: 'LOGOUT',
         UPDATE_COMPANY: 'UPDATE_COMPANY',
     },
+    employees: {
+        UPDATE_EMPLOYEES: 'UPDATE_EMPLOYEES',
+    },
 };

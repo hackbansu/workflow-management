@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 // importing containers for routing
 import Default from 'containers/default';
 import Profile from 'containers/profile';
+import Employees from 'containers/employees';
 
 import { makeLogoutRequest } from 'services/auth';
 import { changeLoaderStateAction } from 'actions/common';
@@ -68,7 +69,7 @@ export class Home extends React.Component {
                                     <Link to="/workflows">Workflows</Link>
                                 </li>
                                 <li>
-                                    <Link to="/users">Users</Link>
+                                    <Link to="/employees">Employees</Link>
                                 </li>
                                 <li>
                                     <Link to="/company">Company</Link>
@@ -98,6 +99,7 @@ export class Home extends React.Component {
                         <div id="content">
                             <Switch>
                                 <Route exact path="/profile" component={Profile} />
+                                <Route exact path="/employees" component={Employees} />
                                 <Route component={Default} />
                             </Switch>
                         </div>

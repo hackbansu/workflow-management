@@ -47,9 +47,6 @@ export class LoginPage extends React.Component {
             const { response, body } = obj;
             const { token, email, id, first_name: firstName, last_name: lastName, profile_photo: profilePhoto } = body;
 
-            // save token to local storage
-            localStorage.setItem('token', token);
-
             // dispatch action to update user token and data
             updateToken(token);
             updateProfile(firstName, lastName, profilePhoto, email, id);

@@ -6,11 +6,8 @@ import rootReducer from './reducers';
 
 export const history = createHistory();
 
-const initialState = {
-    currentUser: {
-        token: localStorage.getItem('token'),
-    },
-};
+const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {};
+
 const enhancers = [];
 const middleware = [thunk, routerMiddleware(history)];
 
@@ -27,4 +24,10 @@ const composedEnhancers = compose(
     ...enhancers
 );
 
-export default createStore(connectRouter(history)(rootReducer), initialState, composedEnhancers);
+const store = createStore(connectRouter(history)(rootReducer), persistedState, composedEnhancers);
+
+store.subscribe(() => {
+    localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+});
+
+export default store;

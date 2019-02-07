@@ -28,9 +28,9 @@ export class Home extends React.Component {
 
         // dispatch action to show loader
         changeLoaderState('visible');
-
-        // delete the token from local storage
-        localStorage.removeItem('token');
+        
+        // dispatch action to logout user
+        logout();
 
         // call the service function
         makeLogoutRequest().then(obj => {
@@ -39,9 +39,6 @@ export class Home extends React.Component {
             if (!obj) {
                 return;
             }
-
-            // dispatch action to logout user
-            logout();
 
             // redirect to login page
             history.push('/login');

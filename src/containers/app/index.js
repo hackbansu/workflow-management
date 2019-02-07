@@ -18,14 +18,20 @@ import PrivateRoute from 'components/privateRoute';
 export class App extends React.Component {
     render() {
         const { toast, token } = this.props;
+        let isLoggedIn = false;
+        if (token && token !== '') {
+            isLoggedIn = true;
+        }
+
+        console.log('isLoggedIn :', isLoggedIn);
 
         return (
             <div>
                 <main>
                     <Switch>
-                        <Route exact path="/login" component={LoginPage} />
-                        <Route exact path="/signup" component={Signup} />
-                        <PrivateRoute path="/" component={Home} token={token} />
+                        <PrivateRoute exact path="/login" component={LoginPage} condition={!isLoggedIn} redirectUrl="/" />
+                        <PrivateRoute exact path="/signup" component={Signup} condition={!isLoggedIn} redirectUrl="/" />
+                        <PrivateRoute path="/" component={Home} condition={isLoggedIn} redirectUrl="/login" />
                         <Route component={Default} />
                     </Switch>
                     <Toast show={toast.show} text={toast.text} />

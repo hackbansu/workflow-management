@@ -21,7 +21,7 @@ export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin }) =>
             <SidebarField name="Workflows" redirectUrl="/workflows" isVisible />
             <SidebarField name="Employees" redirectUrl="/employees" isVisible />
             <SidebarField name="Company" redirectUrl="/company" isVisible />
-            <SidebarField name="Invites" redirectUrl="/invites" isVisible={isAdmin} />
+            <SidebarField name="Invite" redirectUrl="/invite" isVisible={isAdmin} />
             <SidebarField name="Templates" redirectUrl="/templates" isVisible={isAdmin} />
         </ul>
         <ul className="list-unstyled profile-components">

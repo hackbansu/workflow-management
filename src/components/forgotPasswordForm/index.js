@@ -8,7 +8,7 @@ import './index.scss';
 /**
  * Class component for login form
  */
-export class LoginForm extends React.Component {
+export class ForgotPasswordForm extends React.Component {
     /**
      * Constructor for the component.
      * @param {object} props - props object for the component.
@@ -25,7 +25,6 @@ export class LoginForm extends React.Component {
     /**
      * Function to submit the login form.
      * @param {string} email - email entered by the user.
-     * @param {string} password - password entered by the user.
      */
     submitForm = (email) => ev => {
         const { onSubmit } = this.props;
@@ -40,7 +39,7 @@ export class LoginForm extends React.Component {
         const { email } = this.state;
 
         return (
-            <div className="login-form-cover">
+            <div className="forgot-password-form-cover">
                 <form method="post" onSubmit={this.submitForm(email)}>
                     <label>
                         email:
@@ -58,11 +57,11 @@ export class LoginForm extends React.Component {
     }
 }
 
-LoginForm.propTypes = {
+ForgotPasswordForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
 };
 
-LoginForm.defaultProps = {};
+ForgotPasswordForm.defaultProps = {};
 
 const mapStateToProps = state => ({});
 
@@ -71,4 +70,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(LoginForm);
+)(ForgotPasswordForm);

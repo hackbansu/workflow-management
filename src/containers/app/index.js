@@ -8,6 +8,7 @@ import { updateTokenAction } from 'actions/user';
 import LoginPage from 'containers/loginPage';
 import Signup from 'containers/signup';
 import ForgotPassword from 'containers/forgotPassword';
+import ResetPassword from 'containers/resetPassword';
 import Home from 'containers/home';
 import Default from 'containers/default';
 import Toast from 'components/toast';
@@ -40,6 +41,13 @@ export class App extends React.Component {
                             exact
                             path="/forgot-password"
                             component={ForgotPassword}
+                            condition={!isLoggedIn}
+                            redirectUrl="/"
+                        />
+                        <PrivateRoute
+                            exact
+                            path="/reset-password/:token"
+                            component={ResetPassword}
                             condition={!isLoggedIn}
                             redirectUrl="/"
                         />

@@ -15,7 +15,7 @@ export function makeUpdateRequest(address, city, state, links, companyId) {
         links,
     };
 
-    return makeApiRequest('/company/' + companyId + '/', 'PATCH', data);
+    return makeApiRequest('/update-company/' + companyId + '/', 'PATCH', data);
 }
 
 export function makeFetchRequest() {

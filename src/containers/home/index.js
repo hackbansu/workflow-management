@@ -9,7 +9,12 @@ import Profile from 'containers/profile';
 import Company from 'containers/company';
 import Employees from 'containers/employees';
 import Employee from 'containers/employee';
+import Invite from 'containers/invite';
+
+// importing components
 import Sidebar from 'components/sidebar';
+import PrivateRoute from 'components/privateRoute';
+
 
 import { makeLogoutRequest } from 'services/auth';
 import { changeLoaderStateAction } from 'actions/common';
@@ -104,6 +109,7 @@ export class Home extends React.Component {
                                 <Route exact path="/employees" component={Employees} />
                                 <Route exact path="/employee/:id" component={Employee} />
                                 <Route exact path="/company" component={Company} />
+                                <PrivateRoute path="/" component={Invite} condition={isAdmin} redirectUrl="/" />
                                 <Route component={Default} />
                             </Switch>
                         </div>

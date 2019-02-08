@@ -1,3 +1,3 @@
 export default {
-    API_URL: 'https://49bff84e.ngrok.io/api/',
+    API_URL: 'http://192.168.1.61:8000/api/',
 };

@@ -10,6 +10,14 @@ export function makeLoginRequest(email, password) {
 }
 
 /**
+ * Utility function to send the password reset POST request to the server.
+ * @param {string} email - email to send in the login request.
+ */
+export function makePasswordResetRequest(email) {
+    return makeApiRequest('user/request-reset/', 'POST', { email });
+}
+
+/**
  * Utility function to send the login POST request to the server.
  * @param {object} data - data to send in the signup request.
  */

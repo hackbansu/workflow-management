@@ -7,6 +7,7 @@ import { updateTokenAction } from 'actions/user';
 
 import LoginPage from 'containers/loginPage';
 import Signup from 'containers/signup';
+import ForgotPassword from 'containers/forgotPassword';
 import Home from 'containers/home';
 import Default from 'containers/default';
 import Toast from 'components/toast';
@@ -27,8 +28,21 @@ export class App extends React.Component {
             <div>
                 <main>
                     <Switch>
-                        <PrivateRoute exact path="/login" component={LoginPage} condition={!isLoggedIn} redirectUrl="/" />
+                        <PrivateRoute
+                            exact
+                            path="/login"
+                            component={LoginPage}
+                            condition={!isLoggedIn}
+                            redirectUrl="/"
+                        />
                         <PrivateRoute exact path="/signup" component={Signup} condition={!isLoggedIn} redirectUrl="/" />
+                        <PrivateRoute
+                            exact
+                            path="/forgot-password"
+                            component={ForgotPassword}
+                            condition={!isLoggedIn}
+                            redirectUrl="/"
+                        />
                         <PrivateRoute path="/" component={Home} condition={isLoggedIn} redirectUrl="/login" />
                         <Route component={Default} />
                     </Switch>

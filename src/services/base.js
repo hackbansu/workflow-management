@@ -1,19 +1,6 @@
-import { changeToastStateAction } from 'actions/common';
 import constants from 'constants/index.js';
+import { showToast } from 'utils/helpers/toast';
 import store from '../store';
-
-const { dispatch } = store;
-
-/**
- * Show the toast message by dispatching the corresponding action.
- * @param {string} text - text to show in toast message
- */
-function showToast(text) {
-    dispatch(changeToastStateAction(true, text));
-    setTimeout(() => {
-        dispatch(changeToastStateAction(false, ''));
-    }, 3000);
-}
 
 /**
  * service function to make an api call to the server.

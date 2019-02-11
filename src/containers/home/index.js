@@ -91,7 +91,7 @@ export class Home extends React.Component {
     render() {
         const { currentUser } = this.props;
         const { firstName, lastName, isAdmin, company, profilePhoto } = currentUser;
-        const { name: companyName } = company;
+        const { name: companyName, logo } = company;
 
         return (
             <div>
@@ -104,6 +104,7 @@ export class Home extends React.Component {
                             isAdmin={isAdmin}
                             companyName={companyName}
                             profilePhoto={profilePhoto}
+                            logo={logo}
                         />
                         <div id="content" className="col-md-9">
                             <Switch>

@@ -46,7 +46,8 @@ export default (state = initialState, action) => {
                 address: action.address,
                 city: action.city,
                 state: action.state,
-                logo: action.logo,
+                logo:
+                        action.logo.substring(0, 4) === 'http' ? action.logo : `${constants.STATIC_URL}${action.logo}`,
                 status: action.status,
                 links: action.links,
             },

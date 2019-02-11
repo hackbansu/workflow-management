@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import FormField from 'components/formField';
+import UploadField from 'components/uploadField';
 import FormSubmitButton from 'components/formSubmitButton';
 import { CLIENT_RENEG_LIMIT } from 'tls';
 
@@ -24,7 +25,7 @@ export class CompanyForm extends React.Component {
             linksObj[link.link_type] = link.url;
         }
 
-        this.state = { name, address, city, state, status, linksObj };
+        this.state = { name, address, city, state, status, linksObj, logo: null };
 
         this.submitForm = this.submitForm.bind(this);
     }
@@ -36,7 +37,7 @@ export class CompanyForm extends React.Component {
      * @param {string} state - state of the company.
      * @param {string} links - links of the company.
      */
-    submitForm = (address, city, state, linksObj) => ev => {
+    submitForm = (address, city, state, linksObj, logo) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
         const links = [];
@@ -45,19 +46,19 @@ export class CompanyForm extends React.Component {
             links.push({ link_type: linkType, url });
         });
 
-        onSubmit(address, city, state, links);
+        onSubmit(address, city, state, links, logo);
     };
 
     /**
      * Function to return the component rendering.
      */
     render() {
-        const { name, address, city, state, status, linksObj } = this.state;
+        const { name, address, city, state, status, linksObj, logo } = this.state;
         const { isAdmin } = this.props;
 
         return (
             <div>
-                <form method="post" onSubmit={this.submitForm(address, city, state, linksObj)}>
+                <form method="post" onSubmit={this.submitForm(address, city, state, linksObj, logo)}>
                     <fieldset disabled={!isAdmin ? 'disabled' : ''}>
                         {/* name */}
                         <FormField
@@ -123,17 +124,12 @@ export class CompanyForm extends React.Component {
                             />
                         ))}
                         {/* profile photo */}
-                        {/* <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">Upload</span>
-                        </div>
-                        <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="inputGroupFile01" />
-                            <label className="custom-file-label" htmlFor="inputGroupFile01">
-                                Choose file
-                            </label>
-                        </div>
-                    </div> */}
+                        <UploadField
+                            name="Company Logo"
+                            inputName="logo"
+                            type="file"
+                            onChange={e => this.setState({ logo: e.target.files[0] })}
+                        />
                         {/* update profile button */}
                         <FormSubmitButton name="Update" />
                     </fieldset>

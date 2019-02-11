@@ -48,15 +48,15 @@ export class Company extends React.Component {
     /**
      * function to submit update company request.
      */
-    onSubmit = (address, city, state, links) => {
+    onSubmit = (address, city, state, links, logo) => {
         const { updateCompany, history, currentUser } = this.props;
-        const { id: companyId, name, logo, status } = currentUser.company;
+        const { id: companyId, name, status } = currentUser.company;
 
         // dispatch action to show loader
         showLoader(true);
 
         // call the service function
-        makeUpdateRequest(address, city, state, links, companyId).then(obj => {
+        makeUpdateRequest(address, city, state, links, logo, companyId).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -66,7 +66,7 @@ export class Company extends React.Component {
             showToast('Update Successful');
 
             const { response, body } = obj;
-            const { address, city, state, links } = body.company;
+            const { address, city, state, links, logo } = body;
 
             // dispatch action to update company data in store
             updateCompany(companyId, name, address, city, state, logo, status, links);

@@ -8,6 +8,10 @@ export const history = createHistory();
 
 const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {};
 
+if (!persistedState.currentUser.company) {
+    persistedState.currentUser.company = {};
+}
+
 const enhancers = [];
 const middleware = [thunk, routerMiddleware(history)];
 

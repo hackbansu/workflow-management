@@ -11,7 +11,7 @@ import SidebarField from 'components/sidebarField';
 export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin, companyName, profilePhoto, logo }) => (
     <nav id="sidebar">
         <div className="sidebar-header">
-            <h3>Sidebar</h3>
+            <h3>{ companyName }</h3>
         </div>
 
         <ul className="list-unstyled components">

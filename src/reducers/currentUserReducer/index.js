@@ -26,7 +26,10 @@ export default (state = initialState, action) => {
             ...state,
             firstName: action.firstName,
             lastName: action.lastName,
-            profilePhoto: `${constants.STATIC_URL}${action.profilePhoto}`,
+            profilePhoto:
+                    action.profilePhoto.substring(0, 4) === 'http'
+                        ? action.profilePhoto
+                        : `${constants.STATIC_URL}${action.profilePhoto}`,
             email: action.email,
             id: action.id,
             isAdmin: action.isAdmin,

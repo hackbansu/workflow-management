@@ -9,23 +9,28 @@ import store from '../store';
  * @param {object} data - data to send in case of POST request
  * @param {string} token - token of the user to send
  */
-export function makeApiRequest(url, method = 'GET', data = undefined) {
+export function makeApiRequest(url, method = 'GET', data = undefined, contentType = 'application/json') {
     url = constants.API_URL + url;
     const token = store.getState().currentUser.token ? 'Token ' + store.getState().currentUser.token : '';
 
     let body;
     if (data) {
-        body = JSON.stringify(data);
+        body = data;
+    }
+
+    const headers = {
+        Authorization: token,
+    };
+    if (contentType === 'application/json') {
+        headers['content-type'] = contentType;
+        body = JSON.stringify(body);
     }
 
     return fetch(url, {
         // optional fetch options
         method,
         body, // you may send any data, encoded as you wish. shall match content-type
-        headers: {
-            'content-type': 'application/json',
-            Authorization: token,
-        },
+        headers,
         mode: 'cors', // no-cors, cors, *same-origin
         referrer: 'no-referrer', // *client, no-referrer
     })

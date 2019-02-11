@@ -28,7 +28,7 @@ export class Profile extends React.Component {
     /**
      * function to submit profile update request.
      */
-    onSubmit = (password, firstName, lastName) => {
+    onSubmit = (password, firstName, lastName, profilePhoto) => {
         const { updateProfile, history, currentUser } = this.props;
         const { id: userId, email, isAdmin, designation, status } = currentUser;
 
@@ -36,7 +36,7 @@ export class Profile extends React.Component {
         showLoader(true);
 
         // call the service function
-        makeUpdateRequest(password, firstName, lastName).then(obj => {
+        makeUpdateRequest(password, firstName, lastName, profilePhoto).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -50,6 +50,7 @@ export class Profile extends React.Component {
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);
 
             showToast('Profile Updated');
+            history.push('/');
         });
     };
 

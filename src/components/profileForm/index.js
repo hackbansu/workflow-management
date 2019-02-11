@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import FormField from 'components/formField';
+import UploadField from 'components/uploadField';
 import FormSubmitButton from 'components/formSubmitButton';
 
 /**
@@ -25,6 +26,7 @@ export class ProfileForm extends React.Component {
             isAdmin,
             designation,
             status,
+            profilePhoto: null,
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -37,21 +39,21 @@ export class ProfileForm extends React.Component {
      * @param {string} firstName - first name of the user.
      * @param {string} lastName - last name of the user.
      */
-    submitForm = (password, firstName, lastName) => ev => {
+    submitForm = (password, firstName, lastName, profilePhoto) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
-        onSubmit(password, firstName, lastName);
+        onSubmit(password, firstName, lastName, profilePhoto);
     };
 
     /**
      * Function to return the component rendering.
      */
     render() {
-        const { email, password, firstName, lastName, isAdmin, designation, status } = this.state;
+        const { email, password, firstName, lastName, isAdmin, designation, status, profilePhoto } = this.state;
 
         return (
             <div>
-                <form method="post" onSubmit={this.submitForm(password, firstName, lastName)}>
+                <form method="post" onSubmit={this.submitForm(password, firstName, lastName, profilePhoto)}>
                     {/* email */}
                     <FormField
                         name="Email"
@@ -118,17 +120,12 @@ export class ProfileForm extends React.Component {
                         checked={isAdmin ? 'checked' : ''}
                     />
                     {/* profile photo */}
-                    {/* <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">Upload</span>
-                        </div>
-                        <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="inputGroupFile01" />
-                            <label className="custom-file-label" htmlFor="inputGroupFile01">
-                                Choose file
-                            </label>
-                        </div>
-                    </div> */}
+                    <UploadField
+                        name="Profile Picture"
+                        inputName="profilePhoto"
+                        type="file"
+                        onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
+                    />
                     {/* update profile button */}
                     <FormSubmitButton name="Update" />
                 </form>

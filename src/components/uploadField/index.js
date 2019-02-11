@@ -7,31 +7,32 @@ import PropTypes from 'prop-types';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const FormField = ({ name, inputName, type, placeholder, value, onChange, disabled, ...rest }) => {
+export const UploadField = ({ name, inputName, type, onChange, disabled, ...rest }) => {
     const id = inputName + '3';
     return (
-        <div className="form-group row">
-            <label htmlFor={id} className="col-sm-2 col-form-label">
-                {name}
-            </label>
-            <div className="col-sm-10">
+        <div className="input-group mb-3">
+            <div className="input-group-prepend">
+                <span className="input-group-text">{name}</span>
+            </div>
+            <div className="custom-file">
                 <input
-                    id={id}
-                    className="form-control"
-                    type={type}
+                    id="inputGroupFile01"
+                    className="custom-file-input"
                     name={inputName}
-                    value={value}
+                    type={type}
                     onChange={onChange}
-                    placeholder={placeholder}
                     disabled={disabled}
                     {...rest}
                 />
+                <label className="custom-file-label" htmlFor="inputGroupFile01">
+                    Choose file
+                </label>
             </div>
         </div>
     );
 };
 
-FormField.propTypes = {
+UploadField.propTypes = {
     name: PropTypes.string.isRequired,
     inputName: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
@@ -41,10 +42,10 @@ FormField.propTypes = {
     disabled: PropTypes.string,
 };
 
-FormField.defaultProps = {
+UploadField.defaultProps = {
     placeholder: '',
     value: '',
     disabled: '',
 };
 
-export default FormField;
+export default UploadField;

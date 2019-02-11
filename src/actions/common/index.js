@@ -6,7 +6,7 @@ const { CHANGE_LOADER_STATE, CHANGE_TOAST_STATE } = actions.common;
  * Function to get loader state change action.
  * @param {string} value - css class to be set on loader
  */
-export const changeLoaderStateAction = value => ({ type: CHANGE_LOADER_STATE, class: value });
+export const changeLoaderStateAction = show => ({ type: CHANGE_LOADER_STATE, show });
 
 /**
  * Function to get toast state change action.

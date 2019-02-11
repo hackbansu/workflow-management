@@ -23,10 +23,10 @@ export function makePasswordResetRequest(email) {
  */
 export function makePasswordUpdateRequest(type, token, password = '') {
     if (type === 'GET') {
-        return makeApiRequest(`user/reset-password/${token}`, type);
+        return makeApiRequest(`user/reset-password/${token}/`, type);
     }
     if (type === 'POST') {
-        return makeApiRequest(`user/reset-password/${token}`, type, { password });
+        return makeApiRequest(`user/reset-password/${token}/`, type, { password });
     }
     return null;
 }
@@ -36,7 +36,6 @@ export function makePasswordUpdateRequest(type, token, password = '') {
  * @param {object} data - data to send in the signup request.
  */
 export function makeSignupRequest(data) {
-    console.log('data :', data);
     return makeApiRequest('create-company/', 'POST', data);
 }
 

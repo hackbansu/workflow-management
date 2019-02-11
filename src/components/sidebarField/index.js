@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import './index.scss';
-
 /**
  * Functional component of the sidebar field.
  * @param {object} param0 - props object for the component.

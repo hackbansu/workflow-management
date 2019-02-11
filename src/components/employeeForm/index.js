@@ -3,8 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import './index.scss';
-
 import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
 
@@ -107,7 +105,7 @@ export class EmployeeForm extends React.Component {
                             name="Admin"
                             inputName="isAdmin"
                             type="checkbox"
-                            onChange={e => this.setState({ isAdmin: e.target.value })}
+                            onChange={e => this.setState({ isAdmin: e.target.checked })}
                             checked={isAdmin ? 'checked' : ''}
                         />
                         {/* profile photo */}

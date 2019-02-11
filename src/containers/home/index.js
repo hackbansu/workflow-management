@@ -15,15 +15,12 @@ import Invite from 'containers/invite';
 import Sidebar from 'components/sidebar';
 import PrivateRoute from 'components/privateRoute';
 
-
 import { makeLogoutRequest } from 'services/auth';
-import { changeLoaderStateAction } from 'actions/common';
 import { updateProfileAction, updateCompanyAction, logoutAction } from 'actions/user';
-
+import { showLoader } from 'utils/helpers/loader';
+import { showToast } from 'utils/helpers/toast';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
-
-import './index.scss';
 
 /**
  * Home component.
@@ -68,14 +65,14 @@ export class Home extends React.Component {
     }
 
     onLogoutClick = () => {
-        const { changeLoaderState, logout, history } = this.props;
+        const { logout, history } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makeLogoutRequest().then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -84,6 +81,8 @@ export class Home extends React.Component {
             // dispatch action to logout user
             logout();
 
+            showToast('Logout successful');
+
             // redirect to login page
             history.push('/login');
         });
@@ -91,25 +90,27 @@ export class Home extends React.Component {
 
     render() {
         const { currentUser } = this.props;
-        const { firstName, lastName, isAdmin } = currentUser;
+        const { firstName, lastName, isAdmin, company } = currentUser;
+        const { name: companyName } = company;
 
         return (
             <div>
                 <main>
-                    <div className="wrapper">
+                    <div className="wrapper col-md-12">
                         <Sidebar
                             firstName={firstName}
                             lastName={lastName}
                             onLogoutClick={this.onLogoutClick}
                             isAdmin={isAdmin}
+                            companyName={companyName}
                         />
-                        <div id="content">
+                        <div id="content" className="col-md-9">
                             <Switch>
                                 <Route exact path="/profile" component={Profile} />
                                 <Route exact path="/employees" component={Employees} />
                                 <Route exact path="/employee/:id" component={Employee} />
                                 <Route exact path="/company" component={Company} />
-                                <PrivateRoute path="/" component={Invite} condition={isAdmin} redirectUrl="/" />
+                                <PrivateRoute path="/invite" component={Invite} condition={isAdmin} redirectUrl="/" />
                                 <Route component={Default} />
                             </Switch>
                         </div>
@@ -122,7 +123,6 @@ export class Home extends React.Component {
 
 Home.propTypes = {
     currentUser: PropTypes.object.isRequired,
-    changeLoaderState: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
@@ -138,7 +138,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
     logout: () => dispatch(logoutAction()),
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
     updateCompany: (...args) => dispatch(updateCompanyAction(...args)),

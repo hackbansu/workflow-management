@@ -27,7 +27,10 @@ const composedEnhancers = compose(
 const store = createStore(connectRouter(history)(rootReducer), persistedState, composedEnhancers);
 
 store.subscribe(() => {
-    localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+    const persistedData = {};
+    persistedData.currentUser = store.getState().currentUser;
+    persistedData.employees = store.getState().employees;
+    localStorage.setItem('reduxState', JSON.stringify(persistedData));
 });
 
 export default store;

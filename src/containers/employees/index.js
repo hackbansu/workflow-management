@@ -6,7 +6,6 @@ import React from 'react';
 
 import { updateEmployeesAction } from 'actions/employees';
 import { makeFetchRequest } from 'services/employees';
-import './index.scss';
 
 /**
  * Login page component.
@@ -40,7 +39,7 @@ export class Profile extends React.Component {
                     id: userId,
                 } = emp.user;
                 const { designation, is_admin: isAdmin, status, id: employeeId } = emp;
-    
+
                 return {
                     user: {
                         firstName,
@@ -66,8 +65,6 @@ export class Profile extends React.Component {
      */
     render() {
         const { employees } = this.props;
-        console.log('type :', typeof employees);
-        console.log('employees :', employees);
         return (
             <table className="table">
                 <thead>

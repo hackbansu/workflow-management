@@ -3,15 +3,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
+import { showLoader } from 'utils/helpers/loader';
 import { updateTokenAction, updateProfileAction, updateCompanyAction } from 'actions/user';
 import { makeSignupRequest } from 'services/auth';
-import './index.scss';
 
 // importing components
 import SignupForm from 'components/signupForm';
 import PageBanner from 'components/pageBanner';
-import Loader from 'components/loader';
 
 /**
  * Login page component.
@@ -41,10 +39,10 @@ export class Signup extends React.Component {
         companyCity,
         companyState
     ) => {
-        const { changeLoaderState, updateToken, updateProfile, updateCompany, history } = this.props;
+        const { updateToken, updateProfile, updateCompany, history } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         const data = {
             user: {
@@ -64,7 +62,7 @@ export class Signup extends React.Component {
 
         // call the service function
         makeSignupRequest(data).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -92,13 +90,11 @@ export class Signup extends React.Component {
      * function to render the component.
      */
     render() {
-        const { loaderClass } = this.props;
         return (
             <div className="signup-page">
                 <div className="container">
                     <PageBanner text="Sign Up" />
                     <SignupForm onSubmit={this.onSubmit} />
-                    <Loader loaderClass={loaderClass} />
                 </div>
             </div>
         );
@@ -106,8 +102,6 @@ export class Signup extends React.Component {
 }
 
 Signup.propTypes = {
-    loaderClass: PropTypes.string,
-    changeLoaderState: PropTypes.func.isRequired,
     updateToken: PropTypes.func.isRequired,
     updateProfile: PropTypes.func.isRequired,
     updateCompany: PropTypes.func.isRequired,
@@ -115,15 +109,12 @@ Signup.propTypes = {
 };
 
 Signup.defaultProps = {
-    loaderClass: 'invisible',
 };
 
 const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
 });
 
 const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
     updateToken: value => dispatch(updateTokenAction(value)),
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
     updateCompany: (...args) => dispatch(updateCompanyAction(...args)),

@@ -3,8 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import './index.scss';
-
 /**
  * Class component for login form
  */
@@ -54,10 +52,11 @@ export class ResetPasswordForm extends React.Component {
                                 onChange={e => this.setState({ password: e.target.value })}
                             />
                         </label>
+                        <br />
                         <label>
                             Confirm Password:
                             <input
-                                type="confirmPassword"
+                                type="password"
                                 name="confirmPassword"
                                 placeholder=""
                                 onChange={e => this.setState({ confirmPassword: e.target.value })}
@@ -73,9 +72,12 @@ export class ResetPasswordForm extends React.Component {
 
 ResetPasswordForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    isDisabled: PropTypes.bool,
 };
 
-ResetPasswordForm.defaultProps = {};
+ResetPasswordForm.defaultProps = {
+    isDisabled: true,
+};
 
 const mapStateToProps = state => ({});
 

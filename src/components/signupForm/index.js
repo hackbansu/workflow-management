@@ -6,8 +6,6 @@ import PropTypes from 'prop-types';
 import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
 
-import './index.scss';
-
 /**
  * Class component for login form
  */

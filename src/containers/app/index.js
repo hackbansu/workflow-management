@@ -11,6 +11,7 @@ import ForgotPassword from 'containers/forgotPassword';
 import ResetPassword from 'containers/resetPassword';
 import Home from 'containers/home';
 import Default from 'containers/default';
+import Loader from 'components/loader';
 import Toast from 'components/toast';
 import PrivateRoute from 'components/privateRoute';
 
@@ -19,7 +20,7 @@ import PrivateRoute from 'components/privateRoute';
  */
 export class App extends React.Component {
     render() {
-        const { toast, token } = this.props;
+        const { toast, token, loader } = this.props;
         let isLoggedIn = false;
         if (token && token !== '') {
             isLoggedIn = true;
@@ -55,6 +56,7 @@ export class App extends React.Component {
                         <Route component={Default} />
                     </Switch>
                     <Toast show={toast.show} text={toast.text} />
+                    <Loader show={loader.show} />
                 </main>
             </div>
         );
@@ -67,6 +69,9 @@ App.propTypes = {
         text: PropTypes.string,
     }),
     token: PropTypes.string,
+    loader: PropTypes.shape({
+        show: PropTypes.bool,
+    }),
 };
 
 App.defaultProps = {
@@ -75,6 +80,9 @@ App.defaultProps = {
         text: 'There is no text here',
     },
     token: '',
+    loader: {
+        show: false,
+    },
 };
 
 const mapStateToProps = state => ({
@@ -83,6 +91,9 @@ const mapStateToProps = state => ({
         text: state.toast.text,
     },
     token: state.currentUser.token,
+    loader: {
+        show: state.loader.show,
+    },
 });
 
 const mapDispatchToProps = dispatch => ({});

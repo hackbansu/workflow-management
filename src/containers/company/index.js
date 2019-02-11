@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
+import { showLoader } from 'utils/helpers/loader';
+import { showToast } from 'utils/helpers/toast';
 import { updateProfileAction, updateCompanyAction } from 'actions/user';
 import { makeUpdateRequest, makeFetchRequest } from 'services/company';
-import './index.scss';
 
 // importing components
 import CompanyForm from 'components/companyForm';
@@ -25,7 +25,6 @@ export class Company extends React.Component {
     }
 
     componentWillMount() {
-        console.log('************************************');
         const { currentUser, updateProfile, updateCompany } = this.props;
         const { id: userId, firstName, lastName, profilePhoto, email } = currentUser;
 
@@ -50,19 +49,21 @@ export class Company extends React.Component {
      * function to submit update company request.
      */
     onSubmit = (address, city, state, links) => {
-        const { changeLoaderState, updateCompany, history, currentUser } = this.props;
+        const { updateCompany, history, currentUser } = this.props;
         const { id: companyId, name, logo, status } = currentUser.company;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
-        makeUpdateRequest(address, city, state, links).then(obj => {
-            changeLoaderState('invisible');
+        makeUpdateRequest(address, city, state, links, companyId).then(obj => {
+            showLoader(false);
 
             if (!obj) {
                 return;
             }
+
+            showToast('Update Successful');
 
             const { response, body } = obj;
             const { address, city, state, links } = body.company;
@@ -103,7 +104,6 @@ export class Company extends React.Component {
 }
 
 Company.propTypes = {
-    changeLoaderState: PropTypes.func.isRequired,
     updateProfile: PropTypes.func.isRequired,
     updateCompany: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -113,12 +113,10 @@ Company.propTypes = {
 Company.defaultProps = {};
 
 const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
     currentUser: state.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
     updateCompany: (...args) => dispatch(updateCompanyAction(...args)),
 });

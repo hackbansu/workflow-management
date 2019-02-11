@@ -3,11 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
-import { updateProfileAction } from 'actions/user';
 import { makeInviteRequest } from 'services/employees';
+import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
-import './index.scss';
 
 // importing components
 import InviteForm from 'components/inviteForm';
@@ -27,17 +25,17 @@ export class Invite extends React.Component {
     }
 
     /**
-     * function to submit login request.
+     * function to submit invite request.
      */
     onSubmit = (email, firstName, lastName, designation) => {
-        const { changeLoaderState, history } = this.props;
+        const { history } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makeInviteRequest(email, firstName, lastName, designation).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -64,19 +62,14 @@ export class Invite extends React.Component {
 }
 
 Invite.propTypes = {
-    changeLoaderState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
 };
 
 Invite.defaultProps = {};
 
-const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
     mapStateToProps,

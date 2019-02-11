@@ -4,15 +4,13 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
+import { showLoader } from 'utils/helpers/loader';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
-import './index.scss';
 
 // importing components
 import LoginForm from 'components/loginForm';
 import PageBanner from 'components/pageBanner';
-import Loader from 'components/loader';
 import LinkButton from 'components/linkButton';
 
 /**
@@ -33,14 +31,14 @@ export class LoginPage extends React.Component {
      * function to submit login request.
      */
     onSubmit = (email, password) => {
-        const { changeLoaderState, updateToken, updateProfile, history } = this.props;
+        const { updateToken, updateProfile, history } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makeLoginRequest(email, password).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -62,14 +60,12 @@ export class LoginPage extends React.Component {
      * function to render the component.
      */
     render() {
-        const { loaderClass } = this.props;
         return (
             <div className="login-page">
                 <div className="container">
                     <PageBanner text="Login" />
                     <LoginForm onSubmit={this.onSubmit} />
                     <LinkButton name="Forgot Password" toUrl="/forgot-password" />
-                    <Loader loaderClass={loaderClass} />
                 </div>
             </div>
         );
@@ -77,23 +73,16 @@ export class LoginPage extends React.Component {
 }
 
 LoginPage.propTypes = {
-    loaderClass: PropTypes.string,
-    changeLoaderState: PropTypes.func.isRequired,
     updateToken: PropTypes.func.isRequired,
     updateProfile: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
 };
 
-LoginPage.defaultProps = {
-    loaderClass: 'invisible',
-};
+LoginPage.defaultProps = {};
 
-const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
     updateToken: value => dispatch(updateTokenAction(value)),
     updateProfile: (firstName, lastName, profilePhoto, email, id) => dispatch(updateProfileAction(firstName, lastName, profilePhoto, email, id)),
 });

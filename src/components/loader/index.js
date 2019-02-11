@@ -9,8 +9,14 @@ import './index.scss';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const Loader = ({ loaderClass }) => {
-    loaderClass += ' loader-cover';
+export const Loader = ({ show }) => {
+    let loaderClass = 'loader-cover';
+    if (show) {
+        loaderClass += ' visible';
+    } else {
+        loaderClass += ' invisible';
+    }
+
     return (
         <div className={loaderClass}>
             <div className="loader" />
@@ -19,11 +25,9 @@ export const Loader = ({ loaderClass }) => {
 };
 
 Loader.propTypes = {
-    loaderClass: PropTypes.string,
+    show: PropTypes.bool.isRequired,
 };
 
-Loader.defaultProps = {
-    loaderClass: 'invisible',
-};
+Loader.defaultProps = {};
 
 export default Loader;

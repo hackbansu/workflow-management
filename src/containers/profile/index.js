@@ -3,10 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
+import { showToast } from 'utils/helpers/toast';
+import { showLoader } from 'utils/helpers/loader';
 import { updateProfileAction } from 'actions/user';
 import { makeUpdateRequest } from 'services/user';
-import './index.scss';
 
 // importing components
 import ProfileForm from 'components/profileForm';
@@ -26,18 +26,18 @@ export class Profile extends React.Component {
     }
 
     /**
-     * function to submit login request.
+     * function to submit profile update request.
      */
     onSubmit = (password, firstName, lastName) => {
-        const { changeLoaderState, updateProfile, history, currentUser } = this.props;
+        const { updateProfile, history, currentUser } = this.props;
         const { id: userId, email, isAdmin, designation, status } = currentUser;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makeUpdateRequest(password, firstName, lastName).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -48,6 +48,8 @@ export class Profile extends React.Component {
 
             // dispatch action to update user data in store
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);
+
+            showToast('Profile Updated');
         });
     };
 
@@ -77,7 +79,6 @@ export class Profile extends React.Component {
 }
 
 Profile.propTypes = {
-    changeLoaderState: PropTypes.func.isRequired,
     updateProfile: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
@@ -86,12 +87,10 @@ Profile.propTypes = {
 Profile.defaultProps = {};
 
 const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
     currentUser: state.currentUser,
 });
 
 const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
 });
 

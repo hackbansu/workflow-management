@@ -3,10 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
-import { updateProfileAction } from 'actions/user';
+import { showLoader } from 'utils/helpers/loader';
+import { showToast } from 'utils/helpers/toast';
 import { makeUpdateRequest } from 'services/employees';
-import './index.scss';
 
 // importing components
 import EmployeeForm from 'components/employeeForm';
@@ -35,21 +34,23 @@ export class Employee extends React.Component {
     }
 
     /**
-     * function to submit login request.
+     * function to submit update employee request.
      */
     onSubmit = (firstName, lastName, designation, isAdmin) => {
-        const { changeLoaderState, history } = this.props;
+        const { history } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makeUpdateRequest(firstName, lastName, '', designation, isAdmin, this.currentEmployee.id).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
             }
+
+            showToast('Update Successful');
 
             const { response, body } = obj;
 
@@ -87,7 +88,6 @@ export class Employee extends React.Component {
 }
 
 Employee.propTypes = {
-    changeLoaderState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
     employees: PropTypes.array.isRequired,
@@ -97,14 +97,11 @@ Employee.propTypes = {
 Employee.defaultProps = {};
 
 const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
     currentUser: state.currentUser,
     employees: state.employees,
 });
 
-const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
     mapStateToProps,

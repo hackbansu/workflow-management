@@ -3,16 +3,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
+import { showLoader } from 'utils/helpers/loader';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makePasswordResetRequest } from 'services/auth';
 import { showToast } from 'utils/helpers/toast';
-import './index.scss';
 
 // importing components
 import ForgotPasswordForm from 'components/forgotPasswordForm';
 import PageBanner from 'components/pageBanner';
-import Loader from 'components/loader';
 import LinkButton from 'components/linkButton';
 
 /**
@@ -33,14 +31,14 @@ export class ForgotPassword extends React.Component {
      * function to submit login request.
      */
     onSubmit = email => {
-        const { changeLoaderState, history } = this.props;
+        const { history } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makePasswordResetRequest(email).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -59,14 +57,12 @@ export class ForgotPassword extends React.Component {
      * function to render the component.
      */
     render() {
-        const { loaderClass } = this.props;
         return (
             <div className="login-page">
                 <div className="container">
                     <PageBanner text="Forgot Password" />
                     <ForgotPasswordForm onSubmit={this.onSubmit} />
                     <LinkButton name="Login" toUrl="/login" />
-                    <Loader loaderClass={loaderClass} />
                 </div>
             </div>
         );
@@ -74,22 +70,14 @@ export class ForgotPassword extends React.Component {
 }
 
 ForgotPassword.propTypes = {
-    loaderClass: PropTypes.string,
-    changeLoaderState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
 };
 
-ForgotPassword.defaultProps = {
-    loaderClass: 'invisible',
-};
+ForgotPassword.defaultProps = {};
 
-const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
     mapStateToProps,

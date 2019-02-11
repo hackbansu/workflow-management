@@ -2,15 +2,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { changeLoaderStateAction } from 'actions/common';
+import { showLoader } from 'utils/helpers/loader';
 import { makePasswordUpdateRequest } from 'services/auth';
 import { showToast } from 'utils/helpers/toast';
-import './index.scss';
 
 // importing components
 import ResetPasswordForm from 'components/resetPasswordForm';
 import PageBanner from 'components/pageBanner';
-import Loader from 'components/loader';
 
 /**
  * Login page component.
@@ -29,13 +27,13 @@ export class ResetPassword extends React.Component {
     }
 
     componentWillMount() {
-        const { changeLoaderState, match } = this.props;
+        const { match } = this.props;
         const { token } = match.params;
 
-        changeLoaderState('visible');
+        showLoader(true);
 
         makePasswordUpdateRequest('GET', token).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -52,7 +50,7 @@ export class ResetPassword extends React.Component {
      */
     onSubmit = (password, confirmPassword) => {
         const { formDisable } = this.state;
-        const { changeLoaderState, history, match } = this.props;
+        const { history, match } = this.props;
         const { token } = match.params;
 
         if (formDisable) {
@@ -65,11 +63,11 @@ export class ResetPassword extends React.Component {
         }
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makePasswordUpdateRequest('POST', token, password).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
@@ -88,7 +86,6 @@ export class ResetPassword extends React.Component {
      * function to render the component.
      */
     render() {
-        const { loaderClass } = this.props;
         const { formDisabled } = this.state;
 
         return (
@@ -96,7 +93,6 @@ export class ResetPassword extends React.Component {
                 <div className="container">
                     <PageBanner text="New Password" />
                     <ResetPasswordForm onSubmit={this.onSubmit} isDisabled={formDisabled} />
-                    <Loader loaderClass={loaderClass} />
                 </div>
             </div>
         );
@@ -104,23 +100,15 @@ export class ResetPassword extends React.Component {
 }
 
 ResetPassword.propTypes = {
-    loaderClass: PropTypes.string,
-    changeLoaderState: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
 };
 
-ResetPassword.defaultProps = {
-    loaderClass: 'invisible',
-};
+ResetPassword.defaultProps = {};
 
-const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
     mapStateToProps,

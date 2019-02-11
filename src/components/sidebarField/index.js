@@ -6,13 +6,14 @@ import PropTypes from 'prop-types';
  * Functional component of the sidebar field.
  * @param {object} param0 - props object for the component.
  */
-export const sidebarField = ({ name, redirectUrl, isVisible, onClick }) => {
+export const sidebarField = ({ name, redirectUrl, isVisible, onClick, imgUrl }) => {
     if (!isVisible) {
         return '';
     }
     return (
         <li>
             <Link to={redirectUrl} onClick={onClick}>
+                {imgUrl ? <img src={imgUrl} className="display-pic" alt="profile pic" /> : ''}
                 {name}
             </Link>
         </li>

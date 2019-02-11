@@ -1,4 +1,5 @@
 import actions from 'constants/actions.js';
+import constants from 'constants/index.js';
 
 const { UPDATE_TOKEN, UPDATE_PROFILE, UPDATE_COMPANY, LOGOUT } = actions.user;
 
@@ -25,7 +26,7 @@ export default (state = initialState, action) => {
             ...state,
             firstName: action.firstName,
             lastName: action.lastName,
-            profilePhoto: action.profilePhoto,
+            profilePhoto: `${constants.STATIC_URL}${action.profilePhoto}`,
             email: action.email,
             id: action.id,
             isAdmin: action.isAdmin,

@@ -90,7 +90,7 @@ export class Home extends React.Component {
 
     render() {
         const { currentUser } = this.props;
-        const { firstName, lastName, isAdmin, company } = currentUser;
+        const { firstName, lastName, isAdmin, company, profilePhoto } = currentUser;
         const { name: companyName } = company;
 
         return (
@@ -103,6 +103,7 @@ export class Home extends React.Component {
                             onLogoutClick={this.onLogoutClick}
                             isAdmin={isAdmin}
                             companyName={companyName}
+                            profilePhoto={profilePhoto}
                         />
                         <div id="content" className="col-md-9">
                             <Switch>

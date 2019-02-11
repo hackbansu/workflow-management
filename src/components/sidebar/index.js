@@ -8,7 +8,7 @@ import SidebarField from 'components/sidebarField';
  * Functional component of the sidebar field.
  * @param {object} param0 - props object for the component.
  */
-export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin, companyName }) => (
+export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin, companyName, profilePhoto }) => (
     <nav id="sidebar">
         <div className="sidebar-header">
             <h3>Sidebar</h3>
@@ -22,7 +22,7 @@ export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin, comp
             <SidebarField name="Templates" redirectUrl="/templates" isVisible={isAdmin} />
         </ul>
         <ul className="list-unstyled profile-components">
-            <SidebarField name={firstName + ' ' + lastName} redirectUrl="/profile" isVisible />
+            <SidebarField name={firstName + ' ' + lastName} redirectUrl="/profile" isVisible imgUrl={profilePhoto} />
             <SidebarField name={companyName} redirectUrl="/company" isVisible />
             <SidebarField name="Logout" redirectUrl="" isVisible onClick={onLogoutClick} />
         </ul>
@@ -35,6 +35,7 @@ sidebarField.propTypes = {
     lastName: PropTypes.string,
     onLogoutClick: PropTypes.func.isRequired,
     companyName: PropTypes.string,
+    profilePhoto: PropTypes.string.isRequired,
 };
 
 sidebarField.defaultProps = {

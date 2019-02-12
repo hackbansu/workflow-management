@@ -89,14 +89,16 @@ export class Home extends React.Component {
     };
 
     render() {
-        const { currentUser } = this.props;
+        const { currentUser, location } = this.props;
         const { firstName, lastName, isAdmin, profilePhoto } = currentUser;
         let { company } = currentUser;
-
+        
         if (!company) {
             company = {};
         }
         const { name: companyName, logo } = company;
+        let { pathname: activeField } = location;
+        activeField = activeField.split('/')[1].toLowerCase();
 
         return (
             <div>
@@ -110,6 +112,7 @@ export class Home extends React.Component {
                             companyName={companyName}
                             profilePhoto={profilePhoto}
                             logo={logo}
+                            activeField={activeField}
                         />
                         <div id="content">
                             <Switch>
@@ -132,6 +135,7 @@ Home.propTypes = {
     currentUser: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
     updateCompany: PropTypes.func.isRequired,
 };

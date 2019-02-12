@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
  * Functional component of the sidebar field.
  * @param {object} param0 - props object for the component.
  */
-export const sidebarField = ({ name, redirectUrl, isVisible, onClick, imgUrl }) => {
+export const sidebarField = ({ name, fieldType, redirectUrl, isVisible, onClick, imgUrl }) => {
     if (!isVisible) {
         return '';
     }
     return (
-        <li>
+        <li data-field-type={fieldType}>
             <Link to={redirectUrl} onClick={onClick}>
                 {imgUrl ? <img src={imgUrl} className="display-pic" alt="profile pic" /> : ''}
                 {name}
@@ -22,14 +22,17 @@ export const sidebarField = ({ name, redirectUrl, isVisible, onClick, imgUrl }) 
 
 sidebarField.propTypes = {
     name: PropTypes.string.isRequired,
+    fieldType: PropTypes.string.isRequired,
     redirectUrl: PropTypes.string.isRequired,
     isVisible: PropTypes.bool,
     onClick: PropTypes.func,
+    imgUrl: PropTypes.string,
 };
 
 sidebarField.defaultProps = {
     isVisible: false,
     onClick: null,
+    imgUrl: null,
 };
 
 export default sidebarField;

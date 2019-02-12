@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
+import { showModal } from 'utils/helpers/modal';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
 
@@ -41,9 +42,10 @@ export class LoginPage extends React.Component {
             showLoader(false);
 
             if (!obj) {
+                showModal('Invalid Credentials');
                 return;
             }
-
+            
             const { response, body } = obj;
             const { token, email, id, first_name: firstName, last_name: lastName, profile_photo: profilePhoto } = body;
 

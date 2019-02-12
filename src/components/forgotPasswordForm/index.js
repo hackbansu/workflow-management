@@ -19,7 +19,7 @@ export class ForgotPasswordForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: null,
+            email: '',
             errors: {},
         };
 

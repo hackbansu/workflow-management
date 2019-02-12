@@ -12,6 +12,7 @@ import ResetPassword from 'containers/resetPassword';
 import Home from 'containers/home';
 import Default from 'containers/default';
 import Loader from 'components/loader';
+import Modal from 'components/modal';
 import Toast from 'components/toast';
 import PrivateRoute from 'components/privateRoute';
 
@@ -20,7 +21,7 @@ import PrivateRoute from 'components/privateRoute';
  */
 export class App extends React.Component {
     render() {
-        const { toast, token, loader } = this.props;
+        const { toast, token, loader, modal } = this.props;
         let isLoggedIn = false;
         if (token && token !== '') {
             isLoggedIn = true;
@@ -57,6 +58,7 @@ export class App extends React.Component {
                     </Switch>
                     <Toast show={toast.show} text={toast.text} />
                     <Loader show={loader.show} />
+                    <Modal text={modal.text} />
                 </main>
             </div>
         );
@@ -64,33 +66,42 @@ export class App extends React.Component {
 }
 
 App.propTypes = {
+    token: PropTypes.string,
     toast: PropTypes.shape({
         show: PropTypes.bool,
         text: PropTypes.string,
     }),
-    token: PropTypes.string,
+    modal: PropTypes.shape({
+        text: PropTypes.string,
+    }),
     loader: PropTypes.shape({
         show: PropTypes.bool,
     }),
 };
 
 App.defaultProps = {
+    token: '',
     toast: {
         show: false,
         text: 'There is no text here',
     },
-    token: '',
+    modal: {
+        text: 'There is no text here',
+    },
     loader: {
         show: false,
     },
 };
 
 const mapStateToProps = state => ({
+    token: state.currentUser.token,
     toast: {
         show: state.toast.show,
         text: state.toast.text,
     },
-    token: state.currentUser.token,
+    modal: {
+        text: state.modal.text,
+    },
     loader: {
         show: state.loader.show,
     },

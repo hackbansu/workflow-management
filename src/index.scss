@@ -20,9 +20,12 @@ body {
 p {
   font-family: sans-serif;
   font-size: 1.1em;
-  font-weight: 300;
   line-height: 1.7em;
-  color: #999;
+  font-weight: normal;
+}
+
+p::first-letter {
+  text-transform: capitalize;
 }
 
 h2 {
@@ -46,16 +49,6 @@ h4 {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-p {
-  font-size: 13px;
-  line-height: 20px;
-  margin-bottom: 10px;
-}
-
-p::first-letter {
-  text-transform: capitalize;
 }
 
 .heading {
@@ -192,13 +185,7 @@ body {
   background: #fafafa;
 }
 
-p {
-  font-family: sans-serif;
-  font-size: 1.1em;
-  font-weight: 300;
-  line-height: 1.7em;
-  color: #999;
-}
+
 
 a,
 a:hover,
@@ -223,4 +210,8 @@ a:focus {
 
 .page-nav-links {
   text-transform: none;
+}
+
+.modal-open-button{
+  display: none;
 }

@@ -6,7 +6,7 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makePasswordResetRequest } from 'services/auth';
-import { showToast } from 'utils/helpers/toast';
+import { showModal } from 'utils/helpers/modal';
 
 // importing components
 import ForgotPasswordForm from 'components/forgotPasswordForm';
@@ -46,10 +46,7 @@ export class ForgotPassword extends React.Component {
 
             const { response, body } = obj;
 
-            showToast('Email has been sent with reset link');
-
-            // redirect to home page
-            history.push('/login');
+            showModal('Email has been sent with reset link');
         });
     };
 

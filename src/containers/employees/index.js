@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
 import React from 'react';
 
 import { updateEmployeesAction } from 'actions/employees';
@@ -105,14 +106,14 @@ export class Profile extends React.Component {
                     </thead>
                     <tbody>
                         {filteredEmployees.map(data => (
-                            <tr key={data.user.firstName + data.user.lastName + data.designation}>
-                                <td>
-                                    <Link to={'/employee/' + data.id}>{data.user.firstName}</Link>
-                                </td>
-                                <td>{data.user.lastName}</td>
-                                <td>{data.designation}</td>
-                                <td>{userConstants.STATUS[data.status]}</td>
-                            </tr>
+                            <LinkContainer to={`/employee/${data.id}`}>
+                                <tr key={data.user.firstName + data.user.lastName + data.designation}>
+                                    <td>{data.user.firstName}</td>
+                                    <td>{data.user.lastName}</td>
+                                    <td>{data.designation}</td>
+                                    <td>{userConstants.STATUS[data.status]}</td>
+                                </tr>
+                            </LinkContainer>
                         ))}
                     </tbody>
                 </table>

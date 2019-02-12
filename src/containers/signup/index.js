@@ -4,7 +4,7 @@ import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
 import { makeSignupRequest } from 'services/auth';
-import { showToast } from 'utils/helpers/toast';
+import { showModal } from 'utils/helpers/modal';
 
 // importing components
 import SignupForm from 'components/signupForm';
@@ -29,15 +29,12 @@ export class Signup extends React.Component {
      * function to submit login request.
      */
     onSubmit = (
-        email,
-        password,
         firstName,
         lastName,
+        email,
         designation,
         companyName,
         companyAddress,
-        companyCity,
-        companyState
     ) => {
         const { history } = this.props;
 
@@ -49,13 +46,10 @@ export class Signup extends React.Component {
                 first_name: firstName,
                 last_name: lastName,
                 email,
-                password,
             },
             company: {
                 name: companyName,
                 address: companyAddress,
-                city: companyCity,
-                state: companyState,
             },
             designation,
         };
@@ -68,12 +62,11 @@ export class Signup extends React.Component {
                 return;
             }
 
+            document.getElementsByClassName("signup-form").reset();
+
             const { response, body } = obj;
 
-            showToast('Successful Signup');
-
-            // dispatch action to update user token and data
-            history.push('/');
+            showModal('Signup Successful', 'Confirmation link has been sent to your email.');
         });
     };
 

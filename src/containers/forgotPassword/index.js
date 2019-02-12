@@ -46,7 +46,7 @@ export class ForgotPassword extends React.Component {
 
             const { response, body } = obj;
 
-            showModal('Email has been sent with reset link');
+            showModal('Email Sent', 'Reset link has been sent on the provided email.');
         });
     };
 

@@ -21,7 +21,6 @@ export class ProfileForm extends React.Component {
         const { email, firstName, lastName, isAdmin, designation, status } = this.props;
         this.state = {
             email,
-            password: null,
             firstName,
             lastName,
             isAdmin,
@@ -34,27 +33,26 @@ export class ProfileForm extends React.Component {
     }
 
     /**
-     * Function to submit the login form.
-     * @param {string} email - email of the user.
-     * @param {string} password - password entered by the user.
+     * Function to submit the profile update form.
+     * @param {string} profilePhoto - profile photo of the user.
      * @param {string} firstName - first name of the user.
      * @param {string} lastName - last name of the user.
      */
-    submitForm = (password, firstName, lastName, profilePhoto) => ev => {
+    submitForm = (firstName, lastName, profilePhoto) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
-        onSubmit(password, firstName, lastName, profilePhoto);
+        onSubmit(firstName, lastName, profilePhoto);
     };
 
     /**
      * Function to return the component rendering.
      */
     render() {
-        const { email, password, firstName, lastName, isAdmin, designation, status, profilePhoto } = this.state;
+        const { email, firstName, lastName, isAdmin, designation, status, profilePhoto } = this.state;
 
         return (
             <div>
-                <form method="post" onSubmit={this.submitForm(password, firstName, lastName, profilePhoto)}>
+                <form method="post" onSubmit={this.submitForm(firstName, lastName, profilePhoto)}>
                     {/* email */}
                     <FormField
                         name="Email"
@@ -64,14 +62,6 @@ export class ProfileForm extends React.Component {
                         value={email}
                         onChange={e => this.setState({ email: e.target.value })}
                         disabled="disabled"
-                    />
-                    {/* password */}
-                    <FormField
-                        name="Password"
-                        inputName="password"
-                        type="password"
-                        placeholder=""
-                        onChange={e => this.setState({ password: e.target.value })}
                     />
                     {/* first name */}
                     <FormField

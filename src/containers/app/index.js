@@ -58,7 +58,7 @@ export class App extends React.Component {
                     </Switch>
                     <Toast show={toast.show} text={toast.text} />
                     <Loader show={loader.show} />
-                    <Modal text={modal.text} />
+                    <Modal heading={modal.heading} text={modal.text} />
                 </main>
             </div>
         );
@@ -72,6 +72,7 @@ App.propTypes = {
         text: PropTypes.string,
     }),
     modal: PropTypes.shape({
+        heading: PropTypes.string,
         text: PropTypes.string,
     }),
     loader: PropTypes.shape({
@@ -86,6 +87,7 @@ App.defaultProps = {
         text: 'There is no text here',
     },
     modal: {
+        heading: 'heading',
         text: 'There is no text here',
     },
     loader: {
@@ -100,6 +102,7 @@ const mapStateToProps = state => ({
         text: state.toast.text,
     },
     modal: {
+        heading: state.modal.heading,
         text: state.modal.text,
     },
     loader: {

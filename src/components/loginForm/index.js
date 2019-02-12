@@ -18,8 +18,8 @@ export class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: null,
-            password: null,
+            email: '',
+            password: '',
             errors: {},
         };
 
@@ -32,23 +32,30 @@ export class LoginForm extends React.Component {
      * @param {string} password - password entered by the user.
      */
     submitForm = (email, password) => ev => {
+        console.log('email :', email);
+        console.log('password :', password);
+
         const { onSubmit } = this.props;
         ev.preventDefault();
+        let valid = true;
+        const newErrors = {};
 
-        if (!validateEmail(email)) {
-            this.setState({
-                errors: {
-                    email: 'invalid email',
-                },
-            });
-            return;
+        const emailValidity = validateEmail(email);
+        const passwordValidity = validatePassword(password);
+
+        if (!emailValidity.isValid) {
+            valid = false;
+            newErrors.email = emailValidity.message;
         }
 
-        if (!validatePassword(password)) {
+        if (!passwordValidity.isValid) {
+            valid = false;
+            newErrors.password = passwordValidity.message;
+        }
+
+        if (!valid) {
             this.setState({
-                errors: {
-                    password: 'invalid password',
-                },
+                errors: newErrors,
             });
             return;
         }
@@ -76,7 +83,13 @@ export class LoginForm extends React.Component {
                         type="email"
                         placeholder=""
                         value={email}
-                        onChange={e => this.setState({ email: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                email: value,
+                                errors: { ...prevState.errors, email: validateEmail(value).message },
+                            }));
+                        }}
                         errorMsg={errors.email}
                     />
                     {/* password */}
@@ -86,7 +99,13 @@ export class LoginForm extends React.Component {
                         value={null}
                         type="password"
                         placeholder=""
-                        onChange={e => this.setState({ password: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                password: value,
+                                errors: { ...prevState.errors, password: validatePassword(value).message },
+                            }));
+                        }}
                         errorMsg={errors.password}
                     />
                     {/* update profile button */}

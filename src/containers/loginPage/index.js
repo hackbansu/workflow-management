@@ -42,7 +42,7 @@ export class LoginPage extends React.Component {
             showLoader(false);
 
             if (!obj) {
-                showModal('Invalid Credentials');
+                showModal('Login Failed', 'Invalid Credentials');
                 return;
             }
             

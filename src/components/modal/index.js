@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
  * Functional component of the message modal.
  * @param {object} param0 - props object for the component.
  */
-export const Modal = ({ text }) => (
+export const Modal = ({ heading, text }) => (
     <div>
         <button
             type="button"
@@ -21,7 +21,7 @@ export const Modal = ({ text }) => (
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h4 className="modal-title">Message</h4>
+                        <h4 className="modal-title">{heading}</h4>
                         <button type="button" className="close" data-dismiss="modal">
                             &times;
                         </button>

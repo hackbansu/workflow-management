@@ -19,14 +19,11 @@ export class LoginForm extends React.Component {
         super(props);
         this.state = {
             email: '',
-            password: '',
             firstName: '',
             lastName: '',
             designation: '',
             companyName: '',
             companyAddress: '',
-            companyCity: '',
-            companyState: '',
             errors: {},
         };
 
@@ -38,170 +35,87 @@ export class LoginForm extends React.Component {
      * @param {string} email - email entered by the user.
      * @param {string} password - password entered by the user.
      */
-    submitForm = (
-        email,
-        password,
-        firstName,
-        lastName,
-        designation,
-        companyName,
-        companyAddress,
-        companyCity,
-        companyState
-    ) => ev => {
+    submitForm = (firstName, lastName, email, designation, companyName, companyAddress) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+        let valid = true;
+        const newErrors = {};
 
         // validations
-        if (!validateEmail(email)) {
+        const firstNameValidity = validateTextString(firstName);
+        const lastNameValidity = validateTextString(lastName);
+        const emailValidity = validateEmail(email);
+        const designationValidity = validateTextString(designation);
+        const companyNameValidity = validateTextString(companyName);
+        const companyAddressValidity = validateTextString(companyAddress);
+
+        if (!firstNameValidity.isValid) {
+            valid = false;
+            newErrors.firstName = firstNameValidity.message;
+        }
+
+        if (!lastNameValidity.isValid) {
+            valid = false;
+            newErrors.lastName = lastNameValidity.message;
+        }
+
+        if (!emailValidity.isValid) {
+            valid = false;
+            newErrors.email = emailValidity.message;
+        }
+
+        if (!designationValidity.isValid) {
+            valid = false;
+            newErrors.designation = designationValidity.message;
+        }
+
+        if (!companyNameValidity.isValid) {
+            valid = false;
+            newErrors.companyName = companyNameValidity.message;
+        }
+
+        if (!companyAddressValidity.isValid) {
+            valid = false;
+            newErrors.companyAddress = companyAddressValidity.message;
+        }
+
+        if (!valid) {
+            console.log('newErrors :', newErrors);
             this.setState({
-                errors: {
-                    email: 'invalid email',
-                },
+                errors: newErrors,
             });
             return;
         }
 
-        if (!validatePassword(password)) {
-            this.setState({
-                errors: {
-                    password: 'invalid password',
-                },
-            });
-            return;
-        }
-
-        if (!validateTextString(firstName)) {
-            this.setState({
-                errors: {
-                    firstName: 'invalid first name',
-                },
-            });
-            return;
-        }
-        if (!validateTextString(lastName)) {
-            this.setState({
-                errors: {
-                    lastName: 'invalid last name',
-                },
-            });
-            return;
-        }
-        if (!validateTextString(designation)) {
-            this.setState({
-                errors: {
-                    designation: 'invalid designation',
-                },
-            });
-            return;
-        }
-        if (!validateTextString(companyName)) {
-            this.setState({
-                errors: {
-                    companyName: 'invalid company name',
-                },
-            });
-            return;
-        }
-        if (!validateTextString(companyAddress)) {
-            this.setState({
-                errors: {
-                    companyAddress: 'invalid company address',
-                },
-            });
-            return;
-        }
-        if (!validateTextString(companyCity)) {
-            this.setState({
-                errors: {
-                    companyCity: 'invalid company city',
-                },
-            });
-            return;
-        }
-        if (!validateTextString(companyState)) {
-            this.setState({
-                errors: {
-                    companyState: 'invalid company state',
-                },
-            });
-            return;
-        }
-
-        onSubmit(
-            email,
-            password,
-            firstName,
-            lastName,
-            designation,
-            companyName,
-            companyAddress,
-            companyCity,
-            companyState
-        );
+        onSubmit(firstName, lastName, email, designation, companyName, companyAddress);
     };
 
     /**
      * Function to return the component rendering.
      */
     render() {
-        const {
-            email,
-            password,
-            firstName,
-            lastName,
-            designation,
-            companyName,
-            companyAddress,
-            companyCity,
-            companyState,
-            errors,
-        } = this.state;
+        const { firstName, lastName, email, designation, companyName, companyAddress, errors } = this.state;
 
         return (
             <div className="offset-md-1 col-md-10">
                 <form
+                    className="signup-form"
                     method="post"
-                    onSubmit={this.submitForm(
-                        email,
-                        password,
-                        firstName,
-                        lastName,
-                        designation,
-                        companyName,
-                        companyAddress,
-                        companyCity,
-                        companyState
-                    )}
+                    onSubmit={this.submitForm(firstName, lastName, email, designation, companyName, companyAddress)}
                 >
-                    {/* email */}
-                    <FormField
-                        name="Email"
-                        inputName="email"
-                        type="email"
-                        placeholder="eg. user@example.com"
-                        value={null}
-                        onChange={e => this.setState({ email: e.target.value })}
-                        errorMsg={errors.email}
-                    />
-                    {/* password */}
-                    <FormField
-                        name="Password"
-                        inputName="password"
-                        type="password"
-                        placeholder=""
-                        value={null}
-                        onChange={e => this.setState({ password: e.target.value })}
-                        errorMsg={errors.password}
-                    />
                     {/* first name */}
                     <FormField
                         name="First Name"
                         inputName="firstName"
                         type="text"
-                        placeholder="eg. nitin"
                         value={null}
-                        onChange={e => this.setState({ firstName: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                firstName: value,
+                                errors: { ...prevState.errors, firstName: validateTextString(value).message },
+                            }));
+                        }}
                         errorMsg={errors.firstName}
                     />
                     {/* last name */}
@@ -209,19 +123,44 @@ export class LoginForm extends React.Component {
                         name="Last Name"
                         inputName="lastName"
                         type="text"
-                        placeholder="eg. singh"
                         value={null}
-                        onChange={e => this.setState({ lastName: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                lastName: value,
+                                errors: { ...prevState.errors, lastName: validateTextString(value).message },
+                            }));
+                        }}
                         errorMsg={errors.lastName}
+                    />
+                    {/* email */}
+                    <FormField
+                        name="Email"
+                        inputName="email"
+                        type="email"
+                        value={null}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                email: value,
+                                errors: { ...prevState.errors, email: validateEmail(value).message },
+                            }));
+                        }}
+                        errorMsg={errors.email}
                     />
                     {/* Designation */}
                     <FormField
                         name="Designation"
                         inputName="designation"
                         type="text"
-                        placeholder="eg. CEO"
                         value={null}
-                        onChange={e => this.setState({ designation: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                designation: value,
+                                errors: { ...prevState.errors, designation: validateTextString(value).message },
+                            }));
+                        }}
                         errorMsg={errors.designation}
                     />
                     {/* company name */}
@@ -229,9 +168,14 @@ export class LoginForm extends React.Component {
                         name="Company Name"
                         inputName="companyName"
                         type="text"
-                        placeholder="eg. ABC"
                         value={null}
-                        onChange={e => this.setState({ companyName: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                companyName: value,
+                                errors: { ...prevState.errors, companyName: validateTextString(value).message },
+                            }));
+                        }}
                         errorMsg={errors.companyName}
                     />
                     {/* company address */}
@@ -239,30 +183,15 @@ export class LoginForm extends React.Component {
                         name="Company Address"
                         inputName="companyAddress"
                         type="text"
-                        placeholder="eg. Gurgaon"
                         value={null}
-                        onChange={e => this.setState({ companyAddress: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                companyAddress: value,
+                                errors: { ...prevState.errors, companyAddress: validateTextString(value).message },
+                            }));
+                        }}
                         errorMsg={errors.companyAddress}
-                    />
-                    {/* company city */}
-                    <FormField
-                        name="Company City"
-                        inputName="companyCity"
-                        type="text"
-                        placeholder="eg. New Delhi"
-                        value={null}
-                        onChange={e => this.setState({ companyCity: e.target.value })}
-                        errorMsg={errors.companyCity}
-                    />
-                    {/* company state */}
-                    <FormField
-                        name="Company State"
-                        inputName="companyState"
-                        type="text"
-                        placeholder="eg. Delhi"
-                        value={null}
-                        onChange={e => this.setState({ companyState: e.target.value })}
-                        errorMsg={errors.companyState}
                     />
                     {/* Submit profile button */}
                     <FormSubmitButton name="Submit" />

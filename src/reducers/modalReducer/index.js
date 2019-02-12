@@ -14,6 +14,7 @@ export default (state = initialState, action) => {
     case CHANGE_MODAL_STATE:
         return {
             ...state,
+            heading: action.heading,
             text: action.text,
         };
 

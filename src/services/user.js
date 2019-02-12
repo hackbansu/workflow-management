@@ -7,14 +7,11 @@ import { makeApiRequest } from 'services/base';
  * @param {string} firstName - first name to send in the update request.
  * @param {string} lastName - last name to send in the update request.
  */
-export function makeUpdateRequest(password, firstName, lastName, profilePhoto) {
+export function makeUpdateRequest(firstName, lastName, profilePhoto) {
     const formData = new FormData();
     formData.append('first_name', firstName);
     formData.append('last_name', lastName);
 
-    if (password.length !== 0) {
-        formData.append('password', password);
-    }
     if (profilePhoto) {
         formData.append('profile_photo', profilePhoto);
     }

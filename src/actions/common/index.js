@@ -20,4 +20,4 @@ export const changeToastStateAction = (show, text) => ({ type: CHANGE_TOAST_STAT
  * @param {string} value - css class to be set on the toast
  * @param {string} text - text to be set on toast
  */
-export const changeModalStateAction = (text) => ({ type: CHANGE_MODAL_STATE, text });
+export const changeModalStateAction = (heading, text) => ({ type: CHANGE_MODAL_STATE, heading, text });

@@ -33,12 +33,19 @@ export class ForgotPasswordForm extends React.Component {
     submitForm = email => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+        let valid = true;
+        const newErrors = {};
 
-        if (!validateEmail(email)) {
+        const emailValidity = validateEmail(email);
+
+        if (!emailValidity.isValid) {
+            valid = false;
+            newErrors.email = emailValidity.message;
+        }
+
+        if (!valid) {
             this.setState({
-                errors: {
-                    email: 'invalid email',
-                },
+                errors: newErrors,
             });
             return;
         }
@@ -56,7 +63,7 @@ export class ForgotPasswordForm extends React.Component {
             <div className="container">
                 <form className="offset-md-4 col-md-4" method="post" onSubmit={this.submitForm(email)}>
                     <div className="alert alert-dark" role="alert">
-                    Password reset link will be sent to your email.
+                        Password reset link will be sent to your email.
                     </div>
                     {/* email */}
                     <FormField
@@ -65,7 +72,13 @@ export class ForgotPasswordForm extends React.Component {
                         type="email"
                         placeholder=""
                         value={email}
-                        onChange={e => this.setState({ email: e.target.value })}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                email: value,
+                                errors: { ...prevState.errors, email: validateEmail(value).message },
+                            }));
+                        }}
                         errorMsg={errors.email}
                     />
                     {/* update profile button */}

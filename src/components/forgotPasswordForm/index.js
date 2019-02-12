@@ -3,6 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import FormField from 'components/formField';
+import FormSubmitButton from 'components/formSubmitButton';
+
+import { validateEmail } from 'utils/validators';
+
 /**
  * Class component for login form
  */
@@ -15,6 +20,7 @@ export class ForgotPasswordForm extends React.Component {
         super(props);
         this.state = {
             email: null,
+            errors: {},
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -24,9 +30,19 @@ export class ForgotPasswordForm extends React.Component {
      * Function to submit the login form.
      * @param {string} email - email entered by the user.
      */
-    submitForm = (email) => ev => {
+    submitForm = email => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+
+        if (!validateEmail(email)) {
+            this.setState({
+                errors: {
+                    email: 'invalid email',
+                },
+            });
+            return;
+        }
+
         onSubmit(email);
     };
 
@@ -34,21 +50,26 @@ export class ForgotPasswordForm extends React.Component {
      * Function to return the component rendering.
      */
     render() {
-        const { email } = this.state;
+        const { email, errors } = this.state;
 
         return (
-            <div className="forgot-password-form-cover">
-                <form method="post" onSubmit={this.submitForm(email)}>
-                    <label>
-                        email:
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="eg. user@example.com"
-                            onChange={e => this.setState({ email: e.target.value })}
-                        />
-                    </label>
-                    <input type="submit" value="Send" />
+            <div className="container">
+                <form className="offset-md-4 col-md-4" method="post" onSubmit={this.submitForm(email)}>
+                    <div className="alert alert-dark" role="alert">
+                    Password reset link will be sent to your email.
+                    </div>
+                    {/* email */}
+                    <FormField
+                        name="Email"
+                        inputName="email"
+                        type="email"
+                        placeholder=""
+                        value={email}
+                        onChange={e => this.setState({ email: e.target.value })}
+                        errorMsg={errors.email}
+                    />
+                    {/* update profile button */}
+                    <FormSubmitButton name="Send" />
                 </form>
             </div>
         );

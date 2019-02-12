@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
 
+import userConstants from 'constants/user';
+
 /**
  * Class component for login form
  */
@@ -94,9 +96,9 @@ export class EmployeeForm extends React.Component {
                         <FormField
                             name="Status"
                             inputName="status"
-                            type="number"
+                            type="text"
                             placeholder="eg. active"
-                            value={status.toString()}
+                            value={userConstants.STATUS[status]}
                             onChange={e => this.setState({ status: e.target.value })}
                             disabled="disabled"
                         />

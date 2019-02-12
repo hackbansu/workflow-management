@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
-import { updateTokenAction, updateProfileAction, updateCompanyAction } from 'actions/user';
 import { makeSignupRequest } from 'services/auth';
+import { showToast } from 'utils/helpers/toast';
 
 // importing components
 import SignupForm from 'components/signupForm';
 import PageBanner from 'components/pageBanner';
+import LinkButton from 'components/linkButton';
 
 /**
  * Login page component.
@@ -39,7 +39,7 @@ export class Signup extends React.Component {
         companyCity,
         companyState
     ) => {
-        const { updateToken, updateProfile, updateCompany, history } = this.props;
+        const { history } = this.props;
 
         // dispatch action to show loader
         showLoader(true);
@@ -69,19 +69,10 @@ export class Signup extends React.Component {
             }
 
             const { response, body } = obj;
-            const { company, user, designation, status, is_admin: isAdmin } = body;
 
-            const { token, id, first_name: firstName, last_name: lastName, profile_photo: profilePhoto, email } = user;
+            showToast('Successful Signup');
 
             // dispatch action to update user token and data
-            updateToken(token);
-            updateProfile(firstName, lastName, profilePhoto, email, id, isAdmin, designation, status);
-
-            const { name, address, city, state, id: companyId, logo, status: companyStatus, links } = company;
-            // dispatch action to update company information
-            updateCompany(companyId, name, address, city, state, logo, companyStatus, links);
-
-            // redirect to home page
             history.push('/');
         });
     };
@@ -91,10 +82,13 @@ export class Signup extends React.Component {
      */
     render() {
         return (
-            <div className="signup-page">
+            <div>
                 <div className="container">
                     <PageBanner text="Sign Up" />
                     <SignupForm onSubmit={this.onSubmit} />
+                    <ul className="nav justify-content-center page-nav-links">
+                        <LinkButton name="Back to login" toUrl="/login" />
+                    </ul>
                 </div>
             </div>
         );
@@ -102,23 +96,14 @@ export class Signup extends React.Component {
 }
 
 Signup.propTypes = {
-    updateToken: PropTypes.func.isRequired,
-    updateProfile: PropTypes.func.isRequired,
-    updateCompany: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
 };
 
-Signup.defaultProps = {
-};
+Signup.defaultProps = {};
 
-const mapStateToProps = state => ({
-});
+const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({
-    updateToken: value => dispatch(updateTokenAction(value)),
-    updateProfile: (...args) => dispatch(updateProfileAction(...args)),
-    updateCompany: (...args) => dispatch(updateCompanyAction(...args)),
-});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(
     mapStateToProps,

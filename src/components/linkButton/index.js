@@ -10,13 +10,11 @@ import PropTypes from 'prop-types';
  * @param {string} toUrl - url to redirect to on click.
  */
 export const LinkButton = ({ name, toUrl }) => (
-    <ul className="nav justify-content-center">
-        <li className="nav-item">
-            <Link to={toUrl} className="nav-link" href="#">
-                {name}
-            </Link>
-        </li>
-    </ul>
+    <li className="nav-item">
+        <Link to={toUrl} className="nav-link" href="#">
+            {name}
+        </Link>
+    </li>
 );
 
 LinkButton.propTypes = {

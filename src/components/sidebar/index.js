@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import SidebarField from 'components/sidebarField';
 
 /**
- * Functional component of the sidebar field.
+ * Functional component of the sidebar.
  * @param {object} param0 - props object for the component.
  */
-export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin, companyName, profilePhoto, logo }) => (
+export const sidebar = ({ firstName, lastName, onLogoutClick, isAdmin, companyName, profilePhoto, logo }) => (
     <nav id="sidebar">
         <div className="sidebar-header">
             <h3>{ companyName }</h3>
@@ -29,7 +29,7 @@ export const sidebarField = ({ firstName, lastName, onLogoutClick, isAdmin, comp
     </nav>
 );
 
-sidebarField.propTypes = {
+sidebar.propTypes = {
     isAdmin: PropTypes.bool,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
@@ -38,11 +38,11 @@ sidebarField.propTypes = {
     profilePhoto: PropTypes.string.isRequired,
 };
 
-sidebarField.defaultProps = {
+sidebar.defaultProps = {
     isAdmin: false,
     firstName: '',
     lastName: '',
     companyName: '',
 };
 
-export default sidebarField;
+export default sidebar;

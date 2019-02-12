@@ -89,8 +89,8 @@ export class ResetPassword extends React.Component {
         const { formDisabled } = this.state;
 
         return (
-            <div className="login-page">
-                <div className="container">
+            <div>
+                <div className="container entry-form-container">
                     <PageBanner text="New Password" />
                     <ResetPasswordForm onSubmit={this.onSubmit} isDisabled={formDisabled} />
                 </div>

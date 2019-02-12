@@ -3,6 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import FormField from 'components/formField';
+import FormSubmitButton from 'components/formSubmitButton';
+import { validateEmail, validatePassword } from 'utils/validators';
+
 /**
  * Class component for login form
  */
@@ -16,6 +20,7 @@ export class LoginForm extends React.Component {
         this.state = {
             email: null,
             password: null,
+            errors: {},
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -29,6 +34,29 @@ export class LoginForm extends React.Component {
     submitForm = (email, password) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+
+        if (!validateEmail(email)) {
+            this.setState({
+                errors: {
+                    email: 'invalid email',
+                },
+            });
+            return;
+        }
+
+        if (!validatePassword(password)) {
+            this.setState({
+                errors: {
+                    password: 'invalid password',
+                },
+            });
+            return;
+        }
+
+        this.setState({
+            errors: {},
+        });
+
         onSubmit(email, password);
     };
 
@@ -36,31 +64,33 @@ export class LoginForm extends React.Component {
      * Function to return the component rendering.
      */
     render() {
-        const { email, password } = this.state;
+        const { email, password, errors } = this.state;
 
         return (
-            <div className="login-form-cover">
-                <form method="post" onSubmit={this.submitForm(email, password)}>
-                    <label>
-                        email:
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="eg. user@example.com"
-                            onChange={e => this.setState({ email: e.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        password:
-                        <input
-                            type="password"
-                            name="password"
-                            onChange={e => this.setState({ password: e.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <input type="submit" value="log in" />
+            <div className="container">
+                <form className="offset-md-4 col-md-4" method="post" onSubmit={this.submitForm(email, password)}>
+                    {/* email */}
+                    <FormField
+                        name="Email"
+                        inputName="email"
+                        type="email"
+                        placeholder=""
+                        value={email}
+                        onChange={e => this.setState({ email: e.target.value })}
+                        errorMsg={errors.email}
+                    />
+                    {/* password */}
+                    <FormField
+                        name="Password"
+                        inputName="password"
+                        value={null}
+                        type="password"
+                        placeholder=""
+                        onChange={e => this.setState({ password: e.target.value })}
+                        errorMsg={errors.password}
+                    />
+                    {/* update profile button */}
+                    <FormSubmitButton name="Log In" />
                 </form>
             </div>
         );

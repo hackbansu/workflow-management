@@ -58,11 +58,13 @@ export class ForgotPassword extends React.Component {
      */
     render() {
         return (
-            <div className="login-page">
-                <div className="container">
+            <div>
+                <div className="container entry-form-container">
                     <PageBanner text="Forgot Password" />
                     <ForgotPasswordForm onSubmit={this.onSubmit} />
-                    <LinkButton name="Login" toUrl="/login" />
+                    <ul className="nav justify-content-center page-nav-links">
+                        <LinkButton name="Back to login" toUrl="/login" />
+                    </ul>
                 </div>
             </div>
         );

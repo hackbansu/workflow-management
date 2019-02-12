@@ -7,14 +7,14 @@ import PropTypes from 'prop-types';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const FormField = ({ name, inputName, type, placeholder, value, onChange, disabled, ...rest }) => {
+export const FormField = ({ name, inputName, type, placeholder, value, onChange, disabled, errorMsg, ...rest }) => {
     const id = inputName + '3';
     return (
         <div className="form-group row">
-            <label htmlFor={id} className="col-sm-2 col-form-label">
+            <label htmlFor={id} className="col-sm-3 col-form-label">
                 {name}
             </label>
-            <div className="col-sm-10">
+            <div className="col-sm-9">
                 <input
                     id={id}
                     className="form-control"
@@ -26,6 +26,7 @@ export const FormField = ({ name, inputName, type, placeholder, value, onChange,
                     disabled={disabled}
                     {...rest}
                 />
+                <span className="error-msg">{errorMsg}</span>
             </div>
         </div>
     );

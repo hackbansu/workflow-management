@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
+import { validateEmail, validatePassword, validateTextString } from 'utils/validators';
 
 /**
  * Class component for login form
@@ -16,7 +17,18 @@ export class LoginForm extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            designation: '',
+            companyName: '',
+            companyAddress: '',
+            companyCity: '',
+            companyState: '',
+            errors: {},
+        };
 
         this.submitForm = this.submitForm.bind(this);
     }
@@ -39,6 +51,83 @@ export class LoginForm extends React.Component {
     ) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+
+        // validations
+        if (!validateEmail(email)) {
+            this.setState({
+                errors: {
+                    email: 'invalid email',
+                },
+            });
+            return;
+        }
+
+        if (!validatePassword(password)) {
+            this.setState({
+                errors: {
+                    password: 'invalid password',
+                },
+            });
+            return;
+        }
+
+        if (!validateTextString(firstName)) {
+            this.setState({
+                errors: {
+                    firstName: 'invalid first name',
+                },
+            });
+            return;
+        }
+        if (!validateTextString(lastName)) {
+            this.setState({
+                errors: {
+                    lastName: 'invalid last name',
+                },
+            });
+            return;
+        }
+        if (!validateTextString(designation)) {
+            this.setState({
+                errors: {
+                    designation: 'invalid designation',
+                },
+            });
+            return;
+        }
+        if (!validateTextString(companyName)) {
+            this.setState({
+                errors: {
+                    companyName: 'invalid company name',
+                },
+            });
+            return;
+        }
+        if (!validateTextString(companyAddress)) {
+            this.setState({
+                errors: {
+                    companyAddress: 'invalid company address',
+                },
+            });
+            return;
+        }
+        if (!validateTextString(companyCity)) {
+            this.setState({
+                errors: {
+                    companyCity: 'invalid company city',
+                },
+            });
+            return;
+        }
+        if (!validateTextString(companyState)) {
+            this.setState({
+                errors: {
+                    companyState: 'invalid company state',
+                },
+            });
+            return;
+        }
+
         onSubmit(
             email,
             password,
@@ -66,10 +155,11 @@ export class LoginForm extends React.Component {
             companyAddress,
             companyCity,
             companyState,
+            errors,
         } = this.state;
 
         return (
-            <div className="signup-form-cover">
+            <div className="offset-md-1 col-md-10">
                 <form
                     method="post"
                     onSubmit={this.submitForm(
@@ -92,6 +182,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. user@example.com"
                         value={null}
                         onChange={e => this.setState({ email: e.target.value })}
+                        errorMsg={errors.email}
                     />
                     {/* password */}
                     <FormField
@@ -101,6 +192,7 @@ export class LoginForm extends React.Component {
                         placeholder=""
                         value={null}
                         onChange={e => this.setState({ password: e.target.value })}
+                        errorMsg={errors.password}
                     />
                     {/* first name */}
                     <FormField
@@ -110,6 +202,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. nitin"
                         value={null}
                         onChange={e => this.setState({ firstName: e.target.value })}
+                        errorMsg={errors.firstName}
                     />
                     {/* last name */}
                     <FormField
@@ -119,6 +212,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. singh"
                         value={null}
                         onChange={e => this.setState({ lastName: e.target.value })}
+                        errorMsg={errors.lastName}
                     />
                     {/* Designation */}
                     <FormField
@@ -128,6 +222,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. CEO"
                         value={null}
                         onChange={e => this.setState({ designation: e.target.value })}
+                        errorMsg={errors.designation}
                     />
                     {/* company name */}
                     <FormField
@@ -137,6 +232,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. ABC"
                         value={null}
                         onChange={e => this.setState({ companyName: e.target.value })}
+                        errorMsg={errors.companyName}
                     />
                     {/* company address */}
                     <FormField
@@ -146,6 +242,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. Gurgaon"
                         value={null}
                         onChange={e => this.setState({ companyAddress: e.target.value })}
+                        errorMsg={errors.companyAddress}
                     />
                     {/* company city */}
                     <FormField
@@ -155,6 +252,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. New Delhi"
                         value={null}
                         onChange={e => this.setState({ companyCity: e.target.value })}
+                        errorMsg={errors.companyCity}
                     />
                     {/* company state */}
                     <FormField
@@ -164,6 +262,7 @@ export class LoginForm extends React.Component {
                         placeholder="eg. Delhi"
                         value={null}
                         onChange={e => this.setState({ companyState: e.target.value })}
+                        errorMsg={errors.companyState}
                     />
                     {/* Submit profile button */}
                     <FormSubmitButton name="Submit" />

@@ -90,7 +90,12 @@ export class Home extends React.Component {
 
     render() {
         const { currentUser } = this.props;
-        const { firstName, lastName, isAdmin, company, profilePhoto } = currentUser;
+        const { firstName, lastName, isAdmin, profilePhoto } = currentUser;
+        let { company } = currentUser;
+
+        if (!company) {
+            company = {};
+        }
         const { name: companyName, logo } = company;
 
         return (

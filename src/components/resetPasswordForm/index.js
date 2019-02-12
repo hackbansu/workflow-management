@@ -40,7 +40,7 @@ export class ResetPasswordForm extends React.Component {
         const { isDisabled } = this.props;
 
         return (
-            <div className="login-form-cover">
+            <div className="form-cover">
                 <form method="post" onSubmit={this.submitForm(password, confirmPassword)}>
                     <fieldset disabled={isDisabled ? 'disabled' : ''}>
                         <label>

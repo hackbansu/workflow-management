@@ -6,6 +6,10 @@ import React from 'react';
 
 import { updateEmployeesAction } from 'actions/employees';
 import { makeFetchRequest } from 'services/employees';
+import userConstants from 'constants/user';
+
+// import components
+import EmployeesNavbar from 'components/employeesNavbar';
 
 /**
  * Login page component.
@@ -17,7 +21,10 @@ export class Profile extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            filteredEmployees: [],
+        };
+        this.filterEmployees = this.filterEmployees.bind(this);
     }
 
     componentWillMount() {
@@ -60,32 +67,58 @@ export class Profile extends React.Component {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            filteredEmployees: nextProps.employees,
+        });
+    }
+
+    filterEmployees(e) {
+        const type = e.target.text;
+
+        const { employees } = this.props;
+        let data;
+        if (type === 'ALL') {
+            data = employees;
+        } else {
+            data = employees.filter(employee => userConstants.STATUS[employee.status] === type);
+        }
+        this.setState({
+            filteredEmployees: data,
+        });
+    }
+
     /**
      * function to render the component.
      */
     render() {
-        const { employees } = this.props;
+        const { filteredEmployees } = this.state;
         return (
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">First NAME</th>
-                        <th scope="col">Last NAME</th>
-                        <th scope="col">DESIGNATION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {employees.map(data => (
-                        <tr key={data.user.firstName + data.user.lastName + data.designation}>
-                            <td>
-                                <Link to={'/employee/' + data.id}>{data.user.firstName}</Link>
-                            </td>
-                            <td>{data.user.lastName}</td>
-                            <td>{data.designation}</td>
+            <div>
+                <EmployeesNavbar onClick={this.filterEmployees} />
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">First NAME</th>
+                            <th scope="col">Last NAME</th>
+                            <th scope="col">DESIGNATION</th>
+                            <th scope="col">STATUS</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {filteredEmployees.map(data => (
+                            <tr key={data.user.firstName + data.user.lastName + data.designation}>
+                                <td>
+                                    <Link to={'/employee/' + data.id}>{data.user.firstName}</Link>
+                                </td>
+                                <td>{data.user.lastName}</td>
+                                <td>{data.designation}</td>
+                                <td>{userConstants.STATUS[data.status]}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

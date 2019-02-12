@@ -73,9 +73,7 @@ export class Profile extends React.Component {
         });
     }
 
-    filterEmployees(e) {
-        const type = e.target.text;
-
+    filterEmployees(type) {
         const { employees } = this.props;
         let data;
         if (type === 'ALL') {

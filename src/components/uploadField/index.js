@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 export const UploadField = ({ name, inputName, type, onChange, disabled, ...rest }) => {
     const id = inputName + '3';
     return (
-        <div className="input-group mb-3">
+        <div className="input-group mb-3 col-md-8">
             <div className="input-group-prepend">
                 <span className="input-group-text">{name}</span>
             </div>

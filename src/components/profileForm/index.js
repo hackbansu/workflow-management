@@ -53,72 +53,74 @@ export class ProfileForm extends React.Component {
         return (
             <div>
                 <form method="post" onSubmit={this.submitForm(firstName, lastName, profilePhoto)}>
-                    {/* email */}
-                    <FormField
-                        name="Email"
-                        inputName="email"
-                        type="email"
-                        placeholder="eg. user@example.com"
-                        value={email}
-                        onChange={e => this.setState({ email: e.target.value })}
-                        disabled="disabled"
-                    />
-                    {/* first name */}
-                    <FormField
-                        name="First Name"
-                        inputName="firstName"
-                        type="text"
-                        placeholder="eg. nitin"
-                        value={firstName}
-                        onChange={e => this.setState({ firstName: e.target.value })}
-                    />
-                    {/* last name */}
-                    <FormField
-                        name="Last Name"
-                        inputName="lastName"
-                        type="text"
-                        placeholder="eg. singh"
-                        value={lastName}
-                        onChange={e => this.setState({ lastName: e.target.value })}
-                    />
-                    {/* designation */}
-                    <FormField
-                        name="Designation"
-                        inputName="designation"
-                        type="text"
-                        placeholder="eg. CEO"
-                        value={designation}
-                        onChange={e => this.setState({ designation: e.target.value })}
-                        disabled="disabled"
-                    />
-                    {/* status */}
-                    <FormField
-                        name="Status"
-                        inputName="status"
-                        type="text"
-                        placeholder="eg. active"
-                        value={userConstants.STATUS[status]}
-                        onChange={e => this.setState({ status: e.target.value })}
-                        disabled="disabled"
-                    />
-                    {/* isAdmin */}
-                    <FormField
-                        name="Admin"
-                        inputName="isAdmin"
-                        type="checkbox"
-                        onChange={e => this.setState({ isAdmin: e.target.value })}
-                        disabled="disabled"
-                        checked={isAdmin ? 'checked' : ''}
-                    />
-                    {/* profile photo */}
-                    <UploadField
-                        name="Profile Picture"
-                        inputName="profilePhoto"
-                        type="file"
-                        onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
-                    />
-                    {/* update profile button */}
-                    <FormSubmitButton name="Update" />
+                    <fieldset>
+                        {/* email */}
+                        <FormField
+                            name="Email"
+                            inputName="email"
+                            type="email"
+                            placeholder="eg. user@example.com"
+                            value={email}
+                            onChange={e => this.setState({ email: e.target.value })}
+                            disabled="disabled"
+                        />
+                        {/* first name */}
+                        <FormField
+                            name="First Name"
+                            inputName="firstName"
+                            type="text"
+                            placeholder="eg. nitin"
+                            value={firstName}
+                            onChange={e => this.setState({ firstName: e.target.value })}
+                        />
+                        {/* last name */}
+                        <FormField
+                            name="Last Name"
+                            inputName="lastName"
+                            type="text"
+                            placeholder="eg. singh"
+                            value={lastName}
+                            onChange={e => this.setState({ lastName: e.target.value })}
+                        />
+                        {/* designation */}
+                        <FormField
+                            name="Designation"
+                            inputName="designation"
+                            type="text"
+                            placeholder="eg. CEO"
+                            value={designation}
+                            onChange={e => this.setState({ designation: e.target.value })}
+                            disabled="disabled"
+                        />
+                        {/* status */}
+                        <FormField
+                            name="Status"
+                            inputName="status"
+                            type="text"
+                            placeholder="eg. active"
+                            value={userConstants.STATUS[status]}
+                            onChange={e => this.setState({ status: e.target.value })}
+                            disabled="disabled"
+                        />
+                        {/* isAdmin */}
+                        <FormField
+                            name="Admin"
+                            inputName="isAdmin"
+                            type="checkbox"
+                            onChange={e => this.setState({ isAdmin: e.target.value })}
+                            disabled="disabled"
+                            checked={isAdmin ? 'checked' : ''}
+                        />
+                        {/* profile photo */}
+                        <UploadField
+                            name="Profile Picture"
+                            inputName="profilePhoto"
+                            type="file"
+                            onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
+                        />
+                        {/* update profile button */}
+                        <FormSubmitButton name="Update" />
+                    </fieldset>
                 </form>
             </div>
         );

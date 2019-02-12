@@ -14,7 +14,7 @@ export const FormField = ({ name, inputName, type, placeholder, value, onChange,
             <label htmlFor={id} className="col-sm-3 col-form-label">
                 {name}
             </label>
-            <div className="col-sm-9">
+            <div className="col-sm-5">
                 <input
                     id={id}
                     className="form-control"

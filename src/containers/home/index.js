@@ -111,7 +111,7 @@ export class Home extends React.Component {
                             profilePhoto={profilePhoto}
                             logo={logo}
                         />
-                        <div id="content" className="col-md-9">
+                        <div id="content">
                             <Switch>
                                 <Route exact path="/profile" component={Profile} />
                                 <Route exact path="/employees" component={Employees} />

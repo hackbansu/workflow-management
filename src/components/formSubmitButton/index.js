@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
  * @param {object} param0 - props object for the component.
  */
 export const FormSubmitButton = ({ name }) => (
-    <div className="form-group row">
-        <div className="col-sm-10">
+    <div className="form-group">
+        <div className="">
             <button type="submit" className="btn btn-primary">
                 {name}
             </button>

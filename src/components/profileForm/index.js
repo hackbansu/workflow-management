@@ -7,6 +7,7 @@ import FormField from 'components/formField';
 import UploadField from 'components/uploadField';
 import FormSubmitButton from 'components/formSubmitButton';
 import userConstants from 'constants/user';
+import { validateTextString } from 'utils/validators';
 
 /**
  * Class component for login form
@@ -27,6 +28,7 @@ export class ProfileForm extends React.Component {
             designation,
             status,
             profilePhoto: null,
+            errors: {},
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -41,6 +43,30 @@ export class ProfileForm extends React.Component {
     submitForm = (firstName, lastName, profilePhoto) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+        let valid = true;
+        const newErrors = {};
+
+        // validations
+        const firstNameValidity = validateTextString(firstName);
+        const lastNameValidity = validateTextString(lastName);
+
+        if (!firstNameValidity.isValid) {
+            valid = false;
+            newErrors.firstName = firstNameValidity.message;
+        }
+
+        if (!lastNameValidity.isValid) {
+            valid = false;
+            newErrors.lastName = lastNameValidity.message;
+        }
+
+        if (!valid) {
+            this.setState({
+                errors: newErrors,
+            });
+            return;
+        }
+
         onSubmit(firstName, lastName, profilePhoto);
     };
 
@@ -48,7 +74,7 @@ export class ProfileForm extends React.Component {
      * Function to return the component rendering.
      */
     render() {
-        const { email, firstName, lastName, isAdmin, designation, status, profilePhoto } = this.state;
+        const { email, firstName, lastName, isAdmin, designation, status, profilePhoto, errors } = this.state;
 
         return (
             <div>
@@ -61,7 +87,6 @@ export class ProfileForm extends React.Component {
                             type="email"
                             placeholder="eg. user@example.com"
                             value={email}
-                            onChange={e => this.setState({ email: e.target.value })}
                             disabled="disabled"
                         />
                         {/* first name */}
@@ -71,7 +96,14 @@ export class ProfileForm extends React.Component {
                             type="text"
                             placeholder="eg. nitin"
                             value={firstName}
-                            onChange={e => this.setState({ firstName: e.target.value })}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    firstName: value,
+                                    errors: { ...prevState.errors, firstName: validateTextString(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.firstName}
                         />
                         {/* last name */}
                         <FormField
@@ -80,7 +112,14 @@ export class ProfileForm extends React.Component {
                             type="text"
                             placeholder="eg. singh"
                             value={lastName}
-                            onChange={e => this.setState({ lastName: e.target.value })}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    lastName: value,
+                                    errors: { ...prevState.errors, lastName: validateTextString(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.lastName}
                         />
                         {/* designation */}
                         <FormField
@@ -89,7 +128,6 @@ export class ProfileForm extends React.Component {
                             type="text"
                             placeholder="eg. CEO"
                             value={designation}
-                            onChange={e => this.setState({ designation: e.target.value })}
                             disabled="disabled"
                         />
                         {/* status */}
@@ -99,7 +137,6 @@ export class ProfileForm extends React.Component {
                             type="text"
                             placeholder="eg. active"
                             value={userConstants.STATUS[status]}
-                            onChange={e => this.setState({ status: e.target.value })}
                             disabled="disabled"
                         />
                         {/* isAdmin */}
@@ -107,7 +144,6 @@ export class ProfileForm extends React.Component {
                             name="Admin"
                             inputName="isAdmin"
                             type="checkbox"
-                            onChange={e => this.setState({ isAdmin: e.target.value })}
                             disabled="disabled"
                             checked={isAdmin ? 'checked' : ''}
                         />

@@ -6,6 +6,7 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { makeUpdateRequest } from 'services/employees';
+import { updateProfileAction } from 'actions/user';
 
 // importing components
 import EmployeeForm from 'components/employeeForm';
@@ -37,7 +38,7 @@ export class Employee extends React.Component {
      * function to submit update employee request.
      */
     onSubmit = (firstName, lastName, designation, isAdmin) => {
-        const { history } = this.props;
+        const { updateProfile, history, currentUser } = this.props;
 
         // dispatch action to show loader
         showLoader(true);
@@ -50,10 +51,21 @@ export class Employee extends React.Component {
                 return;
             }
 
-            showToast('Update Successful');
-
             const { response, body } = obj;
+            const { user, designation, is_admin: isAdmin, status } = body;
+            const {
+                email,
+                id: userId,
+                first_name: firstName,
+                last_name: lastName,
+                profile_photo_url: profilePhoto,
+            } = user;
 
+            if (userId === currentUser.id) {
+                updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);
+            }
+
+            showToast('Update Successful');
             history.push('/employees');
         });
     };
@@ -92,6 +104,7 @@ Employee.propTypes = {
     currentUser: PropTypes.object.isRequired,
     employees: PropTypes.array.isRequired,
     match: PropTypes.object.isRequired,
+    updateProfile: PropTypes.func.isRequired,
 };
 
 Employee.defaultProps = {};
@@ -101,7 +114,9 @@ const mapStateToProps = state => ({
     employees: state.employees,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    updateProfile: (...args) => dispatch(updateProfileAction(...args)),
+});
 
 export default connect(
     mapStateToProps,

@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 
 import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
-
 import userConstants from 'constants/user';
+import { validateTextString } from 'utils/validators';
 
 /**
  * Class component for login form
@@ -26,6 +26,7 @@ export class EmployeeForm extends React.Component {
             isAdmin,
             designation,
             status,
+            errors: {},
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -41,6 +42,37 @@ export class EmployeeForm extends React.Component {
     submitForm = (firstName, lastName, designation, isAdmin) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+
+        let valid = true;
+        const newErrors = {};
+
+        // validations
+        const firstNameValidity = validateTextString(firstName);
+        const lastNameValidity = validateTextString(lastName);
+        const designationValidity = validateTextString(designation);
+
+        if (!firstNameValidity.isValid) {
+            valid = false;
+            newErrors.firstName = firstNameValidity.message;
+        }
+
+        if (!lastNameValidity.isValid) {
+            valid = false;
+            newErrors.lastName = lastNameValidity.message;
+        }
+
+        if (!designationValidity.isValid) {
+            valid = false;
+            newErrors.designation = designationValidity.message;
+        }
+
+        if (!valid) {
+            this.setState({
+                errors: newErrors,
+            });
+            return;
+        }
+
         onSubmit(firstName, lastName, designation, isAdmin);
     };
 
@@ -49,7 +81,7 @@ export class EmployeeForm extends React.Component {
      */
     render() {
         const { isUserAdmin } = this.props;
-        const { email, password, firstName, lastName, isAdmin, designation, status } = this.state;
+        const { email, password, firstName, lastName, isAdmin, designation, status, errors } = this.state;
 
         return (
             <div>
@@ -62,7 +94,6 @@ export class EmployeeForm extends React.Component {
                             type="email"
                             placeholder="eg. user@example.com"
                             value={email}
-                            onChange={e => this.setState({ email: e.target.value })}
                             disabled="disabled"
                         />
                         {/* first name */}
@@ -72,7 +103,14 @@ export class EmployeeForm extends React.Component {
                             type="text"
                             placeholder="eg. nitin"
                             value={firstName}
-                            onChange={e => this.setState({ firstName: e.target.value })}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    firstName: value,
+                                    errors: { ...prevState.errors, firstName: validateTextString(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.firstName}
                         />
                         {/* last name */}
                         <FormField
@@ -81,7 +119,14 @@ export class EmployeeForm extends React.Component {
                             type="text"
                             placeholder="eg. singh"
                             value={lastName}
-                            onChange={e => this.setState({ lastName: e.target.value })}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    lastName: value,
+                                    errors: { ...prevState.errors, lastName: validateTextString(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.lastName}
                         />
                         {/* designation */}
                         <FormField
@@ -90,7 +135,14 @@ export class EmployeeForm extends React.Component {
                             type="text"
                             placeholder="eg. CEO"
                             value={designation}
-                            onChange={e => this.setState({ designation: e.target.value })}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    designation: value,
+                                    errors: { ...prevState.errors, designation: validateTextString(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.designation}
                         />
                         {/* status */}
                         <FormField
@@ -99,7 +151,6 @@ export class EmployeeForm extends React.Component {
                             type="text"
                             placeholder="eg. active"
                             value={userConstants.STATUS[status]}
-                            onChange={e => this.setState({ status: e.target.value })}
                             disabled="disabled"
                         />
                         {/* isAdmin */}

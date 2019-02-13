@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
-import { validateEmail, validatePassword, validateTextString } from 'utils/validators';
+import { validateEmail, validateTextString } from 'utils/validators';
 
 /**
  * Class component for login form
@@ -80,7 +80,6 @@ export class LoginForm extends React.Component {
         }
 
         if (!valid) {
-            console.log('newErrors :', newErrors);
             this.setState({
                 errors: newErrors,
             });

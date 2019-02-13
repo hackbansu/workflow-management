@@ -38,11 +38,12 @@ FormField.propTypes = {
     type: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     disabled: PropTypes.string,
 };
 
 FormField.defaultProps = {
+    onChange: null,
     placeholder: '',
     value: '',
     disabled: '',

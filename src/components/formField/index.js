@@ -11,10 +11,10 @@ export const FormField = ({ name, inputName, type, placeholder, value, onChange,
     const id = inputName + '3';
     return (
         <div className="form-group row">
-            <label htmlFor={id} className="col-sm-3 col-form-label">
+            <label htmlFor={id} className="col-sm-4 col-form-label">
                 {name}
             </label>
-            <div className="col-sm-5">
+            <div className="col-sm-7">
                 <input
                     id={id}
                     className="form-control"

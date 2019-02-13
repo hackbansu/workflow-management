@@ -5,6 +5,7 @@ import React from 'react';
 
 import { showToast } from 'utils/helpers/toast';
 import { showLoader } from 'utils/helpers/loader';
+import { showModal } from 'utils/helpers/modal';
 import { updateProfileAction } from 'actions/user';
 import { makeUpdateRequest } from 'services/user';
 
@@ -44,6 +45,11 @@ export class Profile extends React.Component {
             }
 
             const { response, body } = obj;
+            if (response.status !== 200) {
+                showModal('Update Failed', 'Profile update failed');
+                return;
+            }
+
             const { first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
 
             // dispatch action to update user data in store

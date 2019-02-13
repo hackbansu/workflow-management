@@ -41,7 +41,7 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             return response.json().then(body => ({ response, body }));
         })
         .then(({ response, body }) => {
-            if (response.status >= 400) {
+            if (response.status >= 500) {
                 // show error in toast msg
                 let errormsg = body.detail;
                 if (errormsg.constructor === Array) {

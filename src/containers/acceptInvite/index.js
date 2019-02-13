@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
-import { makePasswordUpdateRequest } from 'services/auth';
+import { makeInviteAcceptRequest } from 'services/auth';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
 
@@ -14,7 +14,7 @@ import PageBanner from 'components/pageBanner';
 /**
  * Login page component.
  */
-export class ResetPassword extends React.Component {
+export class AcceptInvite extends React.Component {
     /**
      * Constructor for the component.
      * @param {object} props - props object for the component.
@@ -33,7 +33,7 @@ export class ResetPassword extends React.Component {
 
         showLoader(true);
 
-        makePasswordUpdateRequest('GET', token).then(obj => {
+        makeInviteAcceptRequest('GET', token).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -41,9 +41,16 @@ export class ResetPassword extends React.Component {
             }
             
             const { response, body } = obj;
-            if (response.status !== 204) {
+            if (response.status !== 204 && response.status !== 200) {
                 showToast('This link has expired');
                 history.push('/login');
+                return;
+            }
+
+            if (response.status === 204) {
+                showToast('You have successfully joined the company');
+                showModal('Success', 'You have successfully joined the company');
+                // history.push('/login');
                 return;
             }
 
@@ -72,7 +79,7 @@ export class ResetPassword extends React.Component {
         showLoader(true);
 
         // call the service function
-        makePasswordUpdateRequest('POST', token, password).then(obj => {
+        makeInviteAcceptRequest('POST', token, password).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -109,12 +116,12 @@ export class ResetPassword extends React.Component {
     }
 }
 
-ResetPassword.propTypes = {
+AcceptInvite.propTypes = {
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
 };
 
-ResetPassword.defaultProps = {};
+AcceptInvite.defaultProps = {};
 
 const mapStateToProps = state => ({});
 
@@ -123,4 +130,4 @@ const mapDispatchToProps = dispatch => ({});
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ResetPassword);
+)(AcceptInvite);

@@ -9,6 +9,7 @@ import LoginPage from 'containers/loginPage';
 import Signup from 'containers/signup';
 import ForgotPassword from 'containers/forgotPassword';
 import ResetPassword from 'containers/resetPassword';
+import AcceptInvite from 'containers/acceptInvite';
 import Home from 'containers/home';
 import Default from 'containers/default';
 import Loader from 'components/loader';
@@ -50,6 +51,13 @@ export class App extends React.Component {
                             exact
                             path="/reset-password/:token"
                             component={ResetPassword}
+                            condition={!isLoggedIn}
+                            redirectUrl="/"
+                        />
+                        <PrivateRoute
+                            exact
+                            path="/invitation/:token"
+                            component={AcceptInvite}
                             condition={!isLoggedIn}
                             redirectUrl="/"
                         />

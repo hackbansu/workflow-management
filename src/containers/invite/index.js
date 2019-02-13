@@ -41,9 +41,13 @@ export class Invite extends React.Component {
                 return;
             }
 
-            showToast('Invite Sent');
+            const { response, body } = obj;
+            if (response.status !== 200) {
+                showToast('Invite failed');
+                return;
+            }
 
-            history.push('/');
+            showToast('Invite Sent');
         });
     };
 

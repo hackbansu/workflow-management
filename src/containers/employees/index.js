@@ -9,8 +9,9 @@ import { updateEmployeesAction } from 'actions/employees';
 import { makeFetchRequest } from 'services/employees';
 import userConstants from 'constants/user';
 import constants from 'constants/index.js';
-import './index.scss';
+import { showToast } from 'utils/helpers/toast';
 
+import './index.scss';
 
 // import components
 import EmployeesNavbar from 'components/employeesNavbar';
@@ -41,6 +42,10 @@ export class Profile extends React.Component {
             }
 
             const { response, body } = obj;
+            if (response.status !== 200) {
+                showToast('Profile update failed');
+                return;
+            }
 
             const data = body.map(emp => {
                 const {
@@ -56,7 +61,10 @@ export class Profile extends React.Component {
                     user: {
                         firstName,
                         lastName,
-                        profilePhoto: profilePhoto.substring(0, 4) === 'http' ? profilePhoto : `${constants.MEDIA_URL}${profilePhoto}`,
+                        profilePhoto:
+                            profilePhoto.substring(0, 4) === 'http'
+                                ? profilePhoto
+                                : `${constants.MEDIA_URL}${profilePhoto}`,
                         email,
                         id: userId,
                     },
@@ -110,7 +118,9 @@ export class Profile extends React.Component {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th scope="col" className="employee-pic">Profile Pic</th>
+                            <th scope="col" className="employee-pic">
+                                Profile Pic
+                            </th>
                             <th scope="col">First NAME</th>
                             <th scope="col">Last NAME</th>
                             <th scope="col">DESIGNATION</th>

@@ -161,18 +161,6 @@ export class EmployeeForm extends React.Component {
                             onChange={e => this.setState({ isAdmin: e.target.checked })}
                             checked={isAdmin ? 'checked' : ''}
                         />
-                        {/* profile photo */}
-                        {/* <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">Upload</span>
-                        </div>
-                        <div className="custom-file">
-                            <input type="file" className="custom-file-input" id="inputGroupFile01" />
-                            <label className="custom-file-label" htmlFor="inputGroupFile01">
-                                Choose file
-                            </label>
-                        </div>
-                    </div> */}
                         {/* update profile button */}
                         <FormSubmitButton name="Update" />
                     </fieldset>

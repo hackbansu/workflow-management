@@ -42,6 +42,11 @@ export class Home extends React.Component {
             }
 
             const { response, body } = obj;
+            if (response.status !== 200) {
+                showToast('Profile update failed');
+                return;
+            }
+            
             const { email, id: userId, first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
 
             // dispatch action to update user token and data
@@ -53,6 +58,11 @@ export class Home extends React.Component {
                 }
 
                 const { response, body } = obj;
+                if (response.status !== 200) {
+                    showToast('Company details update failed');
+                    return;
+                }
+
                 const { id: companyId, name, address, city, state, logo_url: logo, status, links } = body.company;
                 const { is_admin: isAdmin, designation, status: userStatus } = body;
 
@@ -76,6 +86,12 @@ export class Home extends React.Component {
             showLoader(false);
 
             if (!obj) {
+                return;
+            }
+
+            const { response, body } = obj;
+            if (response.status !== 204) {
+                showToast('Logout failed');
                 return;
             }
 

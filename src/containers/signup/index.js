@@ -65,6 +65,10 @@ export class Signup extends React.Component {
             document.getElementsByClassName("signup-form").reset();
 
             const { response, body } = obj;
+            if (response.status !== 201) {
+                showModal('Signup Failed', 'Signup request failed');
+                return;
+            }
 
             showModal('Signup Successful', 'Confirmation link has been sent to your email.');
         });

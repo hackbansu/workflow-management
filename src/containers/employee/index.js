@@ -5,6 +5,7 @@ import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
+import { showModal } from 'utils/helpers/modal';
 import { makeUpdateRequest } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
 
@@ -52,6 +53,11 @@ export class Employee extends React.Component {
             }
 
             const { response, body } = obj;
+            if (response.status !== 200) {
+                showModal('Update Failed', 'Employee update failed');
+                return;
+            }
+
             const { user, designation, is_admin: isAdmin, status } = body;
             const {
                 email,

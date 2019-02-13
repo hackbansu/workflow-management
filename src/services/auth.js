@@ -28,7 +28,6 @@ export function makePasswordResetRequest(email) {
 
 /**
  * Utility function to send the password reset POST request to the server.
- * @param {string} email - email to send in the login request.
  */
 export function makePasswordUpdateRequest(type, token, password = '') {
     if (type === 'GET') {
@@ -46,4 +45,18 @@ export function makePasswordUpdateRequest(type, token, password = '') {
  */
 export function makeSignupRequest(data) {
     return makeApiRequest('create-company/', 'POST', data);
+}
+
+
+/**
+ * Utility function to send the invitation acceptance GET or POST request to the server.
+ */
+export function makeInviteAcceptRequest(type, token, password = '') {
+    if (type === 'GET') {
+        return makeApiRequest(`user/invitation/${token}/`, type);
+    }
+    if (type === 'POST') {
+        return makeApiRequest(`user/invitation/${token}/`, type, { password });
+    }
+    return null;
 }

@@ -42,12 +42,23 @@ export class LoginPage extends React.Component {
             showLoader(false);
 
             if (!obj) {
+                return;
+            }
+
+            const { response, body } = obj;
+            if (response.status !== 200) {
                 showModal('Login Failed', 'Invalid Credentials');
                 return;
             }
-            
-            const { response, body } = obj;
-            const { token, email, id, first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
+
+            const {
+                token,
+                email,
+                id,
+                first_name: firstName,
+                last_name: lastName,
+                profile_photo_url: profilePhoto,
+            } = body;
 
             // dispatch action to update user token and data
             updateToken(token);

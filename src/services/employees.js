@@ -35,5 +35,5 @@ export function makeInviteRequest(email, firstName, lastName, designation) {
         designation,
     };
 
-    return makeApiRequest('/company/invite-employee/', 'POST', data);
+    return makeApiRequest('company/invite-employee/', 'POST', data);
 }

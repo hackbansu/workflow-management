@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
+import { showToast } from 'utils/helpers/toast';
 import { showLoader } from 'utils/helpers/loader';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makePasswordResetRequest } from 'services/auth';
@@ -45,6 +46,10 @@ export class ForgotPassword extends React.Component {
             }
 
             const { response, body } = obj;
+            if (response.status !== 204) {
+                showModal('Failed', 'Reset link send failed');
+                return;
+            }
 
             showModal('Email Sent', 'Reset link has been sent on the provided email.');
         });

@@ -45,6 +45,7 @@ export class ResetPasswordForm extends React.Component {
                     <fieldset disabled={isDisabled ? 'disabled' : ''}>
                         <label>
                             Password:
+                            <br />
                             <input
                                 type="password"
                                 name="password"
@@ -55,6 +56,7 @@ export class ResetPasswordForm extends React.Component {
                         <br />
                         <label>
                             Confirm Password:
+                            <br />
                             <input
                                 type="password"
                                 name="confirmPassword"
@@ -62,6 +64,7 @@ export class ResetPasswordForm extends React.Component {
                                 onChange={e => this.setState({ confirmPassword: e.target.value })}
                             />
                         </label>
+                        <br />
                         <input type="submit" value="Reset" />
                     </fieldset>
                 </form>

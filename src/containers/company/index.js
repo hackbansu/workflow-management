@@ -4,6 +4,7 @@ import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
+import { showModal } from 'utils/helpers/modal';
 import { updateProfileAction, updateCompanyAction } from 'actions/user';
 import { makeUpdateRequest, makeFetchRequest } from 'services/company';
 
@@ -32,8 +33,12 @@ export class Company extends React.Component {
             if (!obj) {
                 return;
             }
-
             const { response, body } = obj;
+            if (response.status !== 200) {
+                showToast('Company details update failed');
+                return;
+            }
+
             const { id: companyId, name, address, city, state, logo_url: logo, status, links } = body.company;
             const { is_admin: isAdmin, designation, status: userStatus } = body;
 
@@ -63,9 +68,13 @@ export class Company extends React.Component {
                 return;
             }
 
-            showToast('Update Successful');
-
             const { response, body } = obj;
+            if (response.status !== 200) {
+                showModal('Update Failed', 'Company update failed');
+                return;
+            }
+
+            showToast('Update Successful');
             const { address, city, state, links, logo_url: logo } = body;
 
             // dispatch action to update company data in store

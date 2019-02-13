@@ -29,7 +29,7 @@ export default (state = initialState, action) => {
             profilePhoto:
                     action.profilePhoto.substring(0, 4) === 'http'
                         ? action.profilePhoto
-                        : `${constants.STATIC_URL}${action.profilePhoto}`,
+                        : `${constants.MEDIA_URL}${action.profilePhoto}`,
             email: action.email,
             id: action.id,
             isAdmin: action.isAdmin,
@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
                 city: action.city,
                 state: action.state,
                 logo:
-                        action.logo.substring(0, 4) === 'http' ? action.logo : `${constants.STATIC_URL}${action.logo}`,
+                        action.logo.substring(0, 4) === 'http' ? action.logo : `${constants.MEDIA_URL}${action.logo}`,
                 status: action.status,
                 links: action.links,
             },

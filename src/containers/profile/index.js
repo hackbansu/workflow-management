@@ -44,7 +44,7 @@ export class Profile extends React.Component {
             }
 
             const { response, body } = obj;
-            const { first_name: firstName, last_name: lastName, profile_photo: profilePhoto } = body;
+            const { first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
 
             // dispatch action to update user data in store
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);

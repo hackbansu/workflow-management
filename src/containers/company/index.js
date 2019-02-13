@@ -34,7 +34,7 @@ export class Company extends React.Component {
             }
 
             const { response, body } = obj;
-            const { id: companyId, name, address, city, state, logo, status, links } = body.company;
+            const { id: companyId, name, address, city, state, logo_url: logo, status, links } = body.company;
             const { is_admin: isAdmin, designation, status: userStatus } = body;
 
             // dispatch action to update employees
@@ -66,7 +66,7 @@ export class Company extends React.Component {
             showToast('Update Successful');
 
             const { response, body } = obj;
-            const { address, city, state, links, logo } = body;
+            const { address, city, state, links, logo_url: logo } = body;
 
             // dispatch action to update company data in store
             updateCompany(companyId, name, address, city, state, logo, status, links);

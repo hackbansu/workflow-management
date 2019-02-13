@@ -44,7 +44,7 @@ export class Profile extends React.Component {
                     first_name: firstName,
                     last_name: lastName,
                     email,
-                    profile_photo: profilePhoto,
+                    profile_photo_url: profilePhoto,
                     id: userId,
                 } = emp.user;
                 const { designation, is_admin: isAdmin, status, id: employeeId } = emp;

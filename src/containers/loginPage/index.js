@@ -47,7 +47,7 @@ export class LoginPage extends React.Component {
             }
             
             const { response, body } = obj;
-            const { token, email, id, first_name: firstName, last_name: lastName, profile_photo: profilePhoto } = body;
+            const { token, email, id, first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
 
             // dispatch action to update user token and data
             updateToken(token);

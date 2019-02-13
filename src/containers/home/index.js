@@ -42,7 +42,7 @@ export class Home extends React.Component {
             }
 
             const { response, body } = obj;
-            const { email, id: userId, first_name: firstName, last_name: lastName, profile_photo: profilePhoto } = body;
+            const { email, id: userId, first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
 
             // dispatch action to update user token and data
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
@@ -53,7 +53,7 @@ export class Home extends React.Component {
                 }
 
                 const { response, body } = obj;
-                const { id: companyId, name, address, city, state, logo, status, links } = body.company;
+                const { id: companyId, name, address, city, state, logo_url: logo, status, links } = body.company;
                 const { is_admin: isAdmin, designation, status: userStatus } = body;
 
                 // dispatch action to update employees

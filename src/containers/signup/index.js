@@ -76,7 +76,7 @@ export class Signup extends React.Component {
     render() {
         return (
             <div>
-                <div className="container">
+                <div className="container entry-form-container">
                     <PageBanner text="Sign Up" />
                     <SignupForm onSubmit={this.onSubmit} />
                     <ul className="nav justify-content-center page-nav-links">

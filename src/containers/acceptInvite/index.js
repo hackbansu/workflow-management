@@ -43,13 +43,13 @@ export class AcceptInvite extends React.Component {
             const { response, body } = obj;
             if (response.status !== 204 && response.status !== 200) {
                 showToast('This link has expired');
-                history.push('/login');
+                // history.push('/login');
                 return;
             }
 
             if (response.status === 204) {
                 showToast('You have successfully joined the company');
-                showModal('Success', 'You have successfully joined the company');
+                // showModal('Success', 'You have successfully joined the company');
                 // history.push('/login');
                 return;
             }

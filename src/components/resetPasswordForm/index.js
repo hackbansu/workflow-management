@@ -3,6 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { validatePassword } from 'utils/validators';
+
+// importing components
+import FormField from 'components/formField';
+import FormSubmitButton from 'components/formSubmitButton';
+
 /**
  * Class component for login form
  */
@@ -14,8 +20,9 @@ export class ResetPasswordForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            password: null,
-            confirmPassword: null,
+            password: '',
+            confirmPassword: '',
+            errors: {},
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -29,6 +36,31 @@ export class ResetPasswordForm extends React.Component {
     submitForm = (password, confirmPassword) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+
+        let valid = true;
+        const newErrors = {};
+
+        // validations
+        const passwordValidity = validatePassword(password);
+        const confirmPasswordValidity = validatePassword(confirmPassword);
+
+        if (!passwordValidity.isValid) {
+            valid = false;
+            newErrors.password = passwordValidity.message;
+        }
+
+        if (!confirmPasswordValidity.isValid) {
+            valid = false;
+            newErrors.confirmPassword = confirmPasswordValidity.message;
+        }
+
+        if (!valid) {
+            this.setState({
+                errors: newErrors,
+            });
+            return;
+        }
+
         onSubmit(password, confirmPassword);
     };
 
@@ -36,36 +68,47 @@ export class ResetPasswordForm extends React.Component {
      * Function to return the component rendering.
      */
     render() {
-        const { password, confirmPassword } = this.state;
+        const { password, confirmPassword, errors } = this.state;
         const { isDisabled } = this.props;
 
         return (
-            <div className="form-cover">
-                <form method="post" onSubmit={this.submitForm(password, confirmPassword)}>
+            <div className="container">
+                <form className="offset-md-3 col-md-6" method="post" onSubmit={this.submitForm(password, confirmPassword)}>
                     <fieldset disabled={isDisabled ? 'disabled' : ''}>
-                        <label>
-                            Password:
-                            <br />
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder=""
-                                onChange={e => this.setState({ password: e.target.value })}
-                            />
-                        </label>
-                        <br />
-                        <label>
-                            Confirm Password:
-                            <br />
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                placeholder=""
-                                onChange={e => this.setState({ confirmPassword: e.target.value })}
-                            />
-                        </label>
-                        <br />
-                        <input type="submit" value="Reset" />
+                        {/* Password */}
+                        <FormField
+                            name="Password"
+                            inputName="password"
+                            type="password"
+                            placeholder=""
+                            value={null}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    password: value,
+                                    errors: { ...prevState.errors, password: validatePassword(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.password}
+                        />
+                        {/* confirm Password */}
+                        <FormField
+                            name="Confirm Password"
+                            inputName="confirmPassword"
+                            type="password"
+                            placeholder=""
+                            value={null}
+                            onChange={e => {
+                                const { value } = e.target;
+                                return this.setState(prevState => ({
+                                    confirmPassword: value,
+                                    errors: { ...prevState.errors, confirmPassword: validatePassword(value).message },
+                                }));
+                            }}
+                            errorMsg={errors.confirmPassword}
+                        />
+                        {/* update profile button */}
+                        <FormSubmitButton name="Reset" />
                     </fieldset>
                 </form>
             </div>

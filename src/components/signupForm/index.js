@@ -96,7 +96,7 @@ export class LoginForm extends React.Component {
         const { firstName, lastName, email, designation, companyName, companyAddress, errors } = this.state;
 
         return (
-            <div className="offset-md-1 col-md-10">
+            <div className="offset-md-3 col-md-6">
                 <form
                     className="signup-form"
                     method="post"

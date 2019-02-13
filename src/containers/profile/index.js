@@ -50,7 +50,6 @@ export class Profile extends React.Component {
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);
 
             showToast('Profile Updated');
-            history.push('/');
         });
     };
 

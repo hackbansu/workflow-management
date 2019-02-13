@@ -70,9 +70,6 @@ export class Company extends React.Component {
 
             // dispatch action to update company data in store
             updateCompany(companyId, name, address, city, state, logo, status, links);
-
-            // redirect to home page
-            history.push('/');
         });
     };
 

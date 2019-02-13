@@ -16,8 +16,11 @@ export class sidebar extends React.Component {
         this.activeElement = null;
     }
 
-    componentDidMount() {
-        const { activeField } = this.props;
+    componentDidUpdate() {
+        let { activeField } = this.props;
+        if (!activeField) {
+            activeField = 'dashboard';
+        }
 
         const lists = document.getElementsByClassName('sidebar-list');
         let found = false;
@@ -53,12 +56,7 @@ export class sidebar extends React.Component {
                 </div>
 
                 <ul className="sidebar-list list-unstyled components" onClick={this.clickAction}>
-                    <SidebarField
-                        name="Dashboard"
-                        fieldType="dashboard"
-                        redirectUrl="/dashboard"
-                        isVisible
-                    />
+                    <SidebarField name="Dashboard" fieldType="dashboard" redirectUrl="/dashboard" isVisible />
                     <SidebarField name="Workflows" fieldType="workflows" redirectUrl="/workflows" isVisible />
                     <SidebarField name="Employees" fieldType="employees" redirectUrl="/employees" isVisible />
                     <SidebarField name="Invite" fieldType="invite" redirectUrl="/invite" isVisible={isAdmin} />

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import EmployeesNavbarField from 'components/employeesNavbarField';
+import { validateTextString } from 'utils/validators';
 
 /**
  * Functional component of the employees navbar.
@@ -11,14 +12,29 @@ import EmployeesNavbarField from 'components/employeesNavbarField';
 export class EmployeesNavbar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            searchVal: '',
+        };
         this.clickAction = this.clickAction.bind(this);
+        this.searchAction = this.searchAction.bind(this);
         this.activeElement = null;
     }
 
     componentDidMount() {
         this.activeElement = document.getElementsByClassName('navbar-nav mr-auto')[0].children[0];
     }
+
+    searchAction = searchVal => ev => {
+        const { onSearch } = this.props;
+        ev.preventDefault();
+        this.activeElement.classList.remove('active');
+        this.activeElement = document.getElementsByClassName('navbar-nav mr-auto')[0].children[0];
+
+        if (searchVal === '') {
+            this.activeElement.classList.add('active');
+        }
+        onSearch(searchVal.toLowerCase());
+    };
 
     clickAction(e) {
         const { onClick } = this.props;
@@ -35,6 +51,7 @@ export class EmployeesNavbar extends React.Component {
     }
 
     render() {
+        const { searchVal } = this.state;
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <Link className="navbar-brand" to="/employees">
@@ -59,12 +76,14 @@ export class EmployeesNavbar extends React.Component {
                         <EmployeesNavbarField name="Inactive" type="INACTIVE" />
                         <EmployeesNavbarField name="Invited" type="INVITED" />
                     </ul>
-                    <form className="form-inline my-2 my-lg-0">
+                    <form className="form-inline my-2 my-lg-0" onSubmit={this.searchAction(searchVal)}>
                         <input
                             className="form-control mr-sm-2"
                             type="search"
                             placeholder="Search"
                             aria-label="Search"
+                            value={searchVal}
+                            onChange={e => this.setState({ searchVal: e.target.value })}
                         />
                         <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
                             Search
@@ -78,6 +97,7 @@ export class EmployeesNavbar extends React.Component {
 
 EmployeesNavbar.propTypes = {
     onClick: PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
 };
 
 EmployeesNavbar.defaultProps = {};

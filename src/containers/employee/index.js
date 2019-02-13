@@ -54,7 +54,7 @@ export class Employee extends React.Component {
 
             const { response, body } = obj;
 
-            history.push('/');
+            history.push('/employees');
         });
     };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -29,6 +29,7 @@ export class Home extends React.Component {
     constructor(props) {
         super(props);
         this.onLogoutClick = this.onLogoutClick.bind(this);
+        this.state = {};
     }
 
     componentWillMount() {
@@ -92,7 +93,7 @@ export class Home extends React.Component {
         const { currentUser, location } = this.props;
         const { firstName, lastName, isAdmin, profilePhoto } = currentUser;
         let { company } = currentUser;
-        
+
         if (!company) {
             company = {};
         }

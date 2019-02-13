@@ -26,6 +26,7 @@ export class Profile extends React.Component {
             filteredEmployees: [],
         };
         this.filterEmployees = this.filterEmployees.bind(this);
+        this.searchEmployees = this.searchEmployees.bind(this);
     }
 
     componentWillMount() {
@@ -87,6 +88,14 @@ export class Profile extends React.Component {
         });
     }
 
+    searchEmployees(searchVal) {
+        const { employees } = this.props;
+        const data = employees.filter(employee => employee.user.firstName.toLowerCase().indexOf(searchVal) !== -1);
+        this.setState({
+            filteredEmployees: data,
+        });
+    }
+
     /**
      * function to render the component.
      */
@@ -94,7 +103,7 @@ export class Profile extends React.Component {
         const { filteredEmployees } = this.state;
         return (
             <div>
-                <EmployeesNavbar onClick={this.filterEmployees} />
+                <EmployeesNavbar onClick={this.filterEmployees} onSearch={this.searchEmployees} />
                 <table className="table">
                     <thead>
                         <tr>

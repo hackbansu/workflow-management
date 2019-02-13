@@ -8,6 +8,9 @@ import React from 'react';
 import { updateEmployeesAction } from 'actions/employees';
 import { makeFetchRequest } from 'services/employees';
 import userConstants from 'constants/user';
+import constants from 'constants/index.js';
+import './index.scss';
+
 
 // import components
 import EmployeesNavbar from 'components/employeesNavbar';
@@ -53,7 +56,7 @@ export class Profile extends React.Component {
                     user: {
                         firstName,
                         lastName,
-                        profilePhoto,
+                        profilePhoto: profilePhoto.substring(0, 4) === 'http' ? profilePhoto : `${constants.MEDIA_URL}${profilePhoto}`,
                         email,
                         id: userId,
                     },
@@ -107,6 +110,7 @@ export class Profile extends React.Component {
                 <table className="table">
                     <thead>
                         <tr>
+                            <th scope="col" className="employee-pic">Profile Pic</th>
                             <th scope="col">First NAME</th>
                             <th scope="col">Last NAME</th>
                             <th scope="col">DESIGNATION</th>
@@ -117,6 +121,9 @@ export class Profile extends React.Component {
                         {filteredEmployees.map(data => (
                             <LinkContainer to={`/employee/${data.id}`}>
                                 <tr key={data.user.firstName + data.user.lastName + data.designation}>
+                                    <td className="employee-pic">
+                                        <img src={data.user.profilePhoto} className="display-pic" alt="employee-pic" />
+                                    </td>
                                     <td>{data.user.firstName}</td>
                                     <td>{data.user.lastName}</td>
                                     <td>{data.designation}</td>

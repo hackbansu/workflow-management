@@ -3,9 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { makeInviteRequest } from 'services/employees';
+import { makeInviteRequest, makeCsvInviteRequest } from 'services/employees';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
+import { showModal } from 'utils/helpers/modal';
 
 // importing components
 import InviteForm from 'components/inviteForm';
@@ -22,6 +23,7 @@ export class Invite extends React.Component {
         super(props);
         this.state = {};
         this.onSubmit = this.onSubmit.bind(this);
+        this.onCsvFileSubmit = this.onCsvFileSubmit.bind(this);
     }
 
     /**
@@ -51,6 +53,30 @@ export class Invite extends React.Component {
         });
     };
 
+    onCsvFileSubmit = (csvFile) => {
+        const { history } = this.props;
+
+        // dispatch action to show loader
+        showLoader(true);
+
+        // call the service function
+        makeCsvInviteRequest(csvFile).then(obj => {
+            showLoader(false);
+
+            if (!obj) {
+                return;
+            }
+
+            const { response, body } = obj;
+            if (response.status !== 200) {
+                showToast('Invite failed');
+                return;
+            }
+
+            showModal('Success', 'Invitation will be sent and status will be mailed.');
+        });
+    };
+
     /**
      * function to render the component.
      */
@@ -58,7 +84,7 @@ export class Invite extends React.Component {
         return (
             <div className="profile-page">
                 <div className="container">
-                    <InviteForm onSubmit={this.onSubmit} />
+                    <InviteForm onSubmit={this.onSubmit} onCsvFileSubmit={this.onCsvFileSubmit} />
                 </div>
             </div>
         );

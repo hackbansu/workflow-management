@@ -40,6 +40,7 @@ FormField.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func,
     disabled: PropTypes.string,
+    errorMsg: PropTypes.string,
 };
 
 FormField.defaultProps = {
@@ -47,6 +48,7 @@ FormField.defaultProps = {
     placeholder: '',
     value: '',
     disabled: '',
+    errorMsg: '',
 };
 
 export default FormField;

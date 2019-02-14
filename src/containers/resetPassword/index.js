@@ -64,7 +64,7 @@ export class ResetPassword extends React.Component {
         }
 
         if (password !== confirmPassword) {
-            showToast('Password does not match');
+            showModal('Invalid', 'Password does not match');
             return;
         }
 

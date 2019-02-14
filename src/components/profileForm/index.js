@@ -7,7 +7,8 @@ import FormField from 'components/formField';
 import UploadField from 'components/uploadField';
 import FormSubmitButton from 'components/formSubmitButton';
 import userConstants from 'constants/user';
-import { validateTextString } from 'utils/validators';
+import { validateTextString, validateProfilePic } from 'utils/validators';
+import constants from 'constants/index.js';
 
 /**
  * Class component for login form
@@ -49,6 +50,7 @@ export class ProfileForm extends React.Component {
         // validations
         const firstNameValidity = validateTextString(firstName);
         const lastNameValidity = validateTextString(lastName);
+        const profilePhotoValidity = validateProfilePic(profilePhoto);
 
         if (!firstNameValidity.isValid) {
             valid = false;
@@ -58,6 +60,11 @@ export class ProfileForm extends React.Component {
         if (!lastNameValidity.isValid) {
             valid = false;
             newErrors.lastName = lastNameValidity.message;
+        }
+
+        if (!profilePhotoValidity.isValid) {
+            valid = false;
+            newErrors.profilePhoto = profilePhotoValidity.message;
         }
 
         if (!valid) {
@@ -152,7 +159,9 @@ export class ProfileForm extends React.Component {
                             name="Profile Picture"
                             inputName="profilePhoto"
                             type="file"
+                            accept={constants.PROFILE_PIC_TYPES}
                             onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
+                            errorMsg={errors.profilePhoto}
                         />
                         {/* update profile button */}
                         <FormSubmitButton name="Update" />

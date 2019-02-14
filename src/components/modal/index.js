@@ -42,6 +42,7 @@ export const Modal = ({ heading, text }) => (
 
 Modal.propTypes = {
     text: PropTypes.string.isRequired,
+    heading: PropTypes.string.isRequired,
 };
 
 Modal.defaultProps = {};

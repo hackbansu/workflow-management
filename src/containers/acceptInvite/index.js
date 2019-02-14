@@ -39,18 +39,17 @@ export class AcceptInvite extends React.Component {
             if (!obj) {
                 return;
             }
-            
+
             const { response, body } = obj;
             if (response.status !== 204 && response.status !== 200) {
-                showToast('This link has expired');
-                // history.push('/login');
+                showModal('Failed', 'This link has expired');
+                history.push('/login');
                 return;
             }
 
             if (response.status === 204) {
-                showToast('You have successfully joined the company');
-                // showModal('Success', 'You have successfully joined the company');
-                // history.push('/login');
+                showModal('Success', 'You have successfully joined the company');
+                history.push('/login');
                 return;
             }
 
@@ -71,7 +70,7 @@ export class AcceptInvite extends React.Component {
         }
 
         if (password !== confirmPassword) {
-            showToast('Password does not match');
+            showModal('Invalid', 'Password does not match');
             return;
         }
 
@@ -92,7 +91,7 @@ export class AcceptInvite extends React.Component {
                 return;
             }
 
-            showToast('Password has been reset');
+            showModal('Success', 'Password has been reset. You can now login');
 
             // redirect to home page
             history.push('/login');

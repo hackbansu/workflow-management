@@ -34,12 +34,10 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
         mode: 'cors', // no-cors, cors, *same-origin
         referrer: 'no-referrer', // *client, no-referrer
     })
-        .then(response => {
-            if (response.status === 204) {
-                return { response, body: null };
-            }
-            return response.json().then(body => ({ response, body }));
-        })
+        .then(response => response
+            .json()
+            .then(body => ({ response, body }))
+            .catch(err => ({ response, body: null })))
         .then(({ response, body }) => {
             if (response.status >= 500) {
                 // show error in toast msg
@@ -54,7 +52,6 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             return { response, body };
         })
         .catch(err => {
-            console.log('err.message :', err.message);
             // show error in toast msg
             showToast('Some error occured');
             return null;

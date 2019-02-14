@@ -32,9 +32,6 @@ export class LoginForm extends React.Component {
      * @param {string} password - password entered by the user.
      */
     submitForm = (email, password) => ev => {
-        console.log('email :', email);
-        console.log('password :', password);
-
         const { onSubmit } = this.props;
         ev.preventDefault();
         let valid = true;

@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import FormField from 'components/formField';
 import UploadField from 'components/uploadField';
 import FormSubmitButton from 'components/formSubmitButton';
-import { validateTextString } from 'utils/validators';
+import { validateTextString, validateLogo } from 'utils/validators';
+import constants from 'constants/index.js';
 
 /**
  * Class component for login form
@@ -47,6 +48,7 @@ export class CompanyForm extends React.Component {
         const addressValidity = validateTextString(address);
         const cityValidity = validateTextString(city);
         const stateValidity = validateTextString(state);
+        const logoValidity = validateLogo(logo);
 
         if (!addressValidity.isValid) {
             valid = false;
@@ -57,10 +59,15 @@ export class CompanyForm extends React.Component {
             valid = false;
             newErrors.city = cityValidity.message;
         }
-       
+
         if (!stateValidity.isValid) {
             valid = false;
             newErrors.state = stateValidity.message;
+        }
+
+        if (!logoValidity.isValid) {
+            valid = false;
+            newErrors.logo = logoValidity.message;
         }
 
         if (!valid) {
@@ -177,7 +184,9 @@ export class CompanyForm extends React.Component {
                             name="Company Logo"
                             inputName="logo"
                             type="file"
+                            accept={constants.COMPANY_LOGO_PIC_TYPES}
                             onChange={e => this.setState({ logo: e.target.files[0] })}
+                            errorMsg={errors.logo}
                         />
                         {/* update company button */}
                         <FormSubmitButton name="Update" />

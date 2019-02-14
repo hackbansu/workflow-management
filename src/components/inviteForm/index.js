@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import FormField from 'components/formField';
+import UploadField from 'components/uploadField';
 import FormSubmitButton from 'components/formSubmitButton';
-import { validateEmail, validateTextString } from 'utils/validators';
+import { validateEmail, validateTextString, validateInviteCsvFile } from 'utils/validators';
+import constants from 'constants/index.js';
 
 /**
  * Class component for login form
@@ -22,6 +24,7 @@ export class InviteForm extends React.Component {
             firstName: '',
             lastName: '',
             designation: '',
+            csvFile: null,
             errors: {},
         };
 
@@ -35,37 +38,45 @@ export class InviteForm extends React.Component {
      * @param {string} firstName - first name of the user.
      * @param {string} lastName - last name of the user.
      */
-    submitForm = (email, firstName, lastName, designation) => ev => {
-        const { onSubmit } = this.props;
+    submitForm = (email, firstName, lastName, designation, csvFile) => ev => {
+        const { onSubmit, onCsvFileSubmit } = this.props;
         ev.preventDefault();
 
         let valid = true;
         const newErrors = {};
 
-        // validations
-        const emailValidity = validateEmail(email);
-        const firstNameValidity = validateTextString(firstName);
-        const lastNameValidity = validateTextString(lastName);
-        const designationValidity = validateTextString(designation);
+        if (!csvFile) {
+            const emailValidity = validateEmail(email);
+            const firstNameValidity = validateTextString(firstName);
+            const lastNameValidity = validateTextString(lastName);
+            const designationValidity = validateTextString(designation);
 
-        if (!firstNameValidity.isValid) {
-            valid = false;
-            newErrors.firstName = firstNameValidity.message;
-        }
+            if (!firstNameValidity.isValid) {
+                valid = false;
+                newErrors.firstName = firstNameValidity.message;
+            }
 
-        if (!lastNameValidity.isValid) {
-            valid = false;
-            newErrors.lastName = lastNameValidity.message;
-        }
+            if (!lastNameValidity.isValid) {
+                valid = false;
+                newErrors.lastName = lastNameValidity.message;
+            }
 
-        if (!emailValidity.isValid) {
-            valid = false;
-            newErrors.email = emailValidity.message;
-        }
+            if (!emailValidity.isValid) {
+                valid = false;
+                newErrors.email = emailValidity.message;
+            }
 
-        if (!designationValidity.isValid) {
-            valid = false;
-            newErrors.designation = designationValidity.message;
+            if (!designationValidity.isValid) {
+                valid = false;
+                newErrors.designation = designationValidity.message;
+            }
+        } else {
+            const csvFileValidity = validateInviteCsvFile(csvFile);
+
+            if (!csvFileValidity.isValid) {
+                valid = false;
+                newErrors.csvFile = csvFileValidity.message;
+            }
         }
 
         if (!valid) {
@@ -75,18 +86,22 @@ export class InviteForm extends React.Component {
             return;
         }
 
-        onSubmit(email, firstName, lastName, designation);
+        if (csvFile) {
+            onCsvFileSubmit(csvFile);
+        } else {
+            onSubmit(email, firstName, lastName, designation);
+        }
     };
 
     /**
      * Function to return the component rendering.
      */
     render() {
-        const { email, firstName, lastName, designation, errors } = this.state;
+        const { email, firstName, lastName, designation, errors, csvFile } = this.state;
 
         return (
             <div>
-                <form method="post" onSubmit={this.submitForm(email, firstName, lastName, designation)}>
+                <form method="post" onSubmit={this.submitForm(email, firstName, lastName, designation, csvFile)}>
                     {/* first name */}
                     <FormField
                         name="First Name"
@@ -151,7 +166,16 @@ export class InviteForm extends React.Component {
                         }}
                         errorMsg={errors.designation}
                     />
-                    {/* update profile button */}
+                    {/* CSV file */}
+                    <UploadField
+                        name="CSV File"
+                        inputName="csvFile"
+                        type="file"
+                        accept={constants.INVITE_FILE_TYPES}
+                        onChange={e => this.setState({ csvFile: e.target.files[0] })}
+                        errorMsg={errors.csvFile}
+                    />
+                    {/* send invite button */}
                     <FormSubmitButton name="Invite" />
                 </form>
             </div>
@@ -161,6 +185,7 @@ export class InviteForm extends React.Component {
 
 InviteForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    onCsvFileSubmit: PropTypes.func.isRequired,
 };
 
 InviteForm.defaultProps = {};

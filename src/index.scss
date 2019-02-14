@@ -98,18 +98,25 @@ button:disabled {
 .wrapper {
   display: flex;
   width: 100%;
+  min-height: 100vh;
   align-items: stretch;
   padding: 0px;
 }
 
+.sidebar-container, .content-container{
+  padding: 0;
+}
+
 #sidebar {
-  min-width: 250px;
-  max-width: 250px;
-  min-height: 100vh;
+  height: 100vh;
   background: #272f35;
   color: #fff;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  width: inherit;
+  max-width: inherit;
+  overflow-y: auto;
 }
 
 #sidebar .sidebar-header {
@@ -177,7 +184,7 @@ a[aria-expanded="true"] {
 #root {
   background-color: #dadeec;
   min-height: 100vh;
-  min-width: 100vw;
+  min-width: 100%;
 }
 
 body {

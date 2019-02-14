@@ -37,3 +37,10 @@ export function makeInviteRequest(email, firstName, lastName, designation) {
 
     return makeApiRequest('company/invite-employee/', 'POST', data);
 }
+
+export function makeCsvInviteRequest(csvFile) {
+    const formData = new FormData();
+    formData.append('csv_file', csvFile);
+
+    return makeApiRequest('company/invite-employee-csv/', 'POST', formData, null);
+}

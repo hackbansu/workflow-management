@@ -132,7 +132,14 @@ export class Profile extends React.Component {
                             <LinkContainer to={`/employee/${data.id}`}>
                                 <tr key={data.user.firstName + data.user.lastName + data.designation}>
                                     <td className="employee-pic">
-                                        <img src={data.user.profilePhoto} className="display-pic" alt="employee-pic" />
+                                        <img
+                                            src={data.user.profilePhoto}
+                                            className="display-pic"
+                                            alt="employee-pic"
+                                            onError={e => {
+                                                e.target.src = '/profile7.png';
+                                            }}
+                                        />
                                     </td>
                                     <td>{data.user.firstName}</td>
                                     <td>{data.user.lastName}</td>

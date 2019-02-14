@@ -46,8 +46,14 @@ export class Home extends React.Component {
                 showToast('Profile update failed');
                 return;
             }
-            
-            const { email, id: userId, first_name: firstName, last_name: lastName, profile_photo_url: profilePhoto } = body;
+
+            const {
+                email,
+                id: userId,
+                first_name: firstName,
+                last_name: lastName,
+                profile_photo_url: profilePhoto,
+            } = body;
 
             // dispatch action to update user token and data
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
@@ -121,25 +127,34 @@ export class Home extends React.Component {
             <div>
                 <main>
                     <div className="wrapper col-md-12">
-                        <Sidebar
-                            firstName={firstName}
-                            lastName={lastName}
-                            onLogoutClick={this.onLogoutClick}
-                            isAdmin={isAdmin}
-                            companyName={companyName}
-                            profilePhoto={profilePhoto}
-                            logo={logo}
-                            activeField={activeField}
-                        />
-                        <div id="content">
-                            <Switch>
-                                <Route exact path="/profile" component={Profile} />
-                                <Route exact path="/employees" component={Employees} />
-                                <Route exact path="/employee/:id" component={Employee} />
-                                <Route exact path="/company" component={Company} />
-                                <PrivateRoute path="/invite" component={Invite} condition={isAdmin} redirectUrl="/" />
-                                <Route component={Default} />
-                            </Switch>
+                        <div className="col-md-2 col-sm-3 col-3 sidebar-container">
+                            <Sidebar
+                                firstName={firstName}
+                                lastName={lastName}
+                                onLogoutClick={this.onLogoutClick}
+                                isAdmin={isAdmin}
+                                companyName={companyName}
+                                profilePhoto={profilePhoto}
+                                logo={logo}
+                                activeField={activeField}
+                            />
+                        </div>
+                        <div className="col-md-10 col-sm-9 col-9 content-container">
+                            <div id="content">
+                                <Switch>
+                                    <Route exact path="/profile" component={Profile} />
+                                    <Route exact path="/employees" component={Employees} />
+                                    <Route exact path="/employee/:id" component={Employee} />
+                                    <Route exact path="/company" component={Company} />
+                                    <PrivateRoute
+                                        path="/invite"
+                                        component={Invite}
+                                        condition={isAdmin}
+                                        redirectUrl="/"
+                                    />
+                                    <Route component={Default} />
+                                </Switch>
+                            </div>
                         </div>
                     </div>
                 </main>

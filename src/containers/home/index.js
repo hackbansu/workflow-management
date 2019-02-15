@@ -10,6 +10,7 @@ import Company from 'containers/company';
 import Employees from 'containers/employees';
 import Employee from 'containers/employee';
 import Invite from 'containers/invite';
+import CreateCompany from 'containers/createCompany';
 
 // importing components
 import Sidebar from 'components/sidebar';
@@ -29,7 +30,9 @@ export class Home extends React.Component {
     constructor(props) {
         super(props);
         this.onLogoutClick = this.onLogoutClick.bind(this);
-        this.state = {};
+        this.state = {
+            isPartOfComapany: true,
+        };
     }
 
     componentWillMount() {
@@ -65,6 +68,7 @@ export class Home extends React.Component {
 
                 const { response, body } = obj;
                 if (response.status !== 200) {
+                    this.setState({ isPartOfComapany: false });
                     showToast('Company details update failed');
                     return;
                 }
@@ -112,6 +116,7 @@ export class Home extends React.Component {
     };
 
     render() {
+        const { isPartOfComapany } = this.state;
         const { currentUser, location } = this.props;
         const { firstName, lastName, isAdmin, profilePhoto } = currentUser;
         let { company } = currentUser;
@@ -138,19 +143,45 @@ export class Home extends React.Component {
                                 profilePhoto={profilePhoto}
                                 logo={logo}
                                 activeField={activeField}
+                                isPartOfComapany={isPartOfComapany}
                             />
                         </div>
                         <div className="col-md-10 col-sm-9 col-9 content-container">
                             <div id="content">
                                 <Switch>
                                     <Route exact path="/profile" component={Profile} />
-                                    <Route exact path="/employees" component={Employees} />
-                                    <Route exact path="/employee/:id" component={Employee} />
-                                    <Route exact path="/company" component={Company} />
+                                    <PrivateRoute
+                                        exact
+                                        path="/employees"
+                                        component={Employees}
+                                        condition={isPartOfComapany}
+                                        redirectUrl="/create-company"
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path="/employee/:id"
+                                        component={Employee}
+                                        condition={isPartOfComapany}
+                                        redirectUrl="/create-company"
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path="/company"
+                                        component={Company}
+                                        condition={isPartOfComapany}
+                                        redirectUrl="/create-company"
+                                    />
                                     <PrivateRoute
                                         path="/invite"
                                         component={Invite}
                                         condition={isAdmin}
+                                        redirectUrl="/"
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path="/create-company"
+                                        component={CreateCompany}
+                                        condition={!isPartOfComapany}
                                         redirectUrl="/"
                                     />
                                     <Route component={Default} />

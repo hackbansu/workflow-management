@@ -1,5 +1,5 @@
 .loader-cover{
-    background-color: rgba(187, 35, 35, 0.5);
+    background-color: rgba(0, 0, 0, 0.801);
     position: absolute;
     top: 0;
     left: 0;
@@ -9,7 +9,7 @@
 }
 
 .loader {
-    background: url('assets/loader.gif') no-repeat center;
+    background: url('assets/loader.svg') no-repeat center;
     height: 100%;
     width: 100%;
 }

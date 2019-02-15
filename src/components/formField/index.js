@@ -7,8 +7,24 @@ import PropTypes from 'prop-types';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const FormField = ({ name, inputName, type, placeholder, value, onChange, disabled, errorMsg, ...rest }) => {
+export const FormField = ({
+    name,
+    inputName,
+    type,
+    placeholder,
+    value,
+    onChange,
+    disabled,
+    errorMsg,
+    isVisible,
+    ...rest
+}) => {
     const id = inputName + '3';
+
+    if (!isVisible) {
+        return '';
+    }
+
     return (
         <div className="form-group row">
             <label htmlFor={id} className="col-sm-4 col-form-label">
@@ -41,6 +57,7 @@ FormField.propTypes = {
     onChange: PropTypes.func,
     disabled: PropTypes.string,
     errorMsg: PropTypes.string,
+    isVisible: PropTypes.bool,
 };
 
 FormField.defaultProps = {
@@ -49,6 +66,7 @@ FormField.defaultProps = {
     value: '',
     disabled: '',
     errorMsg: '',
+    isVisible: true,
 };
 
 export default FormField;

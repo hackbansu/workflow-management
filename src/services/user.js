@@ -25,3 +25,7 @@ export function makeUpdateRequest(firstName, lastName, profilePhoto) {
 export function makeFetchRequest() {
     return makeApiRequest('user/profile/', 'GET');
 }
+
+export function makeCreateCompanyRequest(data) {
+    return makeApiRequest('company/new-company/', 'POST', data);
+}

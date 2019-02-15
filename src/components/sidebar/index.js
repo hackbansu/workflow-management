@@ -42,13 +42,24 @@ export class sidebar extends React.Component {
     clickAction(e) {
         e.preventDefault();
 
-        this.activeElement.classList.remove('active');
+        if (this.activeElement) {
+            this.activeElement.classList.remove('active');
+        }
         e.target.parentElement.classList.add('active');
         this.activeElement = e.target.parentElement;
     }
 
     render() {
-        const { firstName, lastName, onLogoutClick, isAdmin, companyName, profilePhoto, logo } = this.props;
+        const {
+            firstName,
+            lastName,
+            onLogoutClick,
+            isAdmin,
+            companyName,
+            profilePhoto,
+            logo,
+            isPartOfComapany,
+        } = this.props;
         return (
             <nav id="sidebar">
                 <div className="sidebar-header">
@@ -56,11 +67,27 @@ export class sidebar extends React.Component {
                 </div>
 
                 <ul className="sidebar-list list-unstyled components" onClick={this.clickAction}>
-                    <SidebarField name="Dashboard" fieldType="dashboard" redirectUrl="/dashboard" isVisible />
-                    <SidebarField name="Workflows" fieldType="workflows" redirectUrl="/workflows" isVisible />
-                    <SidebarField name="Employees" fieldType="employees" redirectUrl="/employees" isVisible />
-                    <SidebarField name="Invite" fieldType="invite" redirectUrl="/invite" isVisible={isAdmin} />
-                    <SidebarField name="Templates" fieldType="templates" redirectUrl="/templates" isVisible={isAdmin} />
+                    {isPartOfComapany ? (
+                        <div>
+                            <SidebarField name="Dashboard" fieldType="dashboard" redirectUrl="/dashboard" isVisible />
+                            <SidebarField name="Workflows" fieldType="workflows" redirectUrl="/workflows" isVisible />
+                            <SidebarField name="Employees" fieldType="employees" redirectUrl="/employees" isVisible />
+                            <SidebarField name="Invite" fieldType="invite" redirectUrl="/invite" isVisible={isAdmin} />
+                            <SidebarField
+                                name="Templates"
+                                fieldType="templates"
+                                redirectUrl="/templates"
+                                isVisible={isAdmin}
+                            />
+                        </div>
+                    ) : (
+                        <SidebarField
+                            name="Create Company"
+                            fieldType="create-company"
+                            redirectUrl="/create-company"
+                            isVisible
+                        />
+                    )}
                 </ul>
                 <ul className="sidebar-list list-unstyled profile-components" onClick={this.clickAction}>
                     <SidebarField
@@ -74,7 +101,7 @@ export class sidebar extends React.Component {
                         name={companyName}
                         fieldType="company"
                         redirectUrl="/company"
-                        isVisible
+                        isVisible={isPartOfComapany}
                         imgUrl={logo}
                     />
                     <SidebarField name="Logout" fieldType="logout" redirectUrl="" isVisible onClick={onLogoutClick} />
@@ -92,6 +119,7 @@ sidebar.propTypes = {
     profilePhoto: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
     activeField: PropTypes.string.isRequired,
+    isPartOfComapany: PropTypes.bool,
 };
 
 sidebar.defaultProps = {
@@ -99,6 +127,7 @@ sidebar.defaultProps = {
     firstName: '',
     lastName: '',
     companyName: '',
+    isPartOfComapany: true,
 };
 
 export default sidebar;

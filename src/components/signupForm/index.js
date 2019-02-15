@@ -36,7 +36,7 @@ export class LoginForm extends React.Component {
      * @param {string} password - password entered by the user.
      */
     submitForm = (firstName, lastName, email, designation, companyName, companyAddress) => ev => {
-        const { onSubmit } = this.props;
+        const { onSubmit, isNewUser } = this.props;
         ev.preventDefault();
         let valid = true;
         const newErrors = {};
@@ -49,19 +49,21 @@ export class LoginForm extends React.Component {
         const companyNameValidity = validateTextString(companyName);
         const companyAddressValidity = validateTextString(companyAddress);
 
-        if (!firstNameValidity.isValid) {
-            valid = false;
-            newErrors.firstName = firstNameValidity.message;
-        }
+        if (isNewUser) {
+            if (!firstNameValidity.isValid) {
+                valid = false;
+                newErrors.firstName = firstNameValidity.message;
+            }
 
-        if (!lastNameValidity.isValid) {
-            valid = false;
-            newErrors.lastName = lastNameValidity.message;
-        }
+            if (!lastNameValidity.isValid) {
+                valid = false;
+                newErrors.lastName = lastNameValidity.message;
+            }
 
-        if (!emailValidity.isValid) {
-            valid = false;
-            newErrors.email = emailValidity.message;
+            if (!emailValidity.isValid) {
+                valid = false;
+                newErrors.email = emailValidity.message;
+            }
         }
 
         if (!designationValidity.isValid) {
@@ -86,13 +88,18 @@ export class LoginForm extends React.Component {
             return;
         }
 
-        onSubmit(firstName, lastName, email, designation, companyName, companyAddress);
+        if (isNewUser) {
+            onSubmit(firstName, lastName, email, designation, companyName, companyAddress);
+        } else {
+            onSubmit(designation, companyName, companyAddress);
+        }
     };
 
     /**
      * Function to return the component rendering.
      */
     render() {
+        const { isNewUser } = this.props;
         const { firstName, lastName, email, designation, companyName, companyAddress, errors } = this.state;
 
         return (
@@ -116,6 +123,7 @@ export class LoginForm extends React.Component {
                             }));
                         }}
                         errorMsg={errors.firstName}
+                        isVisible={isNewUser}
                     />
                     {/* last name */}
                     <FormField
@@ -131,6 +139,7 @@ export class LoginForm extends React.Component {
                             }));
                         }}
                         errorMsg={errors.lastName}
+                        isVisible={isNewUser}
                     />
                     {/* email */}
                     <FormField
@@ -146,6 +155,7 @@ export class LoginForm extends React.Component {
                             }));
                         }}
                         errorMsg={errors.email}
+                        isVisible={isNewUser}
                     />
                     {/* Designation */}
                     <FormField
@@ -202,9 +212,12 @@ export class LoginForm extends React.Component {
 
 LoginForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    isNewUser: PropTypes.bool,
 };
 
-LoginForm.defaultProps = {};
+LoginForm.defaultProps = {
+    isNewUser: true,
+};
 
 const mapStateToProps = state => ({});
 

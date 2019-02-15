@@ -18,7 +18,8 @@ export function validateEmail(email) {
 }
 
 export function validatePassword(password) {
-    const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const re = /^[A-Za-z\d]{8,}$/;
+    // const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     const isValid = re.test(String(password));
 
     if (!isValid) {

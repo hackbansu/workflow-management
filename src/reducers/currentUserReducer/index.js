@@ -18,9 +18,6 @@ export default (state = initialState, action) => {
             token: action.token,
         };
 
-    case LOGOUT:
-        return {};
-
     case UPDATE_PROFILE:
         return {
             ...state,
@@ -46,8 +43,7 @@ export default (state = initialState, action) => {
                 address: action.address,
                 city: action.city,
                 state: action.state,
-                logo:
-                        action.logo.substring(0, 4) === 'http' ? action.logo : `${constants.MEDIA_URL}${action.logo}`,
+                logo: action.logo.substring(0, 4) === 'http' ? action.logo : `${constants.MEDIA_URL}${action.logo}`,
                 status: action.status,
                 links: action.links,
             },

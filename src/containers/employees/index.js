@@ -81,9 +81,11 @@ export class Profile extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            filteredEmployees: nextProps.employees,
-        });
+        if (Object.entries(nextProps.employees).length !== 0) {
+            this.setState({
+                filteredEmployees: nextProps.employees,
+            });
+        }
     }
 
     filterEmployees(type) {

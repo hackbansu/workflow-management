@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -22,6 +23,7 @@ import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
+import ApiConstants from 'constants/api';
 
 /**
  * Home component.
@@ -86,7 +88,7 @@ export class Home extends React.Component {
     }
 
     onLogoutClick = () => {
-        const { logout, history } = this.props;
+        const { logout, redirectPage } = this.props;
 
         // dispatch action to show loader
         showLoader(true);
@@ -111,7 +113,7 @@ export class Home extends React.Component {
             showToast('Logout successful');
 
             // redirect to login page
-            history.push('/login');
+            redirectPage(ApiConstants.LOGIN_PAGE);
         });
     };
 
@@ -149,40 +151,40 @@ export class Home extends React.Component {
                         <div className="col-md-10 col-sm-9 col-9 content-container">
                             <div id="content">
                                 <Switch>
-                                    <Route exact path="/profile" component={Profile} />
+                                    <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
                                     <PrivateRoute
                                         exact
-                                        path="/employees"
+                                        path={ApiConstants.EMPLOYEES_PAGE}
                                         component={Employees}
                                         condition={isPartOfComapany}
-                                        redirectUrl="/create-company"
+                                        redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                     />
                                     <PrivateRoute
                                         exact
-                                        path="/employee/:id"
+                                        path={`${ApiConstants.EMPLOYEE_PAGE}/:id`}
                                         component={Employee}
                                         condition={isPartOfComapany}
-                                        redirectUrl="/create-company"
+                                        redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                     />
                                     <PrivateRoute
                                         exact
-                                        path="/company"
+                                        path={ApiConstants.COMPANY_PAGE}
                                         component={Company}
                                         condition={isPartOfComapany}
-                                        redirectUrl="/create-company"
+                                        redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                     />
                                     <PrivateRoute
-                                        path="/invite"
+                                        path={ApiConstants.INVITE_PAGE}
                                         component={Invite}
                                         condition={isAdmin}
-                                        redirectUrl="/"
+                                        redirectUrl={ApiConstants.HOME_PAGE}
                                     />
                                     <PrivateRoute
                                         exact
-                                        path="/create-company"
+                                        path={ApiConstants.CREATE_COMPANY_PAGE}
                                         component={CreateCompany}
                                         condition={!isPartOfComapany}
-                                        redirectUrl="/"
+                                        redirectUrl={ApiConstants.HOME_PAGE}
                                     />
                                     <Route component={Default} />
                                 </Switch>
@@ -198,7 +200,6 @@ export class Home extends React.Component {
 Home.propTypes = {
     currentUser: PropTypes.object.isRequired,
     logout: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
     updateCompany: PropTypes.func.isRequired,
@@ -210,12 +211,14 @@ const mapStateToProps = state => ({
     currentUser: state.currentUser,
     updateProfile: PropTypes.func.isRequired,
     updateCompany: PropTypes.func.isRequired,
+    redirectPage: PropTypes.func.isRequired,
 });
 
 const mapDispatchToProps = dispatch => ({
     logout: () => dispatch(logoutAction()),
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
     updateCompany: (...args) => dispatch(updateCompanyAction(...args)),
+    redirectPage: url => dispatch(push(url)),
 });
 
 export default connect(

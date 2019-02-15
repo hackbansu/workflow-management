@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import SidebarField from 'components/sidebarField';
+import ApiConstants from 'constants/api';
 
 /**
  * Functional component of the sidebar.
@@ -69,14 +70,34 @@ export class sidebar extends React.Component {
                 <ul className="sidebar-list list-unstyled components" onClick={this.clickAction}>
                     {isPartOfComapany ? (
                         <div>
-                            <SidebarField name="Dashboard" fieldType="dashboard" redirectUrl="/dashboard" isVisible />
-                            <SidebarField name="Workflows" fieldType="workflows" redirectUrl="/workflows" isVisible />
-                            <SidebarField name="Employees" fieldType="employees" redirectUrl="/employees" isVisible />
-                            <SidebarField name="Invite" fieldType="invite" redirectUrl="/invite" isVisible={isAdmin} />
+                            <SidebarField
+                                name="Dashboard"
+                                fieldType="dashboard"
+                                redirectUrl={ApiConstants.DASHBOARD_PAGE}
+                                isVisible
+                            />
+                            <SidebarField
+                                name="Workflows"
+                                fieldType="workflows"
+                                redirectUrl={ApiConstants.WORKFLOWS_PAGE}
+                                isVisible
+                            />
+                            <SidebarField
+                                name="Employees"
+                                fieldType="employees"
+                                redirectUrl={ApiConstants.EMPLOYEES_PAGE}
+                                isVisible
+                            />
+                            <SidebarField
+                                name="Invite"
+                                fieldType="invite"
+                                redirectUrl={ApiConstants.INVITE_PAGE}
+                                isVisible={isAdmin}
+                            />
                             <SidebarField
                                 name="Templates"
                                 fieldType="templates"
-                                redirectUrl="/templates"
+                                redirectUrl={ApiConstants.TEMPLATES_PAGE}
                                 isVisible={isAdmin}
                             />
                         </div>
@@ -84,7 +105,7 @@ export class sidebar extends React.Component {
                         <SidebarField
                             name="Create Company"
                             fieldType="create-company"
-                            redirectUrl="/create-company"
+                            redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                             isVisible
                         />
                     )}
@@ -93,14 +114,14 @@ export class sidebar extends React.Component {
                     <SidebarField
                         name={firstName + ' ' + lastName}
                         fieldType="profile"
-                        redirectUrl="/profile"
+                        redirectUrl={ApiConstants.PROFILE_PAGE}
                         isVisible
                         imgUrl={profilePhoto}
                     />
                     <SidebarField
                         name={companyName}
                         fieldType="company"
-                        redirectUrl="/company"
+                        redirectUrl={ApiConstants.COMPANY_PAGE}
                         isVisible={isPartOfComapany}
                         imgUrl={logo}
                     />

@@ -2,12 +2,14 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
 import { showModal } from 'utils/helpers/modal';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
+import ApiConstants from 'constants/api';
 
 // importing components
 import LoginForm from 'components/loginForm';
@@ -32,7 +34,7 @@ export class LoginPage extends React.Component {
      * function to submit login request.
      */
     onSubmit = (email, password) => {
-        const { updateToken, updateProfile, history } = this.props;
+        const { updateToken, updateProfile, redirectPage } = this.props;
 
         // dispatch action to show loader
         showLoader(true);
@@ -65,7 +67,7 @@ export class LoginPage extends React.Component {
             updateProfile(firstName, lastName, profilePhoto, email, id);
 
             // redirect to home page
-            history.push('/');
+            redirectPage(ApiConstants.HOME_PAGE);
         });
     };
 
@@ -79,8 +81,8 @@ export class LoginPage extends React.Component {
                     <PageBanner text="Login" />
                     <LoginForm onSubmit={this.onSubmit} />
                     <ul className="nav justify-content-center page-nav-links">
-                        <LinkButton name="Forgot Password" toUrl="/forgot-password" />
-                        <LinkButton name="Signup" toUrl="/signup" />
+                        <LinkButton name="Forgot Password" toUrl={ApiConstants.FORGOT_PASSWORD_PAGE} />
+                        <LinkButton name="Signup" toUrl={ApiConstants.SIGNUP_PAGE} />
                     </ul>
                 </div>
             </div>
@@ -91,7 +93,7 @@ export class LoginPage extends React.Component {
 LoginPage.propTypes = {
     updateToken: PropTypes.func.isRequired,
     updateProfile: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    redirectPage: PropTypes.func.isRequired,
 };
 
 LoginPage.defaultProps = {};
@@ -99,6 +101,7 @@ LoginPage.defaultProps = {};
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
+    redirectPage: (url) => dispatch(push(url)),
     updateToken: value => dispatch(updateTokenAction(value)),
     updateProfile: (firstName, lastName, profilePhoto, email, id) => dispatch(updateProfileAction(firstName, lastName, profilePhoto, email, id)),
 });

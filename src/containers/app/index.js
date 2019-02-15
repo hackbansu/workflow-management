@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { updateTokenAction } from 'actions/user';
+import ApiConstants from 'constants/api';
 
 import LoginPage from 'containers/loginPage';
 import Signup from 'containers/signup';
@@ -34,34 +35,45 @@ export class App extends React.Component {
                     <Switch>
                         <PrivateRoute
                             exact
-                            path="/login"
+                            path={ApiConstants.LOGIN_PAGE}
                             component={LoginPage}
                             condition={!isLoggedIn}
-                            redirectUrl="/"
+                            redirectUrl={ApiConstants.HOME_PAGE}
                         />
-                        <PrivateRoute exact path="/signup" component={Signup} condition={!isLoggedIn} redirectUrl="/" />
                         <PrivateRoute
                             exact
-                            path="/forgot-password"
+                            path={ApiConstants.SIGNUP_PAGE}
+                            component={Signup}
+                            condition={!isLoggedIn}
+                            redirectUrl={ApiConstants.HOME_PAGE}
+                        />
+                        <PrivateRoute
+                            exact
+                            path={ApiConstants.FORGOT_PASSWORD_PAGE}
                             component={ForgotPassword}
                             condition={!isLoggedIn}
-                            redirectUrl="/"
+                            redirectUrl={ApiConstants.HOME_PAGE}
                         />
                         <PrivateRoute
                             exact
-                            path="/reset-password/:token"
+                            path={`${ApiConstants.RESET_PASSWORD_PAGE}/:token`}
                             component={ResetPassword}
                             condition={!isLoggedIn}
-                            redirectUrl="/"
+                            redirectUrl={ApiConstants.HOME_PAGE}
                         />
                         <PrivateRoute
                             exact
-                            path="/invitation/:token"
+                            path={`${ApiConstants.INVITATION_PAGE}/:token`}
                             component={AcceptInvite}
                             condition={!isLoggedIn}
-                            redirectUrl="/"
+                            redirectUrl={ApiConstants.HOME_PAGE}
                         />
-                        <PrivateRoute path="/" component={Home} condition={isLoggedIn} redirectUrl="/login" />
+                        <PrivateRoute
+                            path={ApiConstants.HOME_PAGE}
+                            component={Home}
+                            condition={isLoggedIn}
+                            redirectUrl={ApiConstants.LOGIN_PAGE}
+                        />
                         <Route component={Default} />
                     </Switch>
                     <Toast show={toast.show} text={toast.text} />

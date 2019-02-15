@@ -1,4 +1,7 @@
 import { makeApiRequest } from 'services/base';
+import ApiConstants from 'constants/api';
+
+const companyApiUrls = ApiConstants.api.company;
 
 /**
  * Utility function to send the company PATCH request to the server.
@@ -18,9 +21,9 @@ export function makeUpdateRequest(address, city, state, links, logo, companyId) 
         formData.append('logo', logo);
     }
 
-    return makeApiRequest('update-company/' + companyId.toString() + '/', 'PATCH', formData, null);
+    return makeApiRequest(companyApiUrls.UPDATE + companyId.toString() + '/', 'PATCH', formData, null);
 }
 
 export function makeFetchRequest() {
-    return makeApiRequest('employee/my-company/', 'GET');
+    return makeApiRequest(companyApiUrls.FETCH, 'GET');
 }

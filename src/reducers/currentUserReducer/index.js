@@ -1,5 +1,5 @@
 import actions from 'constants/actions.js';
-import constants from 'constants/index.js';
+import ApiConstants from 'constants/api';
 
 const { UPDATE_TOKEN, UPDATE_PROFILE, UPDATE_COMPANY, LOGOUT } = actions.user;
 
@@ -26,7 +26,7 @@ export default (state = initialState, action) => {
             profilePhoto:
                     action.profilePhoto.substring(0, 4) === 'http'
                         ? action.profilePhoto
-                        : `${constants.MEDIA_URL}${action.profilePhoto}`,
+                        : `${ApiConstants.MEDIA_URL}${action.profilePhoto}`,
             email: action.email,
             id: action.id,
             isAdmin: action.isAdmin,
@@ -43,7 +43,10 @@ export default (state = initialState, action) => {
                 address: action.address,
                 city: action.city,
                 state: action.state,
-                logo: action.logo.substring(0, 4) === 'http' ? action.logo : `${constants.MEDIA_URL}${action.logo}`,
+                logo:
+                        action.logo.substring(0, 4) === 'http'
+                            ? action.logo
+                            : `${ApiConstants.MEDIA_URL}${action.logo}`,
                 status: action.status,
                 links: action.links,
             },

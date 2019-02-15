@@ -217,7 +217,7 @@ export class EmployeeForm extends React.Component {
                     <button
                         type="button"
                         className={
-                            'btn btn-info mr-5'
+                            'btn btn-info mr-3'
                             + (isUserAdmin ? '' : ' hide')
                             + (userConstants.STATUS[status] === 'INVITED' ? '' : ' hide')
                         }

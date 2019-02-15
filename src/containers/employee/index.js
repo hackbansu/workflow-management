@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
@@ -8,6 +9,7 @@ import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
 import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
+import ApiConstants from 'constants/api';
 
 // importing components
 import EmployeeForm from 'components/employeeForm';
@@ -42,7 +44,7 @@ export class Employee extends React.Component {
      * function to submit update employee request.
      */
     onSubmit = (firstName, lastName, designation, isAdmin) => {
-        const { updateProfile, history, currentUser } = this.props;
+        const { updateProfile, redirectPage, currentUser } = this.props;
 
         // dispatch action to show loader
         showLoader(true);
@@ -75,7 +77,7 @@ export class Employee extends React.Component {
             }
 
             showToast('Update Successful');
-            history.push('/employees');
+            redirectPage(ApiConstants.EMPLOYEES_PAGE);
         });
     };
 
@@ -105,7 +107,7 @@ export class Employee extends React.Component {
     };
 
     onRemoveEmployee = () => {
-        const { history } = this.props;
+        const { redirectPage } = this.props;
 
         // dispatch action to show loader
         showLoader(true);
@@ -125,14 +127,13 @@ export class Employee extends React.Component {
             }
 
             showToast('Removal Successful');
-            history.push('/employees');
+            redirectPage(ApiConstants.EMPLOYEES_PAGE);
         });
     };
 
     onBackClick = () => {
-        const { history } = this.props;
-
-        history.push('/employees');
+        const { redirectPage } = this.props;
+        redirectPage(ApiConstants.EMPLOYEES_PAGE);
     };
 
     /**
@@ -168,11 +169,11 @@ export class Employee extends React.Component {
 }
 
 Employee.propTypes = {
-    history: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
     employees: PropTypes.array.isRequired,
     match: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
+    redirectPage: PropTypes.func.isRequired,
 };
 
 Employee.defaultProps = {};
@@ -184,6 +185,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
+    redirectPage: (url) => dispatch(push(url)),
 });
 
 export default connect(

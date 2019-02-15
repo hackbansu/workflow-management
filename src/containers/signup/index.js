@@ -5,6 +5,7 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { makeSignupRequest } from 'services/auth';
 import { showModal } from 'utils/helpers/modal';
+import ApiConstants from 'constants/api';
 
 // importing components
 import SignupForm from 'components/signupForm';
@@ -84,7 +85,7 @@ export class Signup extends React.Component {
                     <PageBanner text="Sign Up" />
                     <SignupForm onSubmit={this.onSubmit} />
                     <ul className="nav justify-content-center page-nav-links">
-                        <LinkButton name="Back to login" toUrl="/login" />
+                        <LinkButton name="Back to login" toUrl={ApiConstants.LOGIN_PAGE} />
                     </ul>
                 </div>
             </div>

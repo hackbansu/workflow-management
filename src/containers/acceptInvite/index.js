@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
 import { makeInviteAcceptRequest } from 'services/auth';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
+import ApiConstants from 'constants/api';
 
 // importing components
 import ResetPasswordForm from 'components/resetPasswordForm';
@@ -28,7 +30,7 @@ export class AcceptInvite extends React.Component {
     }
 
     componentWillMount() {
-        const { match, history } = this.props;
+        const { match, redirectPage } = this.props;
         const { token } = match.params;
 
         showLoader(true);
@@ -43,13 +45,13 @@ export class AcceptInvite extends React.Component {
             const { response, body } = obj;
             if (response.status !== 204 && response.status !== 200) {
                 showModal('Failed', 'This link has expired');
-                history.push('/login');
+                redirectPage(ApiConstants.LOGIN_PAGE);
                 return;
             }
 
             if (response.status === 204) {
                 showModal('Success', 'You have successfully joined the company');
-                history.push('/login');
+                redirectPage(ApiConstants.LOGIN_PAGE);
                 return;
             }
 
@@ -62,7 +64,7 @@ export class AcceptInvite extends React.Component {
      */
     onSubmit = (password, confirmPassword) => {
         const { formDisable } = this.state;
-        const { history, match } = this.props;
+        const { redirectPage, match } = this.props;
         const { token } = match.params;
 
         if (formDisable) {
@@ -78,7 +80,7 @@ export class AcceptInvite extends React.Component {
         showLoader(true);
 
         // call the service function
-        makeInviteAcceptRequest('POST', token, password).then(obj => {
+        makeInviteAcceptRequest('PATCH', token, password).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -94,7 +96,7 @@ export class AcceptInvite extends React.Component {
             showModal('Success', 'Password has been reset. You can now login');
 
             // redirect to home page
-            history.push('/login');
+            redirectPage(ApiConstants.LOGIN_PAGE);
         });
     };
 
@@ -116,15 +118,17 @@ export class AcceptInvite extends React.Component {
 }
 
 AcceptInvite.propTypes = {
-    history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
+    redirectPage: PropTypes.func.isRequired,
 };
 
 AcceptInvite.defaultProps = {};
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    redirectPage: (url) => dispatch(push(url)),
+});
 
 export default connect(
     mapStateToProps,

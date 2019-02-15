@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React from 'react';
+import { push } from 'connected-react-router';
 
 import { showLoader } from 'utils/helpers/loader';
 import { makePasswordUpdateRequest } from 'services/auth';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
+import ApiConstants from 'constants/api';
 
 // importing components
 import ResetPasswordForm from 'components/resetPasswordForm';
@@ -28,7 +30,7 @@ export class ResetPassword extends React.Component {
     }
 
     componentWillMount() {
-        const { match, history } = this.props;
+        const { match, redirectPage } = this.props;
         const { token } = match.params;
 
         showLoader(true);
@@ -39,11 +41,11 @@ export class ResetPassword extends React.Component {
             if (!obj) {
                 return;
             }
-            
+
             const { response, body } = obj;
             if (response.status !== 204) {
                 showToast('This link has expired');
-                history.push('/login');
+                redirectPage(ApiConstants.LOGIN_PAGE);
                 return;
             }
 
@@ -56,7 +58,7 @@ export class ResetPassword extends React.Component {
      */
     onSubmit = (password, confirmPassword) => {
         const { formDisable } = this.state;
-        const { history, match } = this.props;
+        const { redirectPage, match } = this.props;
         const { token } = match.params;
 
         if (formDisable) {
@@ -72,7 +74,7 @@ export class ResetPassword extends React.Component {
         showLoader(true);
 
         // call the service function
-        makePasswordUpdateRequest('POST', token, password).then(obj => {
+        makePasswordUpdateRequest('PATCH', token, password).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -88,7 +90,7 @@ export class ResetPassword extends React.Component {
             showToast('Password has been reset');
 
             // redirect to home page
-            history.push('/login');
+            redirectPage(ApiConstants.LOGIN_PAGE);
         });
     };
 
@@ -110,7 +112,7 @@ export class ResetPassword extends React.Component {
 }
 
 ResetPassword.propTypes = {
-    history: PropTypes.object.isRequired,
+    redirectPage: PropTypes.func.isRequired,
     match: PropTypes.object.isRequired,
 };
 
@@ -118,7 +120,9 @@ ResetPassword.defaultProps = {};
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    redirectPage: url => dispatch(push(url)),
+});
 
 export default connect(
     mapStateToProps,

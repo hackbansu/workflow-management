@@ -1,4 +1,7 @@
 import { makeApiRequest } from 'services/base';
+import ApiConstants from 'constants/api';
+
+const userApiUrls = ApiConstants.api.user;
 
 /**
  * Utility function to send the login POST request to the server.
@@ -16,16 +19,16 @@ export function makeUpdateRequest(firstName, lastName, profilePhoto) {
         formData.append('profile_photo', profilePhoto);
     }
 
-    return makeApiRequest('user/profile/', 'PATCH', formData, null);
+    return makeApiRequest(userApiUrls.UPDATE, 'PATCH', formData, null);
 }
 
 /**
  * Utility function to fetch user details.
  */
 export function makeFetchRequest() {
-    return makeApiRequest('user/profile/', 'GET');
+    return makeApiRequest(userApiUrls.FETCH, 'GET');
 }
 
 export function makeCreateCompanyRequest(data) {
-    return makeApiRequest('company/new-company/', 'POST', data);
+    return makeApiRequest(userApiUrls.CREATE_COMPANY, 'POST', data);
 }

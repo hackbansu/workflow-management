@@ -1,10 +1,13 @@
 import { makeApiRequest } from 'services/base';
+import ApiConstants from 'constants/api';
+
+const employeeApiUrls = ApiConstants.api.employee;
 
 /**
  * Utility function to send the fetch employees request to the server.
  */
 export function makeFetchRequest() {
-    return makeApiRequest('employees/', 'GET');
+    return makeApiRequest(employeeApiUrls.FETCH_ALL, 'GET');
 }
 
 export function makeUpdateRequest(firstName, lastName, profilePhoto, designation, isAdmin, employeeId) {
@@ -14,14 +17,14 @@ export function makeUpdateRequest(firstName, lastName, profilePhoto, designation
         is_admin: isAdmin,
     };
 
-    return makeApiRequest('employee/' + employeeId + '/', 'PATCH', data);
+    return makeApiRequest(employeeApiUrls.FETCH + employeeId + '/', 'PATCH', data);
 }
 
 /**
  * Utility function to send the employee removal request.
  */
 export function makeRemoveRequest(employeeId) {
-    return makeApiRequest('employee/' + employeeId + '/', 'DELETE');
+    return makeApiRequest(employeeApiUrls.FETCH + employeeId + '/', 'DELETE');
 }
 
 /**
@@ -37,12 +40,12 @@ export function makeInviteRequest(email, firstName, lastName, designation) {
         designation,
     };
 
-    return makeApiRequest('company/invite-employee/', 'POST', data);
+    return makeApiRequest(employeeApiUrls.INVITE, 'POST', data);
 }
 
 export function makeCsvInviteRequest(csvFile) {
     const formData = new FormData();
     formData.append('csv_file', csvFile);
 
-    return makeApiRequest('company/invite-employee-csv/', 'POST', formData, null);
+    return makeApiRequest(employeeApiUrls.INVITE_CSV, 'POST', formData, null);
 }

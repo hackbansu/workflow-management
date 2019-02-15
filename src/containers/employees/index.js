@@ -8,7 +8,7 @@ import React from 'react';
 import { updateEmployeesAction } from 'actions/employees';
 import { makeFetchRequest } from 'services/employees';
 import userConstants from 'constants/user';
-import constants from 'constants/index.js';
+import ApiConstants from 'constants/api';
 import { showToast } from 'utils/helpers/toast';
 
 import './index.scss';
@@ -64,7 +64,7 @@ export class Profile extends React.Component {
                         profilePhoto:
                             profilePhoto.substring(0, 4) === 'http'
                                 ? profilePhoto
-                                : `${constants.MEDIA_URL}${profilePhoto}`,
+                                : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
                         email,
                         id: userId,
                     },

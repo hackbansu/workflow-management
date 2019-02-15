@@ -8,6 +8,7 @@ import { showLoader } from 'utils/helpers/loader';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makePasswordResetRequest } from 'services/auth';
 import { showModal } from 'utils/helpers/modal';
+import ApiConstants from 'constants/api';
 
 // importing components
 import ForgotPasswordForm from 'components/forgotPasswordForm';
@@ -65,7 +66,7 @@ export class ForgotPassword extends React.Component {
                     <PageBanner text="Forgot Password" />
                     <ForgotPasswordForm onSubmit={this.onSubmit} />
                     <ul className="nav justify-content-center page-nav-links">
-                        <LinkButton name="Back to login" toUrl="/login" />
+                        <LinkButton name="Back to login" toUrl={ApiConstants.LOGIN_PAGE} />
                     </ul>
                 </div>
             </div>

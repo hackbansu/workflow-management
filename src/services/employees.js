@@ -7,11 +7,6 @@ export function makeFetchRequest() {
     return makeApiRequest('employees/', 'GET');
 }
 
-/**
- * Utility function to send the login POST request to the server.
- * @param {string} firstName - first name to send in the update request.
- * @param {string} lastName - last name to send in the update request.
- */
 export function makeUpdateRequest(firstName, lastName, profilePhoto, designation, isAdmin, employeeId) {
     const data = {
         user: { first_name: firstName, last_name: lastName },
@@ -20,6 +15,13 @@ export function makeUpdateRequest(firstName, lastName, profilePhoto, designation
     };
 
     return makeApiRequest('employee/' + employeeId + '/', 'PATCH', data);
+}
+
+/**
+ * Utility function to send the employee removal request.
+ */
+export function makeRemoveRequest(employeeId) {
+    return makeApiRequest('employee/' + employeeId + '/', 'DELETE');
 }
 
 /**

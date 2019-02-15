@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const UploadField = ({ name, inputName, type, onChange, disabled, accept, errorMsg, ...rest }) => {
+export const UploadField = ({ name, inputName, type, onChange, disabled, accept, errorMsg, fileName, ...rest }) => {
     const id = inputName + '3';
     return (
         <div className="input-group mb-3 col-md-8">
@@ -26,7 +26,7 @@ export const UploadField = ({ name, inputName, type, onChange, disabled, accept,
                     {...rest}
                 />
                 <label className="custom-file-label" htmlFor="inputGroupFile01">
-                    Choose file
+                    {fileName}
                 </label>
             </div>
             <span className="error-msg">{errorMsg}</span>
@@ -44,6 +44,7 @@ UploadField.propTypes = {
     disabled: PropTypes.string,
     accept: PropTypes.string,
     errorMsg: PropTypes.string,
+    fileName: PropTypes.string,
 };
 
 UploadField.defaultProps = {
@@ -52,6 +53,7 @@ UploadField.defaultProps = {
     accept: '',
     disabled: '',
     errorMsg: '',
+    fileName: '',
 };
 
 export default UploadField;

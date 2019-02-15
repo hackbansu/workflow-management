@@ -162,6 +162,7 @@ export class ProfileForm extends React.Component {
                             accept={constants.PROFILE_PIC_TYPES}
                             onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
                             errorMsg={errors.profilePhoto}
+                            fileName={profilePhoto ? profilePhoto.name : 'No file selected'}
                         />
                         {/* update profile button */}
                         <FormSubmitButton name="Update" />

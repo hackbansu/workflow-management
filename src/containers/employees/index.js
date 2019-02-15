@@ -130,7 +130,10 @@ export class Profile extends React.Component {
                     <tbody>
                         {filteredEmployees.map(data => (
                             <LinkContainer to={`/employee/${data.id}`}>
-                                <tr key={data.user.firstName + data.user.lastName + data.designation}>
+                                <tr
+                                    key={data.user.firstName + data.user.lastName + data.designation}
+                                    className={userConstants.STATUS[data.status].toLowerCase() + '-employee'}
+                                >
                                     <td className="employee-pic">
                                         <img
                                             src={data.user.profilePhoto}

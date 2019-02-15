@@ -7,9 +7,9 @@ import PropTypes from 'prop-types';
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const FormSubmitButton = ({ name }) => (
-    <div className="form-group">
-        <div className="">
+export const FormSubmitButton = ({ name, hide }) => (
+    <div className={'form-group' + (hide ? ' hide' : '')}>
+        <div>
             <button type="submit" className="btn btn-primary">
                 {name}
             </button>
@@ -19,8 +19,11 @@ export const FormSubmitButton = ({ name }) => (
 
 FormSubmitButton.propTypes = {
     name: PropTypes.string.isRequired,
+    hide: PropTypes.bool,
 };
 
-FormSubmitButton.defaultProps = {};
+FormSubmitButton.defaultProps = {
+    hide: false,
+};
 
 export default FormSubmitButton;

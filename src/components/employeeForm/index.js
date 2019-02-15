@@ -7,6 +7,9 @@ import FormField from 'components/formField';
 import FormSubmitButton from 'components/formSubmitButton';
 import userConstants from 'constants/user';
 import { validateTextString } from 'utils/validators';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import './index.scss';
 
 /**
  * Class component for login form
@@ -30,6 +33,8 @@ export class EmployeeForm extends React.Component {
         };
 
         this.submitForm = this.submitForm.bind(this);
+        this.resendInvite = this.resendInvite.bind(this);
+        this.removeEmployee = this.removeEmployee.bind(this);
     }
 
     /**
@@ -42,6 +47,12 @@ export class EmployeeForm extends React.Component {
     submitForm = (firstName, lastName, designation, isAdmin) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+
+        const { isUserAdmin } = this.props;
+        const { status } = this.state;
+        if (!isUserAdmin || userConstants.STATUS[status] === 'INACTIVE') {
+            return;
+        }
 
         let valid = true;
         const newErrors = {};
@@ -76,17 +87,54 @@ export class EmployeeForm extends React.Component {
         onSubmit(firstName, lastName, designation, isAdmin);
     };
 
+    resendInvite = () => {
+        const { onResendInvite, status, isUserAdmin } = this.props;
+
+        if (userConstants.STATUS[status] !== 'INVITED' || !isUserAdmin) {
+            return;
+        }
+
+        onResendInvite();
+    };
+
+    removeEmployee = () => {
+        const { onRemoveEmployee, status, isUserAdmin } = this.props;
+
+        if (userConstants.STATUS[status] === 'INACTIVE' || !isUserAdmin) {
+            return;
+        }
+
+        confirmAlert({
+            title: 'Confirm Remove',
+            message: 'Are you sure to remove employee?',
+            buttons: [
+                {
+                    label: 'Remove',
+                    onClick: () => onRemoveEmployee(),
+                },
+                {
+                    label: 'Cancel',
+                },
+            ],
+        });
+    };
+
     /**
      * Function to return the component rendering.
      */
     render() {
-        const { isUserAdmin } = this.props;
+        const { isUserAdmin, onBackClick } = this.props;
         const { email, password, firstName, lastName, isAdmin, designation, status, errors } = this.state;
+
+        let formDisabled = false;
+        if (!isUserAdmin || userConstants.STATUS[status] === 'INACTIVE') {
+            formDisabled = true;
+        }
 
         return (
             <div>
                 <form method="post" onSubmit={this.submitForm(firstName, lastName, designation, isAdmin)}>
-                    <fieldset disabled={!isUserAdmin ? 'disabled' : ''}>
+                    <fieldset disabled={formDisabled}>
                         {/* email */}
                         <FormField
                             name="Email"
@@ -162,16 +210,42 @@ export class EmployeeForm extends React.Component {
                             checked={isAdmin ? 'checked' : ''}
                         />
                         {/* update profile button */}
-                        <FormSubmitButton name="Update" />
+                        <FormSubmitButton name="Update" hide={formDisabled} />
                     </fieldset>
                 </form>
+                <div className="employee-action-container container">
+                    <button
+                        type="button"
+                        className={
+                            'btn btn-info mr-5'
+                            + (isUserAdmin ? '' : ' hide')
+                            + (userConstants.STATUS[status] === 'INVITED' ? '' : ' hide')
+                        }
+                        onClick={this.resendInvite}
+                    >
+                        Resend Invite
+                    </button>
+                    <button
+                        type="button"
+                        className={
+                            'btn btn-danger mr-3'
+                            + (isUserAdmin ? '' : ' hide')
+                            + (userConstants.STATUS[status] !== 'INACTIVE' ? '' : ' hide')
+                        }
+                        onClick={this.removeEmployee}
+                    >
+                        Remove
+                    </button>
+                    <button type="button" className="btn btn-dark mr-3" onClick={onBackClick}>
+                        Back to employees
+                    </button>
+                </div>
             </div>
         );
     }
 }
 
 EmployeeForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
     firstName: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
@@ -179,11 +253,16 @@ EmployeeForm.propTypes = {
     designation: PropTypes.string.isRequired,
     status: PropTypes.number.isRequired,
     isUserAdmin: PropTypes.bool,
+    onSubmit: PropTypes.func.isRequired,
+    onRemoveEmployee: PropTypes.func.isRequired,
+    onResendInvite: PropTypes.func,
+    onBackClick: PropTypes.func.isRequired,
 };
 
 EmployeeForm.defaultProps = {
     isAdmin: false,
     isUserAdmin: false,
+    onResendInvite: () => null,
 };
 
 const mapStateToProps = state => ({});

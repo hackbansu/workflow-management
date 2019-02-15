@@ -174,6 +174,7 @@ export class InviteForm extends React.Component {
                         accept={constants.INVITE_FILE_TYPES}
                         onChange={e => this.setState({ csvFile: e.target.files[0] })}
                         errorMsg={errors.csvFile}
+                        fileName={csvFile ? csvFile.name : 'No file selected'}
                     />
                     {/* send invite button */}
                     <FormSubmitButton name="Invite" />

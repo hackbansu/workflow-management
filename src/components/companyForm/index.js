@@ -187,6 +187,7 @@ export class CompanyForm extends React.Component {
                             accept={constants.COMPANY_LOGO_PIC_TYPES}
                             onChange={e => this.setState({ logo: e.target.files[0] })}
                             errorMsg={errors.logo}
+                            fileName={logo ? logo.name : 'No file selected'}
                         />
                         {/* update company button */}
                         <FormSubmitButton name="Update" />

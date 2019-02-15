@@ -6,7 +6,7 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
-import { makeUpdateRequest } from 'services/employees';
+import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
 
 // importing components
@@ -24,6 +24,9 @@ export class Employee extends React.Component {
         super(props);
         this.state = {};
         this.onSubmit = this.onSubmit.bind(this);
+        this.onResendInvite = this.onResendInvite.bind(this);
+        this.onRemoveEmployee = this.onRemoveEmployee.bind(this);
+        this.onBackClick = this.onBackClick.bind(this);
         const { employees, match } = this.props;
         const { id: employeeId } = match.params;
 
@@ -76,6 +79,62 @@ export class Employee extends React.Component {
         });
     };
 
+    onResendInvite = () => {
+        const { designation } = this.currentEmployee;
+        const { firstName, lastName, email } = this.currentEmployee.user;
+
+        // dispatch action to show loader
+        showLoader(true);
+
+        // call the service function
+        makeInviteRequest(email, firstName, lastName, designation).then(obj => {
+            showLoader(false);
+
+            if (!obj) {
+                return;
+            }
+
+            const { response, body } = obj;
+            if (response.status !== 200) {
+                showModal('Failed', 'Invite failed');
+                return;
+            }
+
+            showToast('Invite Sent');
+        });
+    };
+
+    onRemoveEmployee = () => {
+        const { history } = this.props;
+
+        // dispatch action to show loader
+        showLoader(true);
+
+        // call the service function
+        makeRemoveRequest(this.currentEmployee.id).then(obj => {
+            showLoader(false);
+
+            if (!obj) {
+                return;
+            }
+
+            const { response, body } = obj;
+            if (response.status !== 204) {
+                showModal('Removal Failed', 'Failed to remove the employee');
+                return;
+            }
+
+            showToast('Removal Successful');
+            history.push('/employees');
+        });
+    };
+
+    onBackClick = () => {
+        const { history } = this.props;
+
+        history.push('/employees');
+    };
+
     /**
      * function to render the component.
      */
@@ -98,6 +157,9 @@ export class Employee extends React.Component {
                         status={status}
                         designation={designation}
                         isUserAdmin={isUserAdmin}
+                        onResendInvite={this.onResendInvite}
+                        onRemoveEmployee={this.onRemoveEmployee}
+                        onBackClick={this.onBackClick}
                     />
                 </div>
             </div>

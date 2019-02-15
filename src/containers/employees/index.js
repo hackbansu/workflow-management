@@ -103,7 +103,21 @@ export class Profile extends React.Component {
 
     searchEmployees(searchVal) {
         const { employees } = this.props;
-        const data = employees.filter(employee => employee.user.firstName.toLowerCase().indexOf(searchVal) !== -1);
+        const data = employees.filter(employee => {
+            if (employee.user.firstName.toLowerCase().indexOf(searchVal) !== -1) {
+                return true;
+            }
+            if (employee.user.lastName.toLowerCase().indexOf(searchVal) !== -1) {
+                return true;
+            }
+            if (employee.user.email.toLowerCase().indexOf(searchVal) !== -1) {
+                return true;
+            }
+            if (employee.designation.toLowerCase().indexOf(searchVal) !== -1) {
+                return true;
+            }
+            return false;
+        });
         this.setState({
             filteredEmployees: data,
         });

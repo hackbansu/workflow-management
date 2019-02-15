@@ -10,7 +10,6 @@ import store from '../store';
  * @param {string} token - token of the user to send
  */
 export function makeApiRequest(url, method = 'GET', data = undefined, contentType = 'application/json') {
-    console.log('url :', url);
     url = ApiConstants.API_URL + url;
     const token = store.getState().currentUser.token ? 'Token ' + store.getState().currentUser.token : '';
 

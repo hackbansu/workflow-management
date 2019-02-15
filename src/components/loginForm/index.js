@@ -88,12 +88,13 @@ export class LoginForm extends React.Component {
                             }));
                         }}
                         errorMsg={errors.email}
+                        autoComplete="email"
                     />
                     {/* password */}
                     <FormField
                         name="Password"
                         inputName="password"
-                        value={null}
+                        value=""
                         type="password"
                         placeholder=""
                         onChange={e => {
@@ -104,6 +105,7 @@ export class LoginForm extends React.Component {
                             }));
                         }}
                         errorMsg={errors.password}
+                        autoComplete="current-password"
                     />
                     {/* update profile button */}
                     <FormSubmitButton name="Log In" />

@@ -3,6 +3,7 @@ import actions from 'constants/actions.js';
 const { CHANGE_MODAL_STATE } = actions.common;
 
 const initialState = {
+    heading: 'default heading',
     text: 'no text here',
 };
 

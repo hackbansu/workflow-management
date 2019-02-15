@@ -203,6 +203,7 @@ Home.propTypes = {
     location: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
     updateCompany: PropTypes.func.isRequired,
+    redirectPage: PropTypes.func.isRequired,
 };
 
 Home.defaultProps = {};

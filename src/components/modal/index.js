@@ -45,6 +45,7 @@ Modal.propTypes = {
     heading: PropTypes.string.isRequired,
 };
 
-Modal.defaultProps = {};
+Modal.defaultProps = {
+};
 
 export default Modal;

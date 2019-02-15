@@ -42,16 +42,15 @@ export class ResetPasswordForm extends React.Component {
 
         // validations
         const passwordValidity = validatePassword(password);
-        const confirmPasswordValidity = validatePassword(confirmPassword);
 
         if (!passwordValidity.isValid) {
             valid = false;
             newErrors.password = passwordValidity.message;
         }
 
-        if (!confirmPasswordValidity.isValid) {
+        if (password !== confirmPassword) {
             valid = false;
-            newErrors.confirmPassword = confirmPasswordValidity.message;
+            newErrors.confirmPassword = 'Confirm password does not';
         }
 
         if (!valid) {
@@ -73,7 +72,11 @@ export class ResetPasswordForm extends React.Component {
 
         return (
             <div className="container">
-                <form className="offset-md-3 col-md-6" method="post" onSubmit={this.submitForm(password, confirmPassword)}>
+                <form
+                    className="offset-md-3 col-md-6"
+                    method="post"
+                    onSubmit={this.submitForm(password, confirmPassword)}
+                >
                     <fieldset disabled={isDisabled ? 'disabled' : ''}>
                         {/* Password */}
                         <FormField
@@ -81,7 +84,7 @@ export class ResetPasswordForm extends React.Component {
                             inputName="password"
                             type="password"
                             placeholder=""
-                            value={null}
+                            value=""
                             onChange={e => {
                                 const { value } = e.target;
                                 return this.setState(prevState => ({
@@ -97,7 +100,7 @@ export class ResetPasswordForm extends React.Component {
                             inputName="confirmPassword"
                             type="password"
                             placeholder=""
-                            value={null}
+                            value=""
                             onChange={e => {
                                 const { value } = e.target;
                                 return this.setState(prevState => ({

@@ -103,7 +103,9 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
     redirectPage: (url) => dispatch(push(url)),
     updateToken: value => dispatch(updateTokenAction(value)),
-    updateProfile: (firstName, lastName, profilePhoto, email, id) => dispatch(updateProfileAction(firstName, lastName, profilePhoto, email, id)),
+    updateProfile: (firstName, lastName, profilePhoto, email, id) => dispatch(
+        updateProfileAction(firstName, lastName, profilePhoto, email, id)
+    ),
 });
 
 export default connect(

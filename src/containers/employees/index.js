@@ -6,10 +6,11 @@ import { LinkContainer } from 'react-router-bootstrap';
 import React from 'react';
 
 import { updateEmployeesAction } from 'actions/employees';
-import { makeFetchRequest } from 'services/employees';
+import { makeFetchAllRequest } from 'services/employees';
 import userConstants from 'constants/user';
 import ApiConstants from 'constants/api';
 import { showToast } from 'utils/helpers/toast';
+import { parseEmployeeData } from 'utils/helpers';
 
 import './index.scss';
 
@@ -37,7 +38,7 @@ export class Profile extends React.Component {
     componentWillMount() {
         const { updateEmployees } = this.props;
 
-        makeFetchRequest().then(obj => {
+        makeFetchAllRequest().then(obj => {
             if (!obj) {
                 return;
             }
@@ -53,31 +54,9 @@ export class Profile extends React.Component {
             const invitedEmployees = {};
 
             const data = body.forEach(emp => {
-                const {
-                    first_name: firstName,
-                    last_name: lastName,
-                    email,
-                    profile_photo_url: profilePhoto,
-                    id: userId,
-                } = emp.user;
-                const { designation, is_admin: isAdmin, status, id: employeeId } = emp;
+                const employeeData = parseEmployeeData(emp);
 
-                const employeeData = {
-                    user: {
-                        firstName,
-                        lastName,
-                        profilePhoto:
-                            profilePhoto.substring(0, 4) === 'http'
-                                ? profilePhoto
-                                : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
-                        email,
-                        id: userId,
-                    },
-                    designation,
-                    isAdmin,
-                    status,
-                    id: employeeId,
-                };
+                const { status, id: employeeId } = employeeData;
 
                 switch (status) {
                 case userConstants.STATUS.ACTIVE:

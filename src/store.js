@@ -30,7 +30,6 @@ const store = createStore(connectRouter(history)(rootReducer), persistedState, c
 store.subscribe(() => {
     saveStore({
         currentUser: store.getState().currentUser,
-        employees: store.getState().employees,
     });
 });
 

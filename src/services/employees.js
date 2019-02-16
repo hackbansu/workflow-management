@@ -6,8 +6,12 @@ const employeeApiUrls = ApiConstants.api.employee;
 /**
  * Utility function to send the fetch employees request to the server.
  */
-export function makeFetchRequest() {
+export function makeFetchAllRequest() {
     return makeApiRequest(employeeApiUrls.FETCH_ALL, 'GET');
+}
+
+export function makeFetchRequest(employeeId) {
+    return makeApiRequest(`${employeeApiUrls.FETCH}${employeeId}/`, 'GET');
 }
 
 export function makeUpdateRequest(firstName, lastName, profilePhoto, designation, isAdmin, employeeId) {
@@ -17,14 +21,14 @@ export function makeUpdateRequest(firstName, lastName, profilePhoto, designation
         is_admin: isAdmin,
     };
 
-    return makeApiRequest(employeeApiUrls.FETCH + employeeId + '/', 'PATCH', data);
+    return makeApiRequest(employeeApiUrls.UPDATE + employeeId + '/', 'PATCH', data);
 }
 
 /**
  * Utility function to send the employee removal request.
  */
 export function makeRemoveRequest(employeeId) {
-    return makeApiRequest(employeeApiUrls.FETCH + employeeId + '/', 'DELETE');
+    return makeApiRequest(employeeApiUrls.REMOVE + employeeId + '/', 'DELETE');
 }
 
 /**

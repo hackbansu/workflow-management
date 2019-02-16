@@ -7,8 +7,10 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
-import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest } from 'services/employees';
+import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest, makeFetchRequest } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
+import { updateEmployeeAction } from 'actions/employees';
+import { parseEmployeeData } from 'utils/helpers';
 import ApiConstants from 'constants/api';
 
 // importing components
@@ -24,18 +26,49 @@ export class Employee extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            currentEmployee: null,
+        };
+
         this.onSubmit = this.onSubmit.bind(this);
         this.onResendInvite = this.onResendInvite.bind(this);
         this.onRemoveEmployee = this.onRemoveEmployee.bind(this);
         this.onBackClick = this.onBackClick.bind(this);
+
         const { employees, match } = this.props;
         const { id: employeeId } = match.params;
 
         Object.entries(employees).forEach(employeeTypes => {
             if (employeeTypes[1][employeeId]) {
-                this.currentEmployee = employeeTypes[1][employeeId];
+                this.state.currentEmployee = employeeTypes[1][employeeId];
             }
+        });
+    }
+
+    componentWillMount() {
+        const { updateEmployee, match } = this.props;
+        const { id: employeeId } = match.params;
+
+        makeFetchRequest(employeeId).then(obj => {
+            if (!obj) {
+                return;
+            }
+
+            
+            const { response, body } = obj;
+            if (response.status !== 200) {
+                showToast('Employees update failed');
+                return;
+            }
+
+            const employeeData = parseEmployeeData(body);
+
+            this.setState({
+                currentEmployee: employeeData,
+            });
+
+            // dispatch action to update employees
+            updateEmployee(employeeData);
         });
     }
 
@@ -44,6 +77,7 @@ export class Employee extends React.Component {
      */
     onSubmit = (firstName, lastName, designation, isAdmin) => {
         const { updateProfile, redirectPage, currentUser } = this.props;
+        const { currentEmployee } = this.state;
         if (!currentUser.isAdmin) {
             return;
         }
@@ -52,7 +86,7 @@ export class Employee extends React.Component {
         showLoader(true);
 
         // call the service function
-        makeUpdateRequest(firstName, lastName, '', designation, isAdmin, this.currentEmployee.id).then(obj => {
+        makeUpdateRequest(firstName, lastName, '', designation, isAdmin, currentEmployee.id).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -85,8 +119,9 @@ export class Employee extends React.Component {
 
     onResendInvite = () => {
         const { currentUser } = this.props;
-        const { designation } = this.currentEmployee;
-        const { firstName, lastName, email } = this.currentEmployee.user;
+        const { currentEmployee } = this.state;
+        const { designation } = currentEmployee;
+        const { firstName, lastName, email } = currentEmployee.user;
 
         if (!currentUser.isAdmin) {
             return;
@@ -115,6 +150,7 @@ export class Employee extends React.Component {
 
     onRemoveEmployee = () => {
         const { redirectPage, currentUser } = this.props;
+        const { currentEmployee } = this.state;
 
         if (!currentUser.isAdmin) {
             return;
@@ -124,7 +160,7 @@ export class Employee extends React.Component {
         showLoader(true);
 
         // call the service function
-        makeRemoveRequest(this.currentEmployee.id).then(obj => {
+        makeRemoveRequest(currentEmployee.id).then(obj => {
             showLoader(false);
 
             if (!obj) {
@@ -152,10 +188,18 @@ export class Employee extends React.Component {
      */
     render() {
         const { currentUser } = this.props;
+        const { currentEmployee } = this.state;
+
+        console.log('currentEmployee :', currentEmployee);
+
+        if (!currentEmployee) {
+            return '';
+        }
 
         const { isAdmin: isUserAdmin } = currentUser;
-        const { isAdmin, designation, status } = this.currentEmployee;
-        const { firstName, lastName, email } = this.currentEmployee.user;
+        const { isAdmin, designation, status, user } = currentEmployee;
+
+        const { firstName, lastName, email } = user;
 
         return (
             <div className="profile-page">
@@ -184,6 +228,7 @@ Employee.propTypes = {
     employees: PropTypes.array.isRequired,
     match: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
+    updateEmployee: PropTypes.func.isRequired,
     redirectPage: PropTypes.func.isRequired,
 };
 
@@ -195,6 +240,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    updateEmployee: (...args) => dispatch(updateEmployeeAction(...args)),
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
     redirectPage: url => dispatch(push(url)),
 });

@@ -63,7 +63,7 @@ export class Signup extends React.Component {
                 return;
             }
 
-            document.getElementsByClassName("signup-form").reset();
+            document.getElementsByClassName('signup-form').reset();
 
             const { response, body } = obj;
             if (response.status !== 201) {

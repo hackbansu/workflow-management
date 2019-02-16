@@ -2,11 +2,10 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
+import { loadStore, saveStore } from 'utils/localStorage';
 import rootReducer from './reducers';
 
 export const history = createHistory();
-
-const persistedState = localStorage.getItem('reduxState') ? JSON.parse(localStorage.getItem('reduxState')) : {};
 
 const enhancers = [];
 const middleware = [thunk, routerMiddleware(history)];
@@ -24,13 +23,15 @@ const composedEnhancers = compose(
     ...enhancers
 );
 
+const persistedState = loadStore();
+
 const store = createStore(connectRouter(history)(rootReducer), persistedState, composedEnhancers);
 
 store.subscribe(() => {
-    const persistedData = {};
-    persistedData.currentUser = store.getState().currentUser;
-    persistedData.employees = store.getState().employees;
-    localStorage.setItem('reduxState', JSON.stringify(persistedData));
+    saveStore({
+        currentUser: store.getState().currentUser,
+        employees: store.getState().employees,
+    });
 });
 
 export default store;

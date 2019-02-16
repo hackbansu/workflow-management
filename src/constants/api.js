@@ -26,7 +26,7 @@ export default {
             FORGOT_PASSWORD: 'auth/request-reset/',
             UPDATE_PASSWORD: 'auth/reset-password/',
             USER_COMPANY_SIGNUP: 'create-company/',
-            ACCEPT_INVITE: 'user/invitation/',
+            ACCEPT_INVITE: 'employee/invitation/',
         },
         user: {
             FETCH: 'user/profile/',

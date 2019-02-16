@@ -24,6 +24,9 @@ const initialState = {
     modal: {},
 };
 
+/**
+ * In case of logout, entire store need to be deleted.
+ */
 export default (state = initialState, action) => {
     switch (action.type) {
     case LOGOUT:

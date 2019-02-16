@@ -1,7 +1,7 @@
 import constants from 'constants/index.js';
 
 export function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
     const isValid = re.test(String(email).toLowerCase());
 
     if (!isValid) {
@@ -25,7 +25,8 @@ export function validatePassword(password) {
     if (!isValid) {
         return {
             isValid,
-            message: password.length === 0 ? 'This field is required' : 'Invalid password',
+            message: password.length === 0 ? 'This field is required'
+                : 'Password must be 8 character long. Only Alphabates and number are allowed',
         };
     }
 

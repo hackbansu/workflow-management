@@ -8,6 +8,7 @@ import store from '../store';
  * @param  {type} body     {response body}
  */
 function apiErrorHandler(response, body) {
+    body = body || { detail: 'Error occur' };
     if (response.status >= 500) {
         showToast('server error occur');
         let errormsg = body.detail;
@@ -38,7 +39,7 @@ function apiErrorHandler(response, body) {
  */
 export function makeApiRequest(url, method = 'GET', data = undefined, contentType = 'application/json') {
     url = ApiConstants.API_URL + url;
-    const token = store.getState().currentUser.token ? 'Token ' + store.getState().currentUser.token : '';
+    const token = store.getState().currentUser.token ? `Token ${store.getState().currentUser.token}` : '';
 
     let body;
     if (data) {
@@ -66,7 +67,7 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             .then(body => ({ response, body }))
             .catch(err => ({ response, body: null })))
         .then(({ response, body }) => {
-            if (response.status >= 400) {
+            if (response.status >= 405) {
                 apiErrorHandler(response, body);
             }
             return { response, body };

@@ -84,7 +84,7 @@ export class ResetPasswordForm extends React.Component {
                             inputName="password"
                             type="password"
                             placeholder=""
-                            value=""
+                            value={password}
                             onChange={e => {
                                 const { value } = e.target;
                                 return this.setState(prevState => ({
@@ -100,7 +100,7 @@ export class ResetPasswordForm extends React.Component {
                             inputName="confirmPassword"
                             type="password"
                             placeholder=""
-                            value=""
+                            value={confirmPassword}
                             onChange={e => {
                                 const { value } = e.target;
                                 return this.setState(prevState => ({

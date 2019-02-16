@@ -1,7 +1,7 @@
 import constants from 'constants/index.js';
 
 export function validateEmail(email) {
-    const re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    const re = /^[\w\d._]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
     const isValid = re.test(String(email).toLowerCase());
 
     if (!isValid) {

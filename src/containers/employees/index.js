@@ -179,7 +179,7 @@ export class Profile extends React.Component {
                     </thead>
                     <tbody>
                         {filteredEmployees.map(data => (
-                            <EmployeeTableRow data={data} />
+                            <EmployeeTableRow data={data} key={`${data.id}-${data.user.id}`} />
                         ))}
                     </tbody>
                 </table>

@@ -20,7 +20,6 @@ export const EmployeeTableRow = ({ data, isVisible }) => {
     return (
         <LinkContainer to={`${ApiConstants.EMPLOYEE_PAGE}/${id}`}>
             <tr
-                key={firstName + lastName + designation}
                 className={userConstants.STATUS[status].toLowerCase() + '-employee'}
             >
                 <td className="employee-pic">

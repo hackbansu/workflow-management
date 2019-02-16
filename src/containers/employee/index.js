@@ -53,8 +53,6 @@ export class Employee extends React.Component {
             if (!obj) {
                 return;
             }
-
-            
             const { response, body } = obj;
             if (response.status !== 200) {
                 showToast('Employees update failed');
@@ -189,8 +187,6 @@ export class Employee extends React.Component {
     render() {
         const { currentUser } = this.props;
         const { currentEmployee } = this.state;
-
-        console.log('currentEmployee :', currentEmployee);
 
         if (!currentEmployee) {
             return '';

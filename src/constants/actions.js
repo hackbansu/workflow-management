@@ -12,5 +12,6 @@ export default {
     },
     employees: {
         UPDATE_EMPLOYEES: 'UPDATE_EMPLOYEES',
+        UPDATE_EMPLOYEE: 'UPDATE_EMPLOYEE',
     },
 };

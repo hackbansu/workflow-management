@@ -35,7 +35,9 @@ export default {
         },
         employee: {
             FETCH_ALL: 'employees/',
-            FETCH: 'employee/',
+            FETCH: 'employee-detail/',
+            UPDATE: 'employee/',
+            REMOVE: 'employee/',
             INVITE: 'company/invite-employee/',
             INVITE_CSV: 'company/invite-employee-csv/',
         },

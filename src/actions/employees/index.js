@@ -7,7 +7,9 @@ const { UPDATE_EMPLOYEES } = actions.employees;
  * @param {string} token - authentication token string
  */
 
-export const updateEmployeesAction = (data) => ({
+export const updateEmployeesAction = (activeEmployees, inactiveEmployees, invitedEmployees) => ({
     type: UPDATE_EMPLOYEES,
-    data,
+    activeEmployees,
+    inactiveEmployees,
+    invitedEmployees,
 });

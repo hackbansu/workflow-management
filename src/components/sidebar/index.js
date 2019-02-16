@@ -26,7 +26,7 @@ export class sidebar extends React.Component {
         const lists = document.getElementsByClassName('sidebar-list');
         let found = false;
         for (const list of lists) {
-            for (const element of list.children) {
+            for (const element of list.children[0].children) {
                 if (element.getAttribute('data-field-type') === activeField) {
                     this.activeElement = element;
                     this.activeElement.classList.add('active');
@@ -111,21 +111,29 @@ export class sidebar extends React.Component {
                     )}
                 </ul>
                 <ul className="sidebar-list list-unstyled profile-components" onClick={this.clickAction}>
-                    <SidebarField
-                        name={firstName + ' ' + lastName}
-                        fieldType="profile"
-                        redirectUrl={ApiConstants.PROFILE_PAGE}
-                        isVisible
-                        imgUrl={profilePhoto}
-                    />
-                    <SidebarField
-                        name={companyName}
-                        fieldType="company"
-                        redirectUrl={ApiConstants.COMPANY_PAGE}
-                        isVisible={isPartOfComapany}
-                        imgUrl={logo}
-                    />
-                    <SidebarField name="Logout" fieldType="logout" redirectUrl="" isVisible onClick={onLogoutClick} />
+                    <div>
+                        <SidebarField
+                            name={firstName + ' ' + lastName}
+                            fieldType="profile"
+                            redirectUrl={ApiConstants.PROFILE_PAGE}
+                            isVisible
+                            imgUrl={profilePhoto}
+                        />
+                        <SidebarField
+                            name={companyName}
+                            fieldType="company"
+                            redirectUrl={ApiConstants.COMPANY_PAGE}
+                            isVisible={isPartOfComapany}
+                            imgUrl={logo}
+                        />
+                        <SidebarField
+                            name="Logout"
+                            fieldType="logout"
+                            redirectUrl=""
+                            isVisible
+                            onClick={onLogoutClick}
+                        />
+                    </div>
                 </ul>
             </nav>
         );

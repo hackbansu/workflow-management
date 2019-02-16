@@ -32,12 +32,11 @@ export class Employee extends React.Component {
         const { employees, match } = this.props;
         const { id: employeeId } = match.params;
 
-        for (const obj of employees) {
-            if (obj.id === parseInt(employeeId)) {
-                this.currentEmployee = obj;
-                break;
+        Object.entries(employees).forEach(employeeTypes => {
+            if (employeeTypes[1][employeeId]) {
+                this.currentEmployee = employeeTypes[1][employeeId];
             }
-        }
+        });
     }
 
     /**
@@ -45,6 +44,9 @@ export class Employee extends React.Component {
      */
     onSubmit = (firstName, lastName, designation, isAdmin) => {
         const { updateProfile, redirectPage, currentUser } = this.props;
+        if (!currentUser.isAdmin) {
+            return;
+        }
 
         // dispatch action to show loader
         showLoader(true);
@@ -82,8 +84,13 @@ export class Employee extends React.Component {
     };
 
     onResendInvite = () => {
+        const { currentUser } = this.props;
         const { designation } = this.currentEmployee;
         const { firstName, lastName, email } = this.currentEmployee.user;
+
+        if (!currentUser.isAdmin) {
+            return;
+        }
 
         // dispatch action to show loader
         showLoader(true);
@@ -107,7 +114,11 @@ export class Employee extends React.Component {
     };
 
     onRemoveEmployee = () => {
-        const { redirectPage } = this.props;
+        const { redirectPage, currentUser } = this.props;
+
+        if (!currentUser.isAdmin) {
+            return;
+        }
 
         // dispatch action to show loader
         showLoader(true);
@@ -185,7 +196,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     updateProfile: (...args) => dispatch(updateProfileAction(...args)),
-    redirectPage: (url) => dispatch(push(url)),
+    redirectPage: url => dispatch(push(url)),
 });
 
 export default connect(

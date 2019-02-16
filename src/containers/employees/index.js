@@ -15,6 +15,7 @@ import './index.scss';
 
 // import components
 import EmployeesNavbar from 'components/employeesNavbar';
+import EmployeeTableRow from 'components/employeeTableRow';
 
 /**
  * Login page component.
@@ -43,11 +44,15 @@ export class Profile extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                showToast('Profile update failed');
+                showToast('Employees update failed');
                 return;
             }
 
-            const data = body.map(emp => {
+            const activeEmployees = {};
+            const inactiveEmployees = {};
+            const invitedEmployees = {};
+
+            const data = body.forEach(emp => {
                 const {
                     first_name: firstName,
                     last_name: lastName,
@@ -57,7 +62,7 @@ export class Profile extends React.Component {
                 } = emp.user;
                 const { designation, is_admin: isAdmin, status, id: employeeId } = emp;
 
-                return {
+                const employeeData = {
                     user: {
                         firstName,
                         lastName,
@@ -73,53 +78,103 @@ export class Profile extends React.Component {
                     status,
                     id: employeeId,
                 };
+
+                switch (status) {
+                case userConstants.STATUS.ACTIVE:
+                    activeEmployees[employeeId] = employeeData;
+                    break;
+
+                case userConstants.STATUS.INACTIVE:
+                    inactiveEmployees[employeeId] = employeeData;
+                    break;
+                case userConstants.STATUS.INVITED:
+                    invitedEmployees[employeeId] = employeeData;
+                    break;
+                default:
+                    break;
+                }
             });
 
             // dispatch action to update employees
-            updateEmployees(data);
+            updateEmployees(activeEmployees, inactiveEmployees, invitedEmployees);
         });
     }
 
     componentWillReceiveProps(nextProps) {
-        if (Object.entries(nextProps.employees).length !== 0) {
-            this.setState({
-                filteredEmployees: nextProps.employees,
+        const { employees } = nextProps;
+        const filterEmployees = [];
+
+        Object.entries(employees).forEach(employeeTypes => {
+            Object.entries(employeeTypes[1]).forEach(employee => {
+                filterEmployees.push(employee[1]);
             });
-        }
+        });
+
+        this.setState({
+            filteredEmployees: filterEmployees,
+        });
     }
 
     filterEmployees(type) {
         const { employees } = this.props;
-        let data;
-        if (type === 'ALL') {
-            data = employees;
-        } else {
-            data = employees.filter(employee => userConstants.STATUS[employee.status] === type);
+        const filteredEmployees = [];
+
+        switch (type) {
+        case 'ACTIVE':
+            Object.entries(employees.activeEmployees).forEach(employee => {
+                filteredEmployees.push(employee[1]);
+            });
+            break;
+        case 'INACTIVE':
+            Object.entries(employees.inactiveEmployees).forEach(employee => {
+                filteredEmployees.push(employee[1]);
+            });
+            break;
+        case 'INVITED':
+            Object.entries(employees.invitedEmployees).forEach(employee => {
+                filteredEmployees.push(employee[1]);
+            });
+            break;
+        default:
+            Object.entries(employees).forEach(employeeTypes => {
+                Object.entries(employeeTypes[1]).forEach(employee => {
+                    filteredEmployees.push(employee[1]);
+                });
+            });
         }
+
         this.setState({
-            filteredEmployees: data,
+            filteredEmployees,
         });
     }
 
     searchEmployees(searchVal) {
         const { employees } = this.props;
-        const data = employees.filter(employee => {
-            if (employee.user.firstName.toLowerCase().indexOf(searchVal) !== -1) {
-                return true;
-            }
-            if (employee.user.lastName.toLowerCase().indexOf(searchVal) !== -1) {
-                return true;
-            }
-            if (employee.user.email.toLowerCase().indexOf(searchVal) !== -1) {
-                return true;
-            }
-            if (employee.designation.toLowerCase().indexOf(searchVal) !== -1) {
-                return true;
-            }
-            return false;
+
+        const filteredEmployees = [];
+
+        Object.entries(employees).forEach(employeeTypes => {
+            Object.entries(employeeTypes[1]).forEach(employee => {
+                const employeeData = employee[1];
+                let found = false;
+                if (employeeData.user.firstName.toLowerCase().indexOf(searchVal) !== -1) {
+                    found = true;
+                } else if (employeeData.user.lastName.toLowerCase().indexOf(searchVal) !== -1) {
+                    found = true;
+                } else if (employeeData.user.email.toLowerCase().indexOf(searchVal) !== -1) {
+                    found = true;
+                } else if (employeeData.designation.toLowerCase().indexOf(searchVal) !== -1) {
+                    found = true;
+                }
+
+                if (found) {
+                    filteredEmployees.push(employeeData);
+                }
+            });
         });
+
         this.setState({
-            filteredEmployees: data,
+            filteredEmployees,
         });
     }
 
@@ -145,27 +200,7 @@ export class Profile extends React.Component {
                     </thead>
                     <tbody>
                         {filteredEmployees.map(data => (
-                            <LinkContainer to={`/employee/${data.id}`}>
-                                <tr
-                                    key={data.user.firstName + data.user.lastName + data.designation}
-                                    className={userConstants.STATUS[data.status].toLowerCase() + '-employee'}
-                                >
-                                    <td className="employee-pic">
-                                        <img
-                                            src={data.user.profilePhoto}
-                                            className="display-pic"
-                                            alt="employee-pic"
-                                            onError={e => {
-                                                e.target.src = '/profile7.png';
-                                            }}
-                                        />
-                                    </td>
-                                    <td>{data.user.firstName}</td>
-                                    <td>{data.user.lastName}</td>
-                                    <td>{data.designation}</td>
-                                    <td>{userConstants.STATUS[data.status]}</td>
-                                </tr>
-                            </LinkContainer>
+                            <EmployeeTableRow data={data} />
                         ))}
                     </tbody>
                 </table>
@@ -176,11 +211,11 @@ export class Profile extends React.Component {
 
 Profile.propTypes = {
     updateEmployees: PropTypes.func.isRequired,
-    employees: PropTypes.array,
+    employees: PropTypes.object,
 };
 
 Profile.defaultProps = {
-    employees: [],
+    employees: {},
 };
 
 const mapStateToProps = state => ({
@@ -188,7 +223,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateEmployees: data => dispatch(updateEmployeesAction(data)),
+    updateEmployees: (...args) => dispatch(updateEmployeesAction(...args)),
 });
 
 export default connect(

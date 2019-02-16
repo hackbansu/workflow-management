@@ -19,11 +19,6 @@ export const loadStore = () => {
  * @param  {state} Object storet to save in localstorage
  */
 export const saveStore = state => {
-    try {
-        const serializedState = JSON.stringify(state);
-        localStorage.setItem('reduxState', serializedState);
-    } catch (err) {
-        console.info('failed to save store');
-        console.trace('err', err);
-    }
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('reduxState', serializedState);
 };

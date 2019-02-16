@@ -206,7 +206,8 @@ Home.propTypes = {
     redirectPage: PropTypes.func.isRequired,
 };
 
-Home.defaultProps = {};
+Home.defaultProps = {
+};
 
 const mapStateToProps = state => ({
     currentUser: state.currentUser,

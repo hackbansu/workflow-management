@@ -10,6 +10,7 @@ import { showModal } from 'utils/helpers/modal';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
 import ApiConstants from 'constants/api';
+import { errorParser } from 'utils/helpers/errorHandler';
 
 // importing components
 import LoginForm from 'components/loginForm';
@@ -49,7 +50,8 @@ export class LoginPage extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                showModal('Login Failed', 'Invalid Credentials');
+                const msg = errorParser(body);
+                showModal('Login Failed', msg);
                 return;
             }
 

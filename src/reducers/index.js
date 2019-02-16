@@ -17,11 +17,35 @@ const appReducer = combineReducers({
 });
 
 const initialState = {
-    currentUser: {},
+    currentUser: {
+        token: '',
+        firstName: '',
+        lastName: '',
+        profilePhoto: '',
+        email: '',
+        designation: '',
+        company: {
+            name: '',
+            address: '',
+            city: '',
+            state: '',
+            logo: '',
+            status: '',
+            links: [],
+        },
+    },
     employees: {},
-    loader: {},
-    toast: {},
-    modal: {},
+    toast: {
+        show: false,
+        text: 'Default Text',
+    },
+    modal: {
+        heading: 'Default Heading',
+        text: 'Default Text',
+    },
+    loader: {
+        show: false,
+    },
 };
 
 /**

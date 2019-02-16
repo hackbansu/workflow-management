@@ -7,6 +7,7 @@ import { makeInviteRequest, makeCsvInviteRequest } from 'services/employees';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
+import { errorParser } from 'utils/helpers/errorHandler';
 
 // importing components
 import InviteForm from 'components/inviteForm';
@@ -42,10 +43,11 @@ export class Invite extends React.Component {
             if (!obj) {
                 return;
             }
-
             const { response, body } = obj;
+
             if (response.status !== 200) {
-                showToast('Invite failed');
+                const errorMsg = errorParser(body);
+                showToast(errorMsg);
                 return;
             }
 
@@ -69,7 +71,8 @@ export class Invite extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                showToast('Invite failed');
+                const errorMsg = errorParser(body.details);
+                showToast(errorMsg);
                 return;
             }
 

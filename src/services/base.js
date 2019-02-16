@@ -1,5 +1,6 @@
 import ApiConstants from 'constants/api';
 import { showToast } from 'utils/helpers/toast';
+import { errorParser } from 'utils/helpers/errorHandler';
 import store from '../store';
 
 /**
@@ -10,23 +11,13 @@ import store from '../store';
 function apiErrorHandler(response, body) {
     body = body || { detail: 'Error occur' };
     if (response.status >= 500) {
-        showToast('server error occur');
-        let errormsg = body.detail;
-        if (errormsg instanceof Array) {
-            errormsg = errormsg.join(';');
-        }
-        showToast(errormsg);
-        return null;
+        showToast('Internal Server error occur');
     }
     if (response.status >= 400) {
-        showToast('request error');
-        let errormsg = body.detail;
-        if (errormsg instanceof Array) {
-            errormsg = errormsg.join(';');
-        }
-        showToast(errormsg);
-        return null;
+        showToast('Api error occur');
     }
+    const errorMsg = errorParser(body);
+    showToast(errorMsg);
     return null;
 }
 

@@ -3,6 +3,33 @@ import { showToast } from 'utils/helpers/toast';
 import store from '../store';
 
 /**
+ * @function apiErrorHandler
+ * @param  {type} response {response object}
+ * @param  {type} body     {response body}
+ */
+function apiErrorHandler(response, body) {
+    if (response.status >= 500) {
+        showToast('server error occur');
+        let errormsg = body.detail;
+        if (errormsg instanceof Array) {
+            errormsg = errormsg.join(';');
+        }
+        showToast(errormsg);
+        return null;
+    }
+    if (response.status >= 400) {
+        showToast('request error');
+        let errormsg = body.detail;
+        if (errormsg instanceof Array) {
+            errormsg = errormsg.join(';');
+        }
+        showToast(errormsg);
+        return null;
+    }
+    return null;
+}
+
+/**
  * service function to make an api call to the server.
  * @param {string} url - url string to send the request to.
  * @param {string} method - request type to send.
@@ -39,21 +66,13 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             .then(body => ({ response, body }))
             .catch(err => ({ response, body: null })))
         .then(({ response, body }) => {
-            if (response.status >= 500) {
-                // show error in toast msg
-                let errormsg = body.detail;
-                if (errormsg.constructor === Array) {
-                    errormsg = errormsg[0];
-                }
-                showToast(errormsg);
-                return null;
+            if (response.status >= 400) {
+                apiErrorHandler(response, body);
             }
-
             return { response, body };
         })
         .catch(err => {
-            // show error in toast msg
-            showToast('Some error occured');
+            showToast(String(err));
             return null;
         });
 }

@@ -94,7 +94,7 @@ export class LoginForm extends React.Component {
                     <FormField
                         name="Password"
                         inputName="password"
-                        value=""
+                        value={password}
                         type="password"
                         placeholder=""
                         onChange={e => {

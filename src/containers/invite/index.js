@@ -71,7 +71,7 @@ export class Invite extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                const errorMsg = errorParser(body.details);
+                const errorMsg = errorParser(body);
                 showToast(errorMsg);
                 return;
             }

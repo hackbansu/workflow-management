@@ -90,7 +90,7 @@ export class EmployeeForm extends React.Component {
     resendInvite = () => {
         const { onResendInvite, status, isUserAdmin } = this.props;
 
-        if (userConstants.STATUS[status] !== 'INVITED' || !isUserAdmin) {
+        if (userConstants.STATUS[status] !== userConstants.STATUS.INVITED || !isUserAdmin) {
             return;
         }
 
@@ -100,7 +100,7 @@ export class EmployeeForm extends React.Component {
     removeEmployee = () => {
         const { onRemoveEmployee, status, isUserAdmin } = this.props;
 
-        if (userConstants.STATUS[status] === 'INACTIVE' || !isUserAdmin) {
+        if (userConstants.STATUS[status] !== userConstants.STATUS.INACTIVE || !isUserAdmin) {
             return;
         }
 
@@ -127,7 +127,7 @@ export class EmployeeForm extends React.Component {
         const { email, password, firstName, lastName, isAdmin, designation, status, errors } = this.state;
 
         let formDisabled = false;
-        if (!isUserAdmin || userConstants.STATUS[status] === 'INACTIVE') {
+        if (!isUserAdmin || userConstants.STATUS[status] !== userConstants.STATUS.INACTIVE) {
             formDisabled = true;
         }
 
@@ -219,7 +219,7 @@ export class EmployeeForm extends React.Component {
                         className={
                             'btn btn-info mr-3'
                             + (isUserAdmin ? '' : ' hide')
-                            + (userConstants.STATUS[status] === 'INVITED' ? '' : ' hide')
+                            + (userConstants.STATUS[status] !== userConstants.STATUS.INVITED ? '' : ' hide')
                         }
                         onClick={this.resendInvite}
                     >
@@ -230,7 +230,7 @@ export class EmployeeForm extends React.Component {
                         className={
                             'btn btn-danger mr-3'
                             + (isUserAdmin ? '' : ' hide')
-                            + (userConstants.STATUS[status] !== 'INACTIVE' ? '' : ' hide')
+                            + (userConstants.STATUS[status] !== userConstants.STATUS.INACTIVE ? '' : ' hide')
                         }
                         onClick={this.removeEmployee}
                     >

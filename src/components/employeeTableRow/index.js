@@ -15,13 +15,11 @@ export const EmployeeTableRow = ({ data, isVisible }) => {
     }
 
     const { user, id, designation, status } = data;
-    const { firstName, lastName, profilePhoto } = user;
-
+    const { firstName, profilePhoto } = user;
+    const lastName = user.lastName || ' ';
     return (
         <LinkContainer to={`${ApiConstants.EMPLOYEE_PAGE}/${id}`}>
-            <tr
-                className={userConstants.STATUS[status].toLowerCase() + '-employee'}
-            >
+            <tr className={userConstants.STATUS[status].toLowerCase() + '-employee'}>
                 <td className="employee-pic">
                     <img
                         src={profilePhoto}

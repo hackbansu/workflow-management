@@ -23,12 +23,18 @@ export function makeUpdateRequest(firstName, lastName, profilePhoto) {
 }
 
 /**
- * Utility function to fetch user details.
+ * @function makeFetchRequest {fetch user}
+ * @return {type} {promist of fetch request}
  */
 export function makeFetchRequest() {
     return makeApiRequest(userApiUrls.FETCH, 'GET');
 }
 
+/**
+ * @function makeCreateCompanyRequest {create company for the user}
+ * @param  {type} data {data to sent the request}
+ * @return {type} {promist of fetch request}
+ */
 export function makeCreateCompanyRequest(data) {
     return makeApiRequest(userApiUrls.CREATE_COMPANY, 'POST', data);
 }

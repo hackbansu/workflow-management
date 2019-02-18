@@ -81,16 +81,16 @@ export class Profile extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         const { employees } = nextProps;
-        const filterEmployees = [];
+        const filteredEmployees = [];
 
         Object.entries(employees).forEach(employeeTypes => {
             Object.entries(employeeTypes[1]).forEach(employee => {
-                filterEmployees.push(employee[1]);
+                filteredEmployees.push(employee[1]);
             });
         });
 
         this.setState({
-            filteredEmployees: filterEmployees,
+            filteredEmployees,
         });
     }
 
@@ -162,9 +162,10 @@ export class Profile extends React.Component {
      */
     render() {
         const { filteredEmployees } = this.state;
+        const { isAdmin } = this.props;
         return (
             <div>
-                <EmployeesNavbar onClick={this.filterEmployees} onSearch={this.searchEmployees} />
+                <EmployeesNavbar isAdmin={isAdmin} onClick={this.filterEmployees} onSearch={this.searchEmployees} />
                 <table className="table">
                     <thead>
                         <tr>
@@ -191,6 +192,7 @@ export class Profile extends React.Component {
 Profile.propTypes = {
     updateEmployees: PropTypes.func.isRequired,
     employees: PropTypes.object,
+    isAdmin: PropTypes.bool.isRequired,
 };
 
 Profile.defaultProps = {
@@ -199,6 +201,7 @@ Profile.defaultProps = {
 
 const mapStateToProps = state => ({
     employees: state.employees,
+    isAdmin: state.currentUser.isAdmin,
 });
 
 const mapDispatchToProps = dispatch => ({

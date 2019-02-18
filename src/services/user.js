@@ -31,7 +31,7 @@ export function makeFetchRequest() {
 }
 
 /**
- * @function makeCreateCompanyRequest {creaet company for the user}
+ * @function makeCreateCompanyRequest {create company for the user}
  * @param  {type} data {data to sent the request}
  * @return {type} {promist of fetch request}
  */

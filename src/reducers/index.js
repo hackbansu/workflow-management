@@ -42,6 +42,7 @@ const initialState = {
     modal: {
         heading: 'Default Heading',
         text: 'Default Text',
+        showModal: false,
     },
     loader: {
         show: false,

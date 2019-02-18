@@ -77,7 +77,7 @@ export class App extends React.Component {
                 </Switch>
                 <Toast show={toast.show} text={toast.text} />
                 <Loader show={loader.show} />
-                <Modal heading={modal.heading} text={modal.text} />
+                <Modal heading={modal.heading} text={modal.text} showModal={modal.showModal} />
             </React.Fragment>
         );
     }
@@ -92,6 +92,7 @@ App.propTypes = {
     modal: PropTypes.shape({
         heading: PropTypes.string,
         text: PropTypes.string,
+        showModal: PropTypes.bool,
     }),
     loader: PropTypes.shape({
         show: PropTypes.bool,
@@ -107,6 +108,7 @@ App.defaultProps = {
     modal: {
         heading: 'heading',
         text: 'There is no text here',
+        showModal: false,
     },
     loader: {
         show: false,
@@ -122,6 +124,7 @@ const mapStateToProps = state => ({
     modal: {
         heading: state.modal.heading,
         text: state.modal.text,
+        showModal: state.modal.showModal,
     },
     loader: {
         show: state.loader.show,

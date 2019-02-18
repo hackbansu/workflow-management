@@ -17,6 +17,7 @@ export default (state = initialState, action) => {
             ...state,
             heading: action.heading,
             text: action.text,
+            showModal: action.showModal,
         };
 
     default:

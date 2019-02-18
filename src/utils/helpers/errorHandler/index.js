@@ -46,12 +46,12 @@ errorCategoriser = function errorCategoriser(errors) {
     }
     return errorMsg;
 };
-export function errorParser(errors) {
+export function errorParser(errors, defaultMsg) {
     let errorMsg = '';
     try {
         errorMsg = errorCategoriser(errors);
     } catch (err) {
-        errorMsg = 'Something went wrong';
+        errorMsg = defaultMsg || 'Something went wrong';
     }
     errorMsg = errorMsg.trim().replace(/^\[+|\]$/gm, '');
     return errorMsg;

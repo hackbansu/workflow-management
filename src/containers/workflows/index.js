@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import React from 'react';
+
+import ApiConstants from 'constants/api';
 
 import { showLoader } from 'utils/helpers/loader';
 import { makeCreateCompanyRequest } from 'services/user';
 import { showModal } from 'utils/helpers/modal';
-
 
 /**
  * Login page component.
@@ -26,7 +28,11 @@ export class Workflows extends React.Component {
     render() {
         return (
             <div className="container col-12">
-                Workflows
+                <Link to={ApiConstants.TEMPLATES_PAGE}>
+                    <button type="button" className="btn btn-primary">
+                        New Workflow
+                    </button>
+                </Link>
             </div>
         );
     }

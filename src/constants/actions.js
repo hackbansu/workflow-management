@@ -14,4 +14,7 @@ export default {
         UPDATE_EMPLOYEES: 'UPDATE_EMPLOYEES',
         UPDATE_EMPLOYEE: 'UPDATE_EMPLOYEE',
     },
+    template: {
+        UPDATE_TEMPLATES: 'UPDATE_TEMPLATES',
+    },
 };

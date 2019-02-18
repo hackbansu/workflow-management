@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 
 // importing containers for routing
 import Default from 'containers/default';
-import Profile from 'containers/profile';
-import Company from 'containers/company';
+import Workflows from 'containers/workflows';
+import Templates from 'containers/templates';
 import Employees from 'containers/employees';
 import Employee from 'containers/employee';
 import Invite from 'containers/invite';
+import Profile from 'containers/profile';
+import Company from 'containers/company';
 import CreateCompany from 'containers/createCompany';
 
 // importing components
@@ -149,7 +151,13 @@ export class Home extends React.Component {
                     <div className="col-md-10 col-sm-9 col-9 content-container">
                         <div id="content">
                             <Switch>
-                                <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
+                                <PrivateRoute
+                                    exact
+                                    path={ApiConstants.WORKFLOWS_PAGE}
+                                    component={Workflows}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
                                 <PrivateRoute
                                     exact
                                     path={ApiConstants.EMPLOYEES_PAGE}
@@ -165,17 +173,24 @@ export class Home extends React.Component {
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                 />
                                 <PrivateRoute
+                                    path={ApiConstants.INVITE_PAGE}
+                                    component={Invite}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <PrivateRoute
+                                    path={ApiConstants.TEMPLATES_PAGE}
+                                    component={Templates}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
+                                <PrivateRoute
                                     exact
                                     path={ApiConstants.COMPANY_PAGE}
                                     component={Company}
                                     condition={isPartOfComapany}
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
-                                />
-                                <PrivateRoute
-                                    path={ApiConstants.INVITE_PAGE}
-                                    component={Invite}
-                                    condition={isAdmin}
-                                    redirectUrl={ApiConstants.HOME_PAGE}
                                 />
                                 <PrivateRoute
                                     exact

@@ -63,7 +63,7 @@ export class Templates extends React.Component {
                 description={`number of tasks: ${template.structure.tasks.length}`}
                 buttonText="Create Workflow"
                 buttonOnClick={() => redirectPage(`${ApiConstants.NEW_WORKFLOW_PAGE}/${template.id}`)}
-                imgUrl={template.thumbnail}
+                imgUrl={template.logo}
                 classes="m-3"
                 isVisible
                 key={template.id}

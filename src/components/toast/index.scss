@@ -5,20 +5,20 @@
   right: 60px;
   text-align: center;
 
-  > .toast {
+  > .my-toast {
     color: white;
     background-color: black;
     padding: 5px 25px;
   }
 }
 
-.visible {
+.show-toast {
   visibility: visible;
   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
-.invisible {
+.hide-toast {
   visibility: hidden;
 }
 

@@ -3,7 +3,7 @@ import actions from 'constants/actions.js';
 const { CHANGE_LOADER_STATE } = actions.common;
 
 const initialState = {
-    class: 'invisible',
+    show: false,
 };
 
 /**
@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
     case CHANGE_LOADER_STATE:
         return {
             ...state,
-            class: action.class,
+            show: action.show,
         };
 
     default:

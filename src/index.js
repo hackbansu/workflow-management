@@ -5,16 +5,14 @@ import { ConnectedRouter } from 'connected-react-router';
 import App from 'containers/app';
 import store, { history } from './store';
 import 'sanitize.css/sanitize.css';
-import './index.css';
+import './index.scss';
 
 const target = document.querySelector('#root');
 
 render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <div>
-                <App />
-            </div>
+            <App />
         </ConnectedRouter>
     </Provider>,
     target

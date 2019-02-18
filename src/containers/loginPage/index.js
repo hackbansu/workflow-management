@@ -1,17 +1,21 @@
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import React from 'react';
 
-import { changeLoaderStateAction, changeToastStateAction } from 'actions/common';
-import { updateTokenAction } from 'actions/login';
+import { showLoader } from 'utils/helpers/loader';
+import { showModal } from 'utils/helpers/modal';
+import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
-import './index.scss';
+import ApiConstants from 'constants/api';
+import { errorParser } from 'utils/helpers/errorHandler';
 
 // importing components
 import LoginForm from 'components/loginForm';
 import PageBanner from 'components/pageBanner';
-import Loader from 'components/loader';
+import LinkButton from 'components/linkButton';
 
 /**
  * Login page component.
@@ -31,24 +35,41 @@ export class LoginPage extends React.Component {
      * function to submit login request.
      */
     onSubmit = (email, password) => {
-        const { changeLoaderState, updateToken, history } = this.props;
+        const { updateToken, updateProfile, redirectPage } = this.props;
 
         // dispatch action to show loader
-        changeLoaderState('visible');
+        showLoader(true);
 
         // call the service function
         makeLoginRequest(email, password).then(obj => {
-            changeLoaderState('invisible');
+            showLoader(false);
 
             if (!obj) {
                 return;
             }
 
             const { response, body } = obj;
+            if (response.status !== 200) {
+                const msg = errorParser(body);
+                showModal('Login Failed', msg);
+                return;
+            }
 
-            // dispatch action to update token
-            updateToken(body.token);
-            history.push('/home');
+            const {
+                token,
+                email,
+                id,
+                first_name: firstName,
+                last_name: lastName,
+                profile_photo_url: profilePhoto,
+            } = body;
+
+            // dispatch action to update user token and data
+            updateToken(token);
+            updateProfile(firstName, lastName, profilePhoto, email, id);
+
+            // redirect to home page
+            redirectPage(ApiConstants.HOME_PAGE);
         });
     };
 
@@ -56,38 +77,35 @@ export class LoginPage extends React.Component {
      * function to render the component.
      */
     render() {
-        const { loaderClass } = this.props;
         return (
-            <div className="login-page">
-                <div className="container">
-                    <PageBanner text="Login" />
-                    <LoginForm onSubmit={this.onSubmit} />
-                    <Loader loaderClass={loaderClass} />
-                </div>
+            <div className="container entry-form-container">
+                <PageBanner text="Login" />
+                <LoginForm onSubmit={this.onSubmit} />
+                <ul className="nav justify-content-center page-nav-links">
+                    <LinkButton name="Forgot Password" className="btn-link" toUrl={ApiConstants.FORGOT_PASSWORD_PAGE} />
+                    <LinkButton name="Signup" className="btn-link" toUrl={ApiConstants.SIGNUP_PAGE} />
+                </ul>
             </div>
         );
     }
 }
 
 LoginPage.propTypes = {
-    loaderClass: PropTypes.string,
-    changeLoaderState: PropTypes.func.isRequired,
     updateToken: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
+    updateProfile: PropTypes.func.isRequired,
+    redirectPage: PropTypes.func.isRequired,
 };
 
-LoginPage.defaultProps = {
-    loaderClass: 'invisible',
-};
+LoginPage.defaultProps = {};
 
-const mapStateToProps = state => ({
-    loaderClass: state.loader.class,
-});
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-    changeLoaderState: value => dispatch(changeLoaderStateAction(value)),
-    changeToastState: (value, text) => dispatch(changeToastStateAction(value, text)),
+    redirectPage: (url) => dispatch(push(url)),
     updateToken: value => dispatch(updateTokenAction(value)),
+    updateProfile: (firstName, lastName, profilePhoto, email, id) => dispatch(
+        updateProfileAction(firstName, lastName, profilePhoto, email, id)
+    ),
 });
 
 export default connect(

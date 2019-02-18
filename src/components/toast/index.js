@@ -7,17 +7,22 @@ import './index.scss';
  * Functional component for toast.
  * @param {object} param0 - props object for the component.
  */
-export const Toast = ({ toastClass, text }) => {
-    const className = toastClass + ' toast-cover';
+export const Toast = ({ show, text }) => {
+    let className = 'toast-cover';
+    if (show) {
+        className += ' show-toast';
+    } else {
+        className += ' hide-toast';
+    }
     return (
         <div className={className}>
-            <h4 className="toast">{text}</h4>
+            <h4 className="my-toast">{text}</h4>
         </div>
     );
 };
 
 Toast.propTypes = {
-    toastClass: PropTypes.string.isRequired,
+    show: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired,
 };
 

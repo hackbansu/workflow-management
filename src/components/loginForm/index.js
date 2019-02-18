@@ -3,7 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import './index.scss';
+import FormField from 'components/formField';
+import FormSubmitButton from 'components/formSubmitButton';
+import { validateEmail, validatePassword } from 'utils/validators';
 
 /**
  * Class component for login form
@@ -16,8 +18,9 @@ export class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: null,
-            password: null,
+            email: '',
+            password: '',
+            errors: {},
         };
 
         this.submitForm = this.submitForm.bind(this);
@@ -31,6 +34,33 @@ export class LoginForm extends React.Component {
     submitForm = (email, password) => ev => {
         const { onSubmit } = this.props;
         ev.preventDefault();
+        let valid = true;
+        const newErrors = {};
+
+        const emailValidity = validateEmail(email);
+        const passwordValidity = validatePassword(password);
+
+        if (!emailValidity.isValid) {
+            valid = false;
+            newErrors.email = emailValidity.message;
+        }
+
+        if (!passwordValidity.isValid) {
+            valid = false;
+            newErrors.password = passwordValidity.message;
+        }
+
+        if (!valid) {
+            this.setState({
+                errors: newErrors,
+            });
+            return;
+        }
+
+        this.setState({
+            errors: {},
+        });
+
         onSubmit(email, password);
     };
 
@@ -38,31 +68,49 @@ export class LoginForm extends React.Component {
      * Function to return the component rendering.
      */
     render() {
-        const { email, password } = this.state;
+        const { email, password, errors } = this.state;
 
         return (
-            <div className="login-form-cover">
-                <form method="post" onSubmit={this.submitForm(email, password)}>
-                    <label>
-                        email:
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="eg. user@example.com"
-                            onChange={e => this.setState({ email: e.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        password:
-                        <input
-                            type="password"
-                            name="password"
-                            onChange={e => this.setState({ password: e.target.value })}
-                        />
-                    </label>
-                    <br />
-                    <input type="submit" value="log in" />
+            <div className="container">
+                <form className="offset-md-2 col-md-7" method="post" onSubmit={this.submitForm(email, password)}>
+                    {/* email */}
+                    <FormField
+                        name="Email"
+                        inputName="email"
+                        type="email"
+                        placeholder=""
+                        value={email}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                email: value,
+                                errors: { ...prevState.errors, email: validateEmail(value).message },
+                            }));
+                        }}
+                        errorMsg={errors.email}
+                        autoComplete="email"
+                    />
+                    {/* password */}
+                    <FormField
+                        name="Password"
+                        inputName="password"
+                        value={password}
+                        type="password"
+                        placeholder=""
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                password: value,
+                                errors: { ...prevState.errors, password: validatePassword(value).message },
+                            }));
+                        }}
+                        errorMsg={errors.password}
+                        autoComplete="current-password"
+                    />
+                    {/* update profile button */}
+                    <div className="row justify-content-center">
+                        <FormSubmitButton name="Log In" />
+                    </div>
                 </form>
             </div>
         );

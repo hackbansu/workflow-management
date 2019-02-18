@@ -254,6 +254,7 @@ module.exports = webpackEnv => {
                 containers: 'containers',
                 reducers: 'reducers',
                 services: 'services',
+                utils: 'utils',
             },
             plugins: [
                 // Adds support for installing with Plug'n'Play, leading to faster installs and adding

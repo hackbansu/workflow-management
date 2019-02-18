@@ -132,67 +132,65 @@ export class Home extends React.Component {
         activeField = activeField.split('/')[1].toLowerCase();
 
         return (
-            <div>
-                <main>
-                    <div className="wrapper col-md-12">
-                        <div className="col-md-2 col-sm-3 col-3 sidebar-container">
-                            <Sidebar
-                                firstName={firstName}
-                                lastName={lastName}
-                                onLogoutClick={this.onLogoutClick}
-                                isAdmin={isAdmin}
-                                companyName={companyName}
-                                profilePhoto={profilePhoto}
-                                logo={logo}
-                                activeField={activeField}
-                                isPartOfComapany={isPartOfComapany}
-                            />
-                        </div>
-                        <div className="col-md-10 col-sm-9 col-9 content-container">
-                            <div id="content">
-                                <Switch>
-                                    <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
-                                    <PrivateRoute
-                                        exact
-                                        path={ApiConstants.EMPLOYEES_PAGE}
-                                        component={Employees}
-                                        condition={isPartOfComapany}
-                                        redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path={`${ApiConstants.EMPLOYEE_PAGE}/:id`}
-                                        component={Employee}
-                                        condition={isPartOfComapany}
-                                        redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path={ApiConstants.COMPANY_PAGE}
-                                        component={Company}
-                                        condition={isPartOfComapany}
-                                        redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
-                                    />
-                                    <PrivateRoute
-                                        path={ApiConstants.INVITE_PAGE}
-                                        component={Invite}
-                                        condition={isAdmin}
-                                        redirectUrl={ApiConstants.HOME_PAGE}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path={ApiConstants.CREATE_COMPANY_PAGE}
-                                        component={CreateCompany}
-                                        condition={!isPartOfComapany}
-                                        redirectUrl={ApiConstants.HOME_PAGE}
-                                    />
-                                    <Route component={Default} />
-                                </Switch>
-                            </div>
+            <main>
+                <div className="wrapper col-md-12">
+                    <div className="col-md-2 col-sm-3 col-3 sidebar-container">
+                        <Sidebar
+                            firstName={firstName}
+                            lastName={lastName}
+                            onLogoutClick={this.onLogoutClick}
+                            isAdmin={isAdmin}
+                            companyName={companyName}
+                            profilePhoto={profilePhoto}
+                            logo={logo}
+                            activeField={activeField}
+                            isPartOfComapany={isPartOfComapany}
+                        />
+                    </div>
+                    <div className="col-md-10 col-sm-9 col-9 content-container">
+                        <div id="content">
+                            <Switch>
+                                <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
+                                <PrivateRoute
+                                    exact
+                                    path={ApiConstants.EMPLOYEES_PAGE}
+                                    component={Employees}
+                                    condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.EMPLOYEE_PAGE}/:id`}
+                                    component={Employee}
+                                    condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={ApiConstants.COMPANY_PAGE}
+                                    component={Company}
+                                    condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    path={ApiConstants.INVITE_PAGE}
+                                    component={Invite}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={ApiConstants.CREATE_COMPANY_PAGE}
+                                    component={CreateCompany}
+                                    condition={!isPartOfComapany}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <Route component={Default} />
+                            </Switch>
                         </div>
                     </div>
-                </main>
-            </div>
+                </div>
+            </main>
         );
     }
 }

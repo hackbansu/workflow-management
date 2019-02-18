@@ -8,8 +8,9 @@ export function parseEmployeeData(emp) {
         user: {
             firstName,
             lastName,
-            profilePhoto:
-                profilePhoto.substring(0, 4) === 'http' ? profilePhoto : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
+            profilePhoto: RegExp('^http(s)?://', 'i').test(profilePhoto)
+                ? profilePhoto
+                : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
             email,
             id: userId,
         },

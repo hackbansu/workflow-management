@@ -72,7 +72,7 @@ export class LoginForm extends React.Component {
 
         return (
             <div className="container">
-                <form className="offset-md-4 col-md-4" method="post" onSubmit={this.submitForm(email, password)}>
+                <form className="offset-md-2 col-md-7" method="post" onSubmit={this.submitForm(email, password)}>
                     {/* email */}
                     <FormField
                         name="Email"
@@ -108,7 +108,9 @@ export class LoginForm extends React.Component {
                         autoComplete="current-password"
                     />
                     {/* update profile button */}
-                    <FormSubmitButton name="Log In" />
+                    <div className="row justify-content-center">
+                        <FormSubmitButton name="Log In" />
+                    </div>
                 </form>
             </div>
         );

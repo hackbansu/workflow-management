@@ -5,6 +5,7 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { makeCreateCompanyRequest } from 'services/user';
 import { showModal } from 'utils/helpers/modal';
+import { errorParser } from 'utils/helpers/errorHandler';
 
 // importing components
 import SignupForm from 'components/signupForm';
@@ -48,7 +49,8 @@ export class CreateCompany extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                showModal('Create Failed', 'Sorry, Company create request is failed.');
+                const errorMsg = errorParser(body, 'Sorry, Company create request is failed.');
+                showModal('Create Failed', errorMsg);
                 return;
             }
 
@@ -61,10 +63,8 @@ export class CreateCompany extends React.Component {
      */
     render() {
         return (
-            <div>
-                <div className="container">
-                    <SignupForm onSubmit={this.onSubmit} isNewUser={false} />
-                </div>
+            <div className="container">
+                <SignupForm onSubmit={this.onSubmit} isNewUser={false} />
             </div>
         );
     }

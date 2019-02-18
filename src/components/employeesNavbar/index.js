@@ -113,11 +113,10 @@ export class EmployeesNavbar extends React.Component {
 EmployeesNavbar.propTypes = {
     onClick: PropTypes.func.isRequired,
     onSearch: PropTypes.func.isRequired,
-    isAdmin: PropTypes.bool,
+    isAdmin: PropTypes.bool.isRequired,
 };
 
 EmployeesNavbar.defaultProps = {
-    isAdmin: false,
 };
 
 export default EmployeesNavbar;

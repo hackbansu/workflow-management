@@ -11,9 +11,7 @@ function ModalComponent({ heading, text, showModal }) {
             </Modal.Header>
             <Modal.Body>{text}</Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={hideModal}>
-                Close
-                </Button>
+                <Button variant="primary" onClick={hideModal}>Close</Button>
             </Modal.Footer>
         </Modal>
     );

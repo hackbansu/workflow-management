@@ -50,7 +50,7 @@ export class EmployeeForm extends React.Component {
 
         const { isUserAdmin } = this.props;
         const { status } = this.state;
-        if (!isUserAdmin || userConstants.STATUS[status] === 'INACTIVE') {
+        if (!isUserAdmin || status === userConstants.STATUS.INACTIVE) {
             return;
         }
 
@@ -90,17 +90,15 @@ export class EmployeeForm extends React.Component {
     resendInvite = () => {
         const { onResendInvite, status, isUserAdmin } = this.props;
 
-        if (userConstants.STATUS[status] !== userConstants.STATUS.INVITED || !isUserAdmin) {
-            return;
+        if (status === userConstants.STATUS.INVITED && isUserAdmin) {
+            onResendInvite();
         }
-
-        onResendInvite();
     };
 
     removeEmployee = () => {
         const { onRemoveEmployee, status, isUserAdmin } = this.props;
 
-        if (userConstants.STATUS[status] !== userConstants.STATUS.INACTIVE || !isUserAdmin) {
+        if (status === userConstants.STATUS.INACTIVE || !isUserAdmin) {
             return;
         }
 
@@ -124,10 +122,10 @@ export class EmployeeForm extends React.Component {
      */
     render() {
         const { isUserAdmin, onBackClick } = this.props;
-        const { email, password, firstName, lastName, isAdmin, designation, status, errors } = this.state;
+        const { email, firstName, lastName, isAdmin, designation, status, errors } = this.state;
 
         let formDisabled = false;
-        if (!isUserAdmin || userConstants.STATUS[status] !== userConstants.STATUS.INACTIVE) {
+        if (!isUserAdmin || status === userConstants.STATUS.INACTIVE) {
             formDisabled = true;
         }
 
@@ -219,7 +217,7 @@ export class EmployeeForm extends React.Component {
                         className={
                             'btn btn-info mr-3'
                             + (isUserAdmin ? '' : ' hide')
-                            + (userConstants.STATUS[status] !== userConstants.STATUS.INVITED ? '' : ' hide')
+                            + (status === userConstants.STATUS.INVITED ? '' : ' hide')
                         }
                         onClick={this.resendInvite}
                     >
@@ -230,7 +228,7 @@ export class EmployeeForm extends React.Component {
                         className={
                             'btn btn-danger mr-3'
                             + (isUserAdmin ? '' : ' hide')
-                            + (userConstants.STATUS[status] !== userConstants.STATUS.INACTIVE ? '' : ' hide')
+                            + (status === userConstants.STATUS.INACTIVE ? ' hide' : '')
                         }
                         onClick={this.removeEmployee}
                     >

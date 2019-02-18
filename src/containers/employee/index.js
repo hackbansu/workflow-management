@@ -26,10 +26,6 @@ export class Employee extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.state = {
-            currentEmployee: null,
-        };
-
         this.onSubmit = this.onSubmit.bind(this);
         this.onResendInvite = this.onResendInvite.bind(this);
         this.onRemoveEmployee = this.onRemoveEmployee.bind(this);
@@ -38,11 +34,14 @@ export class Employee extends React.Component {
         const { employees, match } = this.props;
         const { id: employeeId } = match.params;
 
-        Object.entries(employees).forEach(employeeTypes => {
-            if (employeeTypes[1][employeeId]) {
-                this.state.currentEmployee = employeeTypes[1][employeeId];
+        let currentEmployee = null;
+        for (const employeeType in employees) {
+            if (Object.prototype.hasOwnProperty.call(employeeType, String(employeeId))) {
+                currentEmployee = employees[employeeType[employeeId]];
             }
-        });
+        }
+
+        this.state = { currentEmployee };
     }
 
     componentWillMount() {
@@ -221,7 +220,7 @@ export class Employee extends React.Component {
 
 Employee.propTypes = {
     currentUser: PropTypes.object.isRequired,
-    employees: PropTypes.array.isRequired,
+    employees: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     updateProfile: PropTypes.func.isRequired,
     updateEmployee: PropTypes.func.isRequired,

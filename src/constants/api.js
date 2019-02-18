@@ -1,3 +1,5 @@
+import { FIELD_TYPE } from 'constants/navigation';
+
 export default {
     API_URL: 'http://localhost:8000/api/',
     MEDIA_URL: 'http://localhost:8000/media/',
@@ -9,15 +11,16 @@ export default {
     INVITATION_PAGE: '/invitation',
 
     HOME_PAGE: '/',
-    DASHBOARD_PAGE: '/dashboard',
-    WORKFLOWS_PAGE: '/workflows',
-    EMPLOYEES_PAGE: '/employees',
+    DASHBOARD_PAGE: `/${FIELD_TYPE.DASHBOARD}`,
+    WORKFLOWS_PAGE: `/${FIELD_TYPE.WORKFLOWS}`,
+    EMPLOYEES_PAGE: `/${FIELD_TYPE.EMPLOYEES}`,
     EMPLOYEE_PAGE: '/employee',
-    INVITE_PAGE: '/invite',
-    TEMPLATES_PAGE: '/templates',
-    PROFILE_PAGE: '/profile',
-    COMPANY_PAGE: '/company',
-    CREATE_COMPANY_PAGE: '/create-company',
+    INVITE_PAGE: `/${FIELD_TYPE.INVITE}`,
+    TEMPLATES_PAGE: `/${FIELD_TYPE.TEMPLATES}`,
+    PROFILE_PAGE: `/${FIELD_TYPE.PROFILE}`,
+    COMPANY_PAGE: `/${FIELD_TYPE.COMPANY}`,
+    CREATE_COMPANY_PAGE: `/${FIELD_TYPE.CREATE_COMAPNY}`,
+    LOGOUT_PAGE: `/${FIELD_TYPE.LOGOUT}`,
 
     api: {
         auth: {

@@ -130,7 +130,6 @@ export class Home extends React.Component {
         const { name: companyName, logo } = company;
         let { pathname: activeField } = location;
         activeField = activeField.split('/')[1].toLowerCase();
-
         return (
             <main>
                 <div className="wrapper col-md-12">

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import SidebarField from 'components/sidebarField';
 import ApiConstants from 'constants/api';
-
+import { FIELD_TYPE } from 'constants/navigation';
 /**
  * Functional component of the sidebar.
  * @param {object} param0 - props object for the component.
@@ -23,21 +23,27 @@ export class sidebar extends React.Component {
             activeField = 'dashboard';
         }
 
-        const lists = document.getElementsByClassName('sidebar-list');
-        let found = false;
-        for (const list of lists) {
-            for (const element of list.children[0].children) {
-                if (element.getAttribute('data-field-type') === activeField) {
-                    this.activeElement = element;
-                    this.activeElement.classList.add('active');
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
+        for (const element of document.querySelectorAll('[data-field-type]')) {
+            if (element.getAttribute('data-field-type') === activeField) {
+                this.activeElement = element;
+                this.activeElement.classList.add('active');
                 break;
             }
         }
+
+        // for (const list of lists) {
+        //     for (const element of list.children[0].children) {
+        //         if (element.getAttribute('data-field-type') === activeField) {
+        //             this.activeElement = element;
+        //             this.activeElement.classList.add('active');
+        //             found = true;
+        //             break;
+        //         }
+        //     }
+        //     if (found) {
+        //         break;
+        //     }
+        // }
     }
 
     clickAction(e) {
@@ -72,31 +78,31 @@ export class sidebar extends React.Component {
                         <div>
                             <SidebarField
                                 name="Dashboard"
-                                fieldType="dashboard"
+                                fieldType={FIELD_TYPE.DASHBOARD}
                                 redirectUrl={ApiConstants.DASHBOARD_PAGE}
                                 isVisible
                             />
                             <SidebarField
                                 name="Workflows"
-                                fieldType="workflows"
+                                fieldType={FIELD_TYPE.WORKFLOWS}
                                 redirectUrl={ApiConstants.WORKFLOWS_PAGE}
                                 isVisible
                             />
                             <SidebarField
                                 name="Employees"
-                                fieldType="employees"
+                                fieldType={FIELD_TYPE.EMPLOYEES}
                                 redirectUrl={ApiConstants.EMPLOYEES_PAGE}
                                 isVisible
                             />
                             <SidebarField
                                 name="Invite"
-                                fieldType="invite"
+                                fieldType={FIELD_TYPE.INVITE}
                                 redirectUrl={ApiConstants.INVITE_PAGE}
                                 isVisible={isAdmin}
                             />
                             <SidebarField
                                 name="Templates"
-                                fieldType="templates"
+                                fieldType={FIELD_TYPE.TEMPLATES}
                                 redirectUrl={ApiConstants.TEMPLATES_PAGE}
                                 isVisible={isAdmin}
                             />
@@ -104,7 +110,7 @@ export class sidebar extends React.Component {
                     ) : (
                         <SidebarField
                             name="Create Company"
-                            fieldType="create-company"
+                            fieldType={FIELD_TYPE.CREATE_COMPANY}
                             redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                             isVisible
                         />
@@ -114,21 +120,21 @@ export class sidebar extends React.Component {
                     <div>
                         <SidebarField
                             name={firstName + ' ' + lastName}
-                            fieldType="profile"
+                            fieldType={FIELD_TYPE.PROFILE}
                             redirectUrl={ApiConstants.PROFILE_PAGE}
                             isVisible
                             imgUrl={profilePhoto}
                         />
                         <SidebarField
                             name={companyName}
-                            fieldType="company"
+                            fieldType={FIELD_TYPE.COMPANY}
                             redirectUrl={ApiConstants.COMPANY_PAGE}
                             isVisible={isPartOfComapany}
                             imgUrl={logo}
                         />
                         <SidebarField
                             name="Logout"
-                            fieldType="logout"
+                            fieldType={FIELD_TYPE.LOGOUT}
                             redirectUrl=""
                             isVisible
                             onClick={onLogoutClick}

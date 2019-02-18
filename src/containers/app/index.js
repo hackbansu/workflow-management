@@ -30,57 +30,55 @@ export class App extends React.Component {
         }
 
         return (
-            <div>
-                <main>
-                    <Switch>
-                        <PrivateRoute
-                            exact
-                            path={ApiConstants.LOGIN_PAGE}
-                            component={LoginPage}
-                            condition={!isLoggedIn}
-                            redirectUrl={ApiConstants.HOME_PAGE}
-                        />
-                        <PrivateRoute
-                            exact
-                            path={ApiConstants.SIGNUP_PAGE}
-                            component={Signup}
-                            condition={!isLoggedIn}
-                            redirectUrl={ApiConstants.HOME_PAGE}
-                        />
-                        <PrivateRoute
-                            exact
-                            path={ApiConstants.FORGOT_PASSWORD_PAGE}
-                            component={ForgotPassword}
-                            condition={!isLoggedIn}
-                            redirectUrl={ApiConstants.HOME_PAGE}
-                        />
-                        <PrivateRoute
-                            exact
-                            path={`${ApiConstants.RESET_PASSWORD_PAGE}/:token`}
-                            component={ResetPassword}
-                            condition={!isLoggedIn}
-                            redirectUrl={ApiConstants.HOME_PAGE}
-                        />
-                        <PrivateRoute
-                            exact
-                            path={`${ApiConstants.INVITATION_PAGE}/:token`}
-                            component={AcceptInvite}
-                            condition={!isLoggedIn}
-                            redirectUrl={ApiConstants.HOME_PAGE}
-                        />
-                        <PrivateRoute
-                            path={ApiConstants.HOME_PAGE}
-                            component={Home}
-                            condition={isLoggedIn}
-                            redirectUrl={ApiConstants.LOGIN_PAGE}
-                        />
-                        <Route component={Default} />
-                    </Switch>
-                    <Toast show={toast.show} text={toast.text} />
-                    <Loader show={loader.show} />
-                    <Modal heading={modal.heading} text={modal.text} />
-                </main>
-            </div>
+            <React.Fragment>
+                <Switch>
+                    <PrivateRoute
+                        exact
+                        path={ApiConstants.LOGIN_PAGE}
+                        component={LoginPage}
+                        condition={!isLoggedIn}
+                        redirectUrl={ApiConstants.HOME_PAGE}
+                    />
+                    <PrivateRoute
+                        exact
+                        path={ApiConstants.SIGNUP_PAGE}
+                        component={Signup}
+                        condition={!isLoggedIn}
+                        redirectUrl={ApiConstants.HOME_PAGE}
+                    />
+                    <PrivateRoute
+                        exact
+                        path={ApiConstants.FORGOT_PASSWORD_PAGE}
+                        component={ForgotPassword}
+                        condition={!isLoggedIn}
+                        redirectUrl={ApiConstants.HOME_PAGE}
+                    />
+                    <PrivateRoute
+                        exact
+                        path={`${ApiConstants.RESET_PASSWORD_PAGE}/:token`}
+                        component={ResetPassword}
+                        condition={!isLoggedIn}
+                        redirectUrl={ApiConstants.HOME_PAGE}
+                    />
+                    <PrivateRoute
+                        exact
+                        path={`${ApiConstants.INVITATION_PAGE}/:token`}
+                        component={AcceptInvite}
+                        condition={!isLoggedIn}
+                        redirectUrl={ApiConstants.HOME_PAGE}
+                    />
+                    <PrivateRoute
+                        path={ApiConstants.HOME_PAGE}
+                        component={Home}
+                        condition={isLoggedIn}
+                        redirectUrl={ApiConstants.LOGIN_PAGE}
+                    />
+                    <Route component={Default} />
+                </Switch>
+                <Toast show={toast.show} text={toast.text} />
+                <Loader show={loader.show} />
+                <Modal heading={modal.heading} text={modal.text} />
+            </React.Fragment>
         );
     }
 }

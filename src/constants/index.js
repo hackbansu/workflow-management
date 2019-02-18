@@ -9,4 +9,6 @@ export const regexConst = {
     absoluteUrl: RegExp('^http(s)?://', 'i'),
 };
 
-export const isAbsoluteUrl = url => regexConst.absoluteUrl.test(url);
+export function isAbsoluteUrl(url) {
+    return regexConst.absoluteUrl.test(url);
+}

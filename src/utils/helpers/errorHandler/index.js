@@ -1,4 +1,4 @@
-import { regexConst } from 'constants';
+import { regexConst } from 'constants/index.js';
 
 let errorCategoriser;
 

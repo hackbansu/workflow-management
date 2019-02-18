@@ -50,6 +50,24 @@ export class EmployeesNavbar extends React.Component {
         onClick(dataType);
     }
 
+    filterOptions() {
+        const { isAdmin } = this.props;
+        if (isAdmin) {
+            return (
+                <React.Fragment>
+                    <EmployeesNavbarField name="All" active="active" type="ALL" />
+                    <EmployeesNavbarField name="Active" type="ACTIVE" />
+                    <EmployeesNavbarField name="Inactive" type="INACTIVE" />
+                    <EmployeesNavbarField name="Invited" type="INVITED" />
+                </React.Fragment>
+            );
+        }
+        return (
+            <React.Fragment>
+            </React.Fragment>
+        );
+    }
+
     render() {
         const { searchVal } = this.state;
         return (
@@ -71,10 +89,7 @@ export class EmployeesNavbar extends React.Component {
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto" onClick={this.clickAction}>
-                        <EmployeesNavbarField name="All" active="active" type="ALL" />
-                        <EmployeesNavbarField name="Active" type="ACTIVE" />
-                        <EmployeesNavbarField name="Inactive" type="INACTIVE" />
-                        <EmployeesNavbarField name="Invited" type="INVITED" />
+                        { this.filterOptions() }
                     </ul>
                     <form className="form-inline my-2 my-lg-0" onSubmit={this.searchAction(searchVal)}>
                         <input
@@ -98,8 +113,11 @@ export class EmployeesNavbar extends React.Component {
 EmployeesNavbar.propTypes = {
     onClick: PropTypes.func.isRequired,
     onSearch: PropTypes.func.isRequired,
+    isAdmin: PropTypes.bool,
 };
 
-EmployeesNavbar.defaultProps = {};
+EmployeesNavbar.defaultProps = {
+    isAdmin: false,
+};
 
 export default EmployeesNavbar;

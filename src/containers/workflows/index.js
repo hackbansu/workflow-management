@@ -7,6 +7,10 @@ import { makeCreateCompanyRequest } from 'services/user';
 import { showModal } from 'utils/helpers/modal';
 
 
+/*
+This module is not implemented yet, exclude it from review.
+*/
+
 /**
  * Login page component.
  */

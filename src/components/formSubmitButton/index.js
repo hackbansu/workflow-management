@@ -9,11 +9,9 @@ import PropTypes from 'prop-types';
  */
 export const FormSubmitButton = ({ name, hide }) => (
     <div className={'form-group' + (hide ? ' hide' : '')}>
-        <div>
-            <button type="submit" className="btn btn-primary">
-                {name}
-            </button>
-        </div>
+        <button type="submit" className="btn btn-primary">
+            {name}
+        </button>
     </div>
 );
 

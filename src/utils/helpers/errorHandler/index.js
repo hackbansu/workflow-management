@@ -1,3 +1,5 @@
+import { regexConst } from 'constants';
+
 let errorCategoriser;
 
 function errorStringParser(errorMsg, err) {
@@ -53,6 +55,6 @@ export function errorParser(errors, defaultMsg) {
     } catch (err) {
         errorMsg = defaultMsg || 'Something went wrong';
     }
-    errorMsg = errorMsg.trim().replace(/^\[+|\]$/gm, '');
+    errorMsg = errorMsg.trim().replace(regexConst.cleanError, '');
     return errorMsg;
 }

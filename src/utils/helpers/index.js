@@ -1,4 +1,5 @@
 import ApiConstants from 'constants/api';
+import { isAbsoluteUrl } from 'constants';
 
 export function parseEmployeeData(emp) {
     const { first_name: firstName, last_name: lastName, email, profile_photo_url: profilePhoto, id: userId } = emp.user;
@@ -8,8 +9,7 @@ export function parseEmployeeData(emp) {
         user: {
             firstName,
             lastName,
-            profilePhoto:
-                profilePhoto.substring(0, 4) === 'http' ? profilePhoto : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
+            profilePhoto: isAbsoluteUrl(profilePhoto) ? profilePhoto : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
             email,
             id: userId,
         },

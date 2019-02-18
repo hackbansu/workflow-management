@@ -7,7 +7,7 @@ import './index.scss';
  * @param {object} param0 - props object for the component.
  */
 export const PageBanner = ({ text }) => (
-    <div className="page-banner">
+    <div className="row page-banner justify-content-center">
         <h2 className="heading">{text}</h2>
     </div>
 );

@@ -78,15 +78,13 @@ export class LoginPage extends React.Component {
      */
     render() {
         return (
-            <div>
-                <div className="container entry-form-container">
-                    <PageBanner text="Login" />
-                    <LoginForm onSubmit={this.onSubmit} />
-                    <ul className="nav justify-content-center page-nav-links">
-                        <LinkButton name="Forgot Password" toUrl={ApiConstants.FORGOT_PASSWORD_PAGE} />
-                        <LinkButton name="Signup" toUrl={ApiConstants.SIGNUP_PAGE} />
-                    </ul>
-                </div>
+            <div className="container entry-form-container">
+                <PageBanner text="Login" />
+                <LoginForm onSubmit={this.onSubmit} />
+                <ul className="nav justify-content-center page-nav-links">
+                    <LinkButton name="Forgot Password" className="btn-link" toUrl={ApiConstants.FORGOT_PASSWORD_PAGE} />
+                    <LinkButton name="Signup" className="btn-link" toUrl={ApiConstants.SIGNUP_PAGE} />
+                </ul>
             </div>
         );
     }

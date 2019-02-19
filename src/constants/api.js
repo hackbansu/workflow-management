@@ -13,6 +13,8 @@ export default {
     HOME_PAGE: '/',
     DASHBOARD_PAGE: `/${FIELD_TYPE.DASHBOARD}`,
     WORKFLOWS_PAGE: `/${FIELD_TYPE.WORKFLOWS}`,
+    CREATE_WORKFLOW_PAGE: `/${FIELD_TYPE.WORKFLOWS}/new`,
+    NEW_WORKFLOW_PAGE: `/${FIELD_TYPE.WORKFLOWS}/new`,
     EMPLOYEES_PAGE: `/${FIELD_TYPE.EMPLOYEES}`,
     EMPLOYEE_PAGE: '/employee',
     INVITE_PAGE: `/${FIELD_TYPE.INVITE}`,
@@ -43,10 +45,14 @@ export default {
             REMOVE: 'employee/',
             INVITE: 'company/invite-employee/',
             INVITE_CSV: 'company/invite-employee-csv/',
+            FETCH_ACTIVE: 'employees/?status=2',
         },
         company: {
             FETCH: 'employee/my-company/',
             UPDATE: 'update-company/',
+        },
+        template: {
+            FETCH: 'workflow-templates/',
         },
     },
 };

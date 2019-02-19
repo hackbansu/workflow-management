@@ -47,6 +47,7 @@ const initialState = {
     loader: {
         show: false,
     },
+    templates: {},
 };
 
 /**

@@ -8,10 +8,17 @@ import PropTypes from 'prop-types';
 import Default from 'containers/default';
 import Profile from 'containers/profile';
 import Company from 'containers/company';
+import Workflows from 'containers/workflows';
+import WorkflowTemplates from 'containers/workflowTemplates';
 import Employees from 'containers/employees';
 import Employee from 'containers/employee';
 import Invite from 'containers/invite';
 import CreateCompany from 'containers/createCompany';
+import CreateWorkflow from 'containers/createWorkflow';
+
+// import Constants from constant file.
+import UserConstants from 'constants/user';
+import ApiConstants from 'constants/api';
 
 // importing components
 import Sidebar from 'components/sidebar';
@@ -23,7 +30,6 @@ import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
-import ApiConstants from 'constants/api';
 
 /**
  * Home component.
@@ -32,8 +38,9 @@ export class Home extends React.Component {
     constructor(props) {
         super(props);
         this.onLogoutClick = this.onLogoutClick.bind(this);
+        const { status } = props.currentUser;
         this.state = {
-            isPartOfComapany: true,
+            isPartOfComapany: status === UserConstants.STATUS.ACTIVE,
         };
     }
 
@@ -41,6 +48,7 @@ export class Home extends React.Component {
         const { updateProfile, updateCompany, currentUser } = this.props;
         const { isAdmin, designation, status: userStatus } = currentUser;
 
+        // fetch user details
         makeUserFetchRequest().then(obj => {
             if (!obj) {
                 return;
@@ -63,6 +71,7 @@ export class Home extends React.Component {
             // dispatch action to update user token and data
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
 
+            // fetch user company details.
             makeCompanyFetchRequest().then(obj => {
                 if (!obj) {
                     return;
@@ -152,6 +161,20 @@ export class Home extends React.Component {
                                 <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
                                 <PrivateRoute
                                     exact
+                                    path={`${ApiConstants.CREATE_WORKFLOW_PAGE}/:templateId`}
+                                    component={CreateWorkflow}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.CREATE_WORKFLOW_PAGE}/:templateId`}
+                                    component={CreateWorkflow}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
                                     path={ApiConstants.EMPLOYEES_PAGE}
                                     component={Employees}
                                     condition={isPartOfComapany}
@@ -164,6 +187,21 @@ export class Home extends React.Component {
                                     condition={isPartOfComapany}
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                 />
+                                <PrivateRoute
+                                    exact
+                                    path={ApiConstants.INVITE_PAGE}
+                                    component={Invite}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={ApiConstants.TEMPLATES_PAGE}
+                                    component={WorkflowTemplates}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
                                 <PrivateRoute
                                     exact
                                     path={ApiConstants.COMPANY_PAGE}

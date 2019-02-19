@@ -7,4 +7,10 @@ export default {
         ACTIVE: 2,
         INACTIVE: 3,
     },
+    PERMISSION: {
+        1: 'READ',
+        2: 'WRITE',
+        READ: 1,
+        WRITE: 2,
+    },
 };

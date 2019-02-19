@@ -65,6 +65,6 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
         })
         .catch(err => {
             showToast(String(err));
-            return null;
+            return Promise.reject(err);
         });
 }

@@ -1,19 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
-
-import EmployeesOptionField from 'components/employeesOptionField';
 
 class TaskForm extends React.Component {
     constructor(props) {
         super(props);
-        const { taskInformation } = props;
-        this.state = {
-            taskInformation,
-        };
+        this.state = {};
+
+        this.saveTask = this.saveTask.bind(this);
+
         this.parentOptions = this.parentOptions.bind(this);
-        this.pushChanges = this.pushChanges.bind(this);
+        this.taskTitle = React.createRef();
+        this.assignee = React.createRef();
+        this.taskStartDeltaTime = React.createRef();
+        this.taskStartDeltaDays = React.createRef();
+        this.taskDetail = React.createRef();
+        this.parentTask = React.createRef();
     }
 
     parentOptions() {
@@ -25,28 +28,31 @@ class TaskForm extends React.Component {
         ));
     }
 
-    pushChanges() {
-        _.debounce(
-            () => {
-                const { onChange, taskId } = this.props;
-                const { taskInformation } = this.state;
-                onChange(taskInformation, taskId);
-            },
-            1000,
-            { leading: false, trailing: true }
-        )();
+    employeesOptions(employees) {
+        return Object.keys(employees).map(key => (
+            <option key={`${key}-employee-key`} value={`${key}`}>
+                {employees[key].user.email}
+            </option>
+        ));
     }
 
-    handleChange(value, name) {
-        const { taskInformation } = this.state;
-        taskInformation[name] = value;
-        this.setState({ taskInformation }, () => this.pushChanges());
+
+    saveTask() {
+        const { taskId, onChange } = this.props;
+        const taskInformation = {
+            taskTitle: this.taskTitle.current.value,
+            taskStartDeltaTime: this.taskStartDeltaTime.current.value,
+            taskStartDeltaDays: this.taskStartDeltaDays.current.value,
+            taskDetail: this.taskDetail.current.value,
+            parentTask: this.parentTask.current.value,
+            assignee: this.assignee.current.value,
+        };
+        onChange(taskInformation, taskId);
     }
 
     render() {
         // TODO:Implement to render extra field in taks using task props.
-        const { task: taskStructure, employees, borderColor, taskId } = this.props;
-        const { taskInformation } = this.state;
+        const { task: taskStructure, employees, borderColor, taskId, taskInformation } = this.props;
         const { taskTitle, taskStartDeltaTime, taskStartDeltaDays, taskDetail, parentTask, assignee } = taskInformation;
         return (
             <div className={`border ${borderColor} p-2 mb-2 col-12`}>
@@ -66,32 +72,36 @@ class TaskForm extends React.Component {
                         <Form.Control
                             type="text"
                             placeholder="Task title"
-                            value={taskTitle}
-                            onChange={e => this.handleChange(e.target.value, 'taskTitle')}
+                            defaultValue={taskTitle}
+                            ref={this.taskTitle}
                         />
                     </Form.Group>
-                    <EmployeesOptionField
-                        label="Assignee"
-                        employees={employees}
-                        employee={assignee}
-                        onChange={value => this.handleChange(value, 'assignee')}
-                    />
+                    <Form.Group as={Col} controlId="employeeSelect">
+                        <Form.Label column sm={12}>
+                            Assignee
+                        </Form.Label>
+                        <Col sm={12}>
+                            <Form.Control as="select" defaultValue={assignee} ref={this.assignee}>
+                                {this.employeesOptions(employees)}
+                            </Form.Control>
+                        </Col>
+                    </Form.Group>
                 </Form.Row>
                 <Form.Row>
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Time</Form.Label>
                         <Form.Control
                             type="time"
-                            value={taskStartDeltaTime}
-                            onChange={e => this.handleChange(e.target.value, 'taskStartDeltaTime')}
+                            defaultValue={taskStartDeltaTime}
+                            ref={this.taskStartDeltaTime}
                         />
                     </Form.Group>
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Days</Form.Label>
                         <Form.Control
                             type="date"
-                            value={taskStartDeltaDays}
-                            onChange={e => this.handleChange(e.target.value, 'taskStartDeltaDays')}
+                            defaultValue={taskStartDeltaDays}
+                            ref={this.taskStartDeltaDays}
                         />
                     </Form.Group>
                 </Form.Row>
@@ -101,8 +111,8 @@ class TaskForm extends React.Component {
                         <textarea
                             className="form-control"
                             row="4"
-                            value={taskDetail}
-                            onChange={e => this.handleChange(e.target.value, 'taskDetail')}
+                            defaultValue={taskDetail}
+                            ref={this.taskDetail}
                         />
                     </Form.Group>
                 </Form.Row>
@@ -111,12 +121,15 @@ class TaskForm extends React.Component {
                         <Form.Label>Parent Task</Form.Label>
                         <Form.Control
                             as="select"
-                            value={parentTask}
-                            onChange={e => this.handleChange(e.target.value, 'parentTask')}
+                            defaultValue={parentTask}
+                            ref={this.parentTask}
                         >
                             {this.parentOptions()}
                         </Form.Control>
                     </Form.Group>
+                </Form.Row>
+                <Form.Row as={Row} className="py-4">
+                    <Button variant="success" onClick={e => this.saveTask()}>Save</Button>
                 </Form.Row>
             </div>
         );

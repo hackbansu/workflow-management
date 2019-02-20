@@ -1,16 +1,17 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import React from 'react';
-import { Row, Col, Form, Button, Container } from 'react-bootstrap';
 import _ from 'lodash';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Row, Col, Form, Button, Container } from 'react-bootstrap';
 
 import DateTimeField from 'components/dateTimeField';
 import TaskForm from 'components/taskForm';
 import WorkflowPermissions from 'components/workflowPermissions';
-/**
- * Login page component.
- */
+import { validateDate } from 'utils/validators';
+import { showToast } from 'utils/helpers/toast';
+
+
 export class CreateWorkflow extends React.Component {
     constructor(props) {
         super(props);
@@ -27,6 +28,7 @@ export class CreateWorkflow extends React.Component {
         this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
         this.setTask = this.setTask.bind(this);
     }
+
 
     setStartDateTime(value) {
         this.setState({
@@ -101,7 +103,11 @@ export class CreateWorkflow extends React.Component {
                         {'Start Time'}
                     </Form.Label>
                     <Col sm={8}>
-                        <DateTimeField onChange={this.setStartDateTime} />
+                        <DateTimeField
+                            constraintMoment={moment()}
+                            givenMoment={startDateTime}
+                            onChange={this.setStartDateTime}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="WorkflowEndTime">
@@ -109,7 +115,11 @@ export class CreateWorkflow extends React.Component {
                         {'Expected End Time'}
                     </Form.Label>
                     <Col sm={8}>
-                        <DateTimeField onChange={this.setExpectedEndDateTime} />
+                        <DateTimeField
+                            constraintMoment={startDateTime}
+                            givenMoment={expectedEndTime}
+                            onChange={this.setExpectedEndDateTime}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Row className="col-12">

@@ -3,21 +3,36 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 
 import { DatetimePickerTrigger } from 'rc-datetime-picker';
+import { validateDate } from 'utils/validators';
+import { showToast } from 'utils/helpers/toast';
+
+
 import 'rc-datetime-picker/dist/picker.css';
 
 class DateTimeField extends React.Component {
     constructor(props) {
         super(props);
+        const { givenMoment } = props;
         this.state = {
-            currentMoment: moment(),
+            currentMoment: givenMoment,
         };
-        this.onChange = this.onChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    onChange(moment) {
+    handleChange(value) {
+        const { constraintMoment } = this.props;
+        const validationResponse = validateDate(value, constraintMoment);
+        if (!validationResponse.isValid) {
+            showToast(validationResponse.message);
+            this.setState({
+                currentMoment: constraintMoment,
+            });
+            return;
+        }
+
         const { onChange } = this.props;
-        onChange(moment);
-        this.setState({ currentMoment: moment });
+        onChange(value);
+        this.setState({ currentMoment: value });
     }
 
     render() {
@@ -27,14 +42,23 @@ class DateTimeField extends React.Component {
         };
         const { currentMoment } = this.state;
         return (
-            <DatetimePickerTrigger shortcuts={shortcuts} moment={currentMoment} onChange={this.onChange}>
-                <input type="text" value={currentMoment.format('YYYY-MM-DD HH:mm')} readOnly />
+            <DatetimePickerTrigger shortcuts={shortcuts} moment={currentMoment} onChange={this.handleChange}>
+                <input
+                    type="text"
+                    value={currentMoment.format('YYYY-MM-DD HH:mm')}
+                    readOnly
+                />
             </DatetimePickerTrigger>
         );
     }
 }
 DateTimeField.propTypes = {
     onChange: PropTypes.func.isRequired,
+    givenMoment: PropTypes.object,
+    constraintMoment: PropTypes.object.isRequired,
+};
+DateTimeField.defaultProps = {
+    givenMoment: moment(),
 };
 
 export default DateTimeField;

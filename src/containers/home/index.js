@@ -25,12 +25,14 @@ import ApiConstants from 'constants/api';
 import Sidebar from 'components/sidebar';
 import PrivateRoute from 'components/privateRoute';
 
+import { errorParser } from 'utils/helpers/errorHandler';
 import { makeLogoutRequest } from 'services/auth';
 import { updateProfileAction, updateCompanyAction, logoutAction } from 'actions/user';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
+
 
 /**
  * Home component.
@@ -57,7 +59,8 @@ export class Home extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                showToast('Profile update failed');
+                const errMsg = errorParser(body, 'Profile update failed');
+                showToast(errMsg);
                 return;
             }
 
@@ -72,6 +75,7 @@ export class Home extends React.Component {
             // dispatch action to update user token and data
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
 
+
             // fetch user company details.
             makeCompanyFetchRequest().then(obj => {
                 if (!obj) {
@@ -81,7 +85,8 @@ export class Home extends React.Component {
                 const { response, body } = obj;
                 if (response.status !== 200) {
                     this.setState({ isPartOfComapany: false });
-                    showToast('Company details update failed');
+                    const errMsg = errorParser(body, 'Company details update failed');
+                    showToast(errMsg);
                     return;
                 }
 
@@ -168,14 +173,7 @@ export class Home extends React.Component {
                                 />
                                 <PrivateRoute
                                     exact
-                                    path={`${ApiConstants.CREATE_WORKFLOW_PAGE}/:templateId`}
-                                    component={CreateWorkflow}
-                                    condition={isAdmin}
-                                    redirectUrl={ApiConstants.HOME_PAGE}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path={`${ApiConstants.CREATE_WORKFLOW_PAGE}/:templateId`}
+                                    path={`${ApiConstants.NEW_WORKFLOW_PAGE}/:templateId`}
                                     component={CreateWorkflow}
                                     condition={isAdmin}
                                     redirectUrl={ApiConstants.HOME_PAGE}

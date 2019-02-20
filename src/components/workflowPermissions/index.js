@@ -44,23 +44,23 @@ class Permissions extends React.Component {
     createUi() {
         const { employees, workflowPermissions: permissions } = this.props;
 
-        // for (const permission in permissions) {
-        //     if (Object.hasOwnProperty.call(permissions, permission)) {
-        //         delete employees[permission.employee];
-        //     }
-        // }
-
-        return Object.keys(permissions).map((permissionKey, idx) => (
-            <PermissionsForm
-                employees={employees}
-                employee={permissions[permissionKey].employee}
-                permissionIdentifier={permissionKey}
-                permission={permissions[permissionKey].permission}
-                removePermission={this.removePermission}
-                key={`${Math.random()}-permission`}
-                onChange={this.setPermission}
-            />
-        ));
+        return Object.keys(permissions).map((permissionKey, idx) => {
+            const currentEmp = permissions[permissionKey].employee;
+            const empList = { ...employees };
+            const permission = (
+                <PermissionsForm
+                    employees={empList}
+                    employee={currentEmp}
+                    permissionIdentifier={permissionKey}
+                    permission={permissions[permissionKey].permission}
+                    removePermission={this.removePermission}
+                    key={`${Math.random()}-permission`}
+                    onChange={this.setPermission}
+                />
+            );
+            // delete employees[currentEmp];
+            return permission;
+        });
     }
 
     render() {

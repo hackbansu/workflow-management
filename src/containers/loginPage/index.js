@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import React from 'react';
 
@@ -9,8 +7,8 @@ import { showLoader } from 'utils/helpers/loader';
 import { showModal } from 'utils/helpers/modal';
 import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makeLoginRequest } from 'services/auth';
-import ApiConstants from 'constants/api';
 import { errorParser } from 'utils/helpers/errorHandler';
+import ApiConstants from 'constants/api';
 
 // importing components
 import LoginForm from 'components/loginForm';

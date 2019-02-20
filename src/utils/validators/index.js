@@ -1,4 +1,5 @@
-import constants from 'constants/index.js';
+import constants, { regexConst } from 'constants/index.js';
+import moment from 'moment';
 
 export function validateEmail(email) {
     const re = /^[\w\d._]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
@@ -20,13 +21,15 @@ export function validateEmail(email) {
 export function validatePassword(password) {
     const re = /^[A-Za-z\d]{8,}$/;
     // const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    const isValid = re.test(String(password));
+    const isValid = regexConst.email.test(String(password));
 
     if (!isValid) {
         return {
             isValid,
-            message: password.length === 0 ? 'This field is required'
-                : 'Password must be 8 character long. Only Alphabates and number are allowed',
+            message:
+                password.length === 0
+                    ? 'This field is required'
+                    : 'Password must be 8 character long. Only Alphabates and number are allowed',
         };
     }
 
@@ -73,5 +76,26 @@ export function validateInviteCsvFile(csvFile) {
         return { isValid: false, message: 'Invalid file type' };
     }
 
+    return { isValid: true, message: '' };
+}
+
+export function validateDate(givenDate, compareDate) {
+    if (typeof givenDate === 'string') {
+        givenDate = moment(givenDate);
+        if (givenDate.invalidAt() !== -1) {
+            return { isValid: false, message: 'cannot parse to date' };
+        }
+    }
+
+    compareDate = compareDate || moment();
+    compareDate = typeof compareDate === 'string' ? moment(compareDate) : compareDate;
+    compareDate = compareDate.invalidAt() !== -1 ? moment() : compareDate;
+    if (!moment.isMoment(givenDate)) {
+        return { isValid: false, message: 'instance must be moments' };
+    }
+
+    if (givenDate < compareDate) {
+        return { isValid: false, message: `moment must be grater than ${String(compareDate)}` };
+    }
     return { isValid: true, message: '' };
 }

@@ -18,9 +18,7 @@ import { showToast } from 'utils/helpers/toast';
 
 import TemplateCard from 'components/workflowTemplateCard';
 
-/**
- * Login page component.
- */
+
 export class Templates extends React.Component {
     constructor(props) {
         super(props);

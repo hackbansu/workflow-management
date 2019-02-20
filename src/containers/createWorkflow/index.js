@@ -10,7 +10,6 @@ import { errorParser } from 'utils/helpers/errorHandler';
 import { showModal } from 'utils/helpers/modal';
 import { updateEmployeesAction } from 'actions/employees';
 import { updateTemplatesAction } from 'actions/templates';
-import EmployeesOptionField from 'components/employeesOptionField';
 import CreateWorkflowFrom from 'components/createWorkflowForm';
 
 /**

@@ -18,12 +18,14 @@ export class CreateWorkflow extends React.Component {
             workflowName: '',
             startDateTime: moment(),
             expectedEndTime: moment(),
-            workflowPermissions: [],
-            tasks: [],
+            workflowPermissions: {},
+            tasks: {},
         };
         this.createTasks = this.createTasks.bind(this);
         this.setStartDateTime = this.setStartDateTime.bind(this);
         this.setExpectedEndDateTime = this.setExpectedEndDateTime.bind(this);
+        this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
+        this.setTask = this.setTask.bind(this);
     }
 
     setStartDateTime(value) {
@@ -38,7 +40,7 @@ export class CreateWorkflow extends React.Component {
         });
     }
 
-    getParent(upto) {
+    getPossibleParents(upto) {
         return [...Array(upto + 1).keys()];
     }
 
@@ -51,18 +53,27 @@ export class CreateWorkflow extends React.Component {
         this.setState({ workflowPermissions: value });
     }
 
+    setTask(value, id) {
+        const { tasks } = this.state;
+        tasks[id] = value;
+        this.setState({ tasks });
+    }
+
     createTasks() {
         const { activeEmployees } = this.props;
         const { templateStructure } = this.props;
         const { tasks } = templateStructure;
+        const { tasks: taskInformation } = this.state;
         return tasks.map((task, idx) => (
             <TaskForm
                 employees={activeEmployees}
                 task={task}
                 key={`${Math.random()}-task`}
-                parents={this.getParent(idx)}
+                parents={this.getPossibleParents(idx)}
                 borderColor={this.getBorderClass()}
                 taskId={idx}
+                onChange={this.setTask}
+                taskInformation={taskInformation[idx]}
             />
         ));
     }
@@ -106,6 +117,7 @@ export class CreateWorkflow extends React.Component {
                         employees={activeEmployees}
                         borderColor={this.getBorderClass()}
                         onChange={this.setWorkFlowPermissions}
+                        workflowPermissions={workflowPermissions}
                     />
                 </Form.Row>
                 <Form.Row className="col-12">{this.createTasks()}</Form.Row>

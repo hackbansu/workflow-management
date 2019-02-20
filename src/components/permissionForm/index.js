@@ -9,17 +9,25 @@ class PermissionForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.handleChange = this.handleChange.bind(this);
+        this.handleAccessChange = this.handleAccessChange.bind(this);
+        this.handleEmployeeChange = this.handleEmployeeChange.bind(this);
     }
 
-    handleChange(value, type) {
-        const { permissionIdentifier, employee, permission, onChange } = this.props;
+    handleAccessChange(value) {
+        const { permissionIdentifier, employee, onChange } = this.props;
         const data = {
             employee,
+            permission: value,
+        };
+        onChange(permissionIdentifier, data);
+    }
+
+    handleEmployeeChange(value) {
+        const { permissionIdentifier, permission, onChange } = this.props;
+        const data = {
+            employee: value,
             permission,
         };
-
-        data[type] = value;
         onChange(permissionIdentifier, data);
     }
 
@@ -31,7 +39,7 @@ class PermissionForm extends React.Component {
                     label="Employee"
                     employees={employees}
                     employeeId={employee}
-                    onChange={this.handleChange}
+                    onChange={this.handleEmployeeChange}
                 />
                 <Form.Group as={Col} controlId="employeePermission">
                     <Form.Label column sm={12}>
@@ -41,7 +49,7 @@ class PermissionForm extends React.Component {
                         <Form.Control
                             as="select"
                             value={permission}
-                            onChange={e => this.handleChange(e.tartget.value, 'permission')}
+                            onChange={e => this.handleAccessChange(e.target.value)}
                         >
                             <option value={UserConstatnts.PERMISSION.READ}>
                                 {UserConstatnts.PERMISSION[UserConstatnts.PERMISSION.READ]}
@@ -65,14 +73,14 @@ class PermissionForm extends React.Component {
 PermissionForm.propTypes = {
     employees: PropTypes.object.isRequired,
     permissionIdentifier: PropTypes.string.isRequired,
-    permission: PropTypes.number.isRequired,
+    permission: PropTypes.string.isRequired,
     removePermission: PropTypes.func.isRequired,
-    employee: PropTypes.number,
+    employee: PropTypes.string,
     onChange: PropTypes.func.isRequired,
 };
 
 PermissionForm.defaultProps = {
-    employee: -1,
+    employee: '',
 };
 
 export default PermissionForm;

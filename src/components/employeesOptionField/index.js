@@ -17,7 +17,7 @@ function employeesOptionField({ label, employees, employeeId, onChange }) {
                 {label}
             </Form.Label>
             <Col sm={12}>
-                <Form.Control as="select" value={employeeId} onChange={e => onChange(e.target.value, 'employee')}>
+                <Form.Control as="select" value={employeeId} onChange={e => onChange(e.target.value)}>
                     {createOptions(employees)}
                 </Form.Control>
             </Col>
@@ -28,11 +28,10 @@ function employeesOptionField({ label, employees, employeeId, onChange }) {
 employeesOptionField.propTypes = {
     employees: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
-    employeeId: PropTypes.number,
-    onChange: PropTypes.func,
+    employeeId: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
 };
 employeesOptionField.defaultProps = {
-    employeeId: -1,
-    onChange: (...args) => console.log('default option called'),
+    employeeId: '',
 };
 export default employeesOptionField;

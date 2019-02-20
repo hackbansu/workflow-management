@@ -30,20 +30,6 @@ export class sidebar extends React.Component {
                 break;
             }
         }
-
-        // for (const list of lists) {
-        //     for (const element of list.children[0].children) {
-        //         if (element.getAttribute('data-field-type') === activeField) {
-        //             this.activeElement = element;
-        //             this.activeElement.classList.add('active');
-        //             found = true;
-        //             break;
-        //         }
-        //     }
-        //     if (found) {
-        //         break;
-        //     }
-        // }
     }
 
     clickAction(e) {
@@ -98,12 +84,6 @@ export class sidebar extends React.Component {
                                 name="Invite"
                                 fieldType={FIELD_TYPE.INVITE}
                                 redirectUrl={ApiConstants.INVITE_PAGE}
-                                isVisible={isAdmin}
-                            />
-                            <SidebarField
-                                name="Templates"
-                                fieldType={FIELD_TYPE.TEMPLATES}
-                                redirectUrl={ApiConstants.TEMPLATES_PAGE}
                                 isVisible={isAdmin}
                             />
                         </div>

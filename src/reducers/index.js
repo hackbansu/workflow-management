@@ -5,6 +5,7 @@ import employeesReducer from './employeesReducer';
 import loaderReducer from './loaderReducer';
 import toastReducer from './toastReducer';
 import modalReducer from './modalReducer';
+import templateReducer from './templateReducer';
 
 const { LOGOUT } = actions.user;
 
@@ -14,6 +15,7 @@ const appReducer = combineReducers({
     loader: loaderReducer,
     toast: toastReducer,
     modal: modalReducer,
+    templates: templateReducer,
 });
 
 const initialState = {

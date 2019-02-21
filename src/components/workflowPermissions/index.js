@@ -4,7 +4,9 @@ import { Form, Button } from 'react-bootstrap';
 
 import userConstants from 'constants/user.js';
 import PermissionsForm from 'components/permissionForm';
+import { getRandomBorder } from 'utils/helpers';
 import { showToast } from 'utils/helpers/toast';
+
 
 class Permissions extends React.Component {
     constructor(props) {
@@ -64,9 +66,8 @@ class Permissions extends React.Component {
     }
 
     render() {
-        const { borderColor } = this.props;
         return (
-            <div className={`border ${borderColor} p-2 mb-2 col-12`}>
+            <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Form.Row className="m-2">
                     <Form.Group>
                         <Button className="float-right" variant="primary" onClick={this.addPermission}>
@@ -82,13 +83,11 @@ class Permissions extends React.Component {
 
 Permissions.propTypes = {
     employees: PropTypes.object.isRequired,
-    borderColor: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     workflowPermissions: PropTypes.object,
 };
 
 Permissions.defaultProps = {
-    borderColor: 'border-info',
     workflowPermissions: {},
 };
 

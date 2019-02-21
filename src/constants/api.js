@@ -53,5 +53,8 @@ export default {
         template: {
             FETCH: 'workflow-templates/',
         },
+        task: {
+            FETCH: 'tasks/',
+        },
     },
 };

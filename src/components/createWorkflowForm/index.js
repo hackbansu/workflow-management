@@ -8,9 +8,6 @@ import { Row, Col, Form, Button, Container } from 'react-bootstrap';
 import DateTimeField from 'components/dateTimeField';
 import TaskForm from 'components/taskForm';
 import WorkflowPermissions from 'components/workflowPermissions';
-import { validateDate } from 'utils/validators';
-import { showToast } from 'utils/helpers/toast';
-
 
 export class CreateWorkflow extends React.Component {
     constructor(props) {
@@ -46,11 +43,6 @@ export class CreateWorkflow extends React.Component {
         return [...Array(upto + 1).keys()];
     }
 
-    getBorderClass() {
-        const items = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
-        return `border-${_.sample(items)}`;
-    }
-
     setWorkFlowPermissions(value) {
         this.setState({ workflowPermissions: value });
     }
@@ -72,7 +64,6 @@ export class CreateWorkflow extends React.Component {
                 task={task}
                 key={`${Math.random()}-task`}
                 parents={this.getPossibleParents(idx)}
-                borderColor={this.getBorderClass()}
                 taskId={idx}
                 onChange={this.setTask}
                 taskInformation={taskInformation[idx]}
@@ -125,7 +116,6 @@ export class CreateWorkflow extends React.Component {
                 <Form.Row className="col-12">
                     <WorkflowPermissions
                         employees={activeEmployees}
-                        borderColor={this.getBorderClass()}
                         onChange={this.setWorkFlowPermissions}
                         workflowPermissions={workflowPermissions}
                     />

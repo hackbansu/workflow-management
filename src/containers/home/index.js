@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 
 // importing containers for routing
 import Default from 'containers/default';
+import Dashboard from 'containers/dashboard';
 import WorkflowTemplates from 'containers/workflowTemplates';
 import Workflows from 'containers/workflows';
-import Templates from 'containers/templates';
 import Employees from 'containers/employees';
 import Employee from 'containers/employee';
 import Invite from 'containers/invite';
@@ -166,6 +166,13 @@ export class Home extends React.Component {
                             <Switch>
                                 <PrivateRoute
                                     exact
+                                    path={ApiConstants.DASHBOARD_PAGE}
+                                    component={Dashboard}
+                                    condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
                                     path={ApiConstants.WORKFLOWS_PAGE}
                                     component={Workflows}
                                     condition={isAdmin}
@@ -200,21 +207,6 @@ export class Home extends React.Component {
                                 />
                                 <PrivateRoute
                                     path={ApiConstants.TEMPLATES_PAGE}
-                                    component={Templates}
-                                    condition={isAdmin}
-                                    redirectUrl={ApiConstants.HOME_PAGE}
-                                />
-                                <Route exact path={ApiConstants.PROFILE_PAGE} component={Profile} />
-                                <PrivateRoute
-                                    exact
-                                    path={ApiConstants.INVITE_PAGE}
-                                    component={Invite}
-                                    condition={isAdmin}
-                                    redirectUrl={ApiConstants.HOME_PAGE}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path={ApiConstants.TEMPLATES_PAGE}
                                     component={WorkflowTemplates}
                                     condition={isAdmin}
                                     redirectUrl={ApiConstants.HOME_PAGE}
@@ -234,7 +226,8 @@ export class Home extends React.Component {
                                     condition={!isPartOfComapany}
                                     redirectUrl={ApiConstants.HOME_PAGE}
                                 />
-                                <Route component={Default} />
+                                {/* Fallback page */}
+                                <Route component={Dashboard} />
                             </Switch>
                         </div>
                     </div>

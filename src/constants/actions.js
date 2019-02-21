@@ -17,4 +17,9 @@ export default {
     template: {
         UPDATE_TEMPLATES: 'UPDATE_TEMPLATES',
     },
+    task: {
+        UPDATE_COMPLETE_TASKS: 'UPDATE_COMPLETE_TASKS',
+        UPDATE_ONGOING_TASKS: 'UPDATE_ONGOING_TASKS',
+        UPDATE_UPCOMMIG_TASKS: 'UPDATE_UPCOMMMIG_TASKS',
+    },
 };

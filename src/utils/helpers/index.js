@@ -1,4 +1,7 @@
+import _ from 'lodash';
+
 import ApiConstants from 'constants/api';
+import TaskConstants from 'constants/task';
 import { isAbsoluteUrl } from 'constants/index.js';
 
 export function parseEmployeeData(emp) {
@@ -17,5 +20,21 @@ export function parseEmployeeData(emp) {
         isAdmin,
         status,
         id: employeeId,
+    };
+}
+
+export function getRandomBorder() {
+    const items = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark'];
+    return `border-${_.sample(items)}`;
+}
+
+export function formatTasks(tasks) {
+    const upcomming = tasks.filter(task => task.status === TaskConstants.STATUS.UPCOMMING);
+    const ongoing = tasks.filter(task => task.status === TaskConstants.STATUS.ONGOING);
+    const complete = tasks.filter(task => task.status === TaskConstants.STATUS.COMPLETE);
+    return {
+        upcomming: _.keyBy(upcomming, 'id'),
+        ongoing: _.keyBy(ongoing, 'id'),
+        complete: _.keyBy(complete, 'id'),
     };
 }

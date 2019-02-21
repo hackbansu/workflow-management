@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
+import { getRandomBorder } from 'utils/helpers';
+
 class TaskForm extends React.Component {
     constructor(props) {
         super(props);
@@ -52,10 +54,10 @@ class TaskForm extends React.Component {
 
     render() {
         // TODO:Implement to render extra field in taks using task props.
-        const { task: taskStructure, employees, borderColor, taskId, taskInformation } = this.props;
+        const { task: taskStructure, employees, taskId, taskInformation } = this.props;
         const { taskTitle, taskStartDeltaTime, taskStartDeltaDays, taskDetail, parentTask, assignee } = taskInformation;
         return (
-            <div className={`border ${borderColor} p-2 mb-2 col-12`}>
+            <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Form.Row>
                     <Form.Group as={Row} controlId="TaskId">
                         <Form.Label column sm={4}>
@@ -140,13 +142,11 @@ TaskForm.propTypes = {
     task: PropTypes.object.isRequired,
     employees: PropTypes.object.isRequired,
     parents: PropTypes.array.isRequired,
-    borderColor: PropTypes.string,
     taskId: PropTypes.number.isRequired,
     taskInformation: PropTypes.object,
     onChange: PropTypes.func.isRequired,
 };
 TaskForm.defaultProps = {
-    borderColor: 'border-info',
     taskInformation: {
         taskTitle: '',
         taskStartDeltaTime: '',

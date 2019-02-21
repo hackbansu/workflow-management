@@ -7,7 +7,7 @@ export default {
 export const regexConst = {
     cleanError: /^\[+|\]$/gm,
     absoluteUrl: RegExp('^http(s)?://', 'i'),
-    email: RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$'),
+    password: /^[A-Za-z\d]{8,}$/,
 };
 
 export function isAbsoluteUrl(url) {

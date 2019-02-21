@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { Link } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
 import React from 'react';
 import _ from 'lodash';
 import { Row } from 'react-bootstrap';
@@ -12,7 +10,6 @@ import './index.scss';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { updateTemplatesAction } from 'actions/templates';
 import { makeFetchAllTemplatesRequest } from 'services/templates';
-import userConstants from 'constants/user';
 import ApiConstants from 'constants/api';
 import { showToast } from 'utils/helpers/toast';
 

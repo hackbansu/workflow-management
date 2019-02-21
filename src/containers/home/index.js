@@ -33,7 +33,6 @@ import { showToast } from 'utils/helpers/toast';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
 
-
 /**
  * Home component.
  */
@@ -117,8 +116,10 @@ export class Home extends React.Component {
             }
 
             const { response, body } = obj;
-            if (response.status !== 204) {
-                showToast('Logout failed');
+
+            if (response.status !== 204 && response.status !== 401) {
+                const errMsg = errorParser(body, 'logout Failed');
+                showToast(errMsg);
                 return;
             }
 

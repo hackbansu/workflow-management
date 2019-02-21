@@ -13,7 +13,7 @@ function apiErrorHandler(response, body) {
     if (response.status >= 500) {
         showToast('Internal Server error occur');
     }
-    if (response.status >= 400) {
+    if (response.status >= 405) {
         showToast('Api error occur');
     }
     const errorMsg = errorParser(body);

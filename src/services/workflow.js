@@ -4,8 +4,10 @@ import { makeApiRequest } from 'services/base';
 import ApiConst from 'constants/api';
 import TaskConstant from 'constants/task';
 
+const { task } = ApiConst.api;
+
 export function makefetchAllTasks() {
-    // return makeApiRequest(ApiConst.task.FETCH);
+    // return makeApiRequest(task.FETCH);
     // Mocking the response
     return Promise.resolve({
         response: {

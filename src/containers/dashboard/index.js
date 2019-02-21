@@ -83,9 +83,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     updateTasks: (tasks) => {
         const { upcomming, ongoing, complete } = tasks;
-        dispatch(updateCompleteTasks(upcomming));
-        dispatch(updateUpcommingTasks(ongoing));
-        dispatch(updateOngoingTasks(complete));
+        dispatch(updateCompleteTasks(complete));
+        dispatch(updateUpcommingTasks(upcomming));
+        dispatch(updateOngoingTasks(ongoing));
     },
 });
 

@@ -7,11 +7,9 @@ import PermissionsForm from 'components/permissionForm';
 import { getRandomBorder } from 'utils/helpers';
 import { showToast } from 'utils/helpers/toast';
 
-
 class Permissions extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
         this.setPermission = this.setPermission.bind(this);
         this.removePermission = this.removePermission.bind(this);
         this.addPermission = this.addPermission.bind(this);
@@ -26,11 +24,17 @@ class Permissions extends React.Component {
 
     addPermission() {
         const { employees, onChange, workflowPermissions: permissions } = this.props;
-        if (employees.length === 0) {
-            showToast('No active employees in company');
-        } else {
+        const empList = { ...employees };
+        for (const permission in permissions) {
+            if (Object.hasOwnProperty.call(permissions, permission)) {
+                delete empList[permissions[permission].employee];
+            }
+        }
+        const empCount = Object.keys(empList).length;
+        const permissionCount = Object.keys(permissions).length;
+        if (!(empCount === 0 || empCount === permissionCount)) {
             permissions[Object.keys(permissions).length] = {
-                employee: Object.keys(employees)[0],
+                employee: Object.keys(empList)[0],
                 permission: `${userConstants.PERMISSION.READ}`,
             };
             onChange(permissions);
@@ -45,13 +49,12 @@ class Permissions extends React.Component {
 
     createUi() {
         const { employees, workflowPermissions: permissions } = this.props;
-
+        const empoList = { ...employees };
         return Object.keys(permissions).map((permissionKey, idx) => {
             const currentEmp = permissions[permissionKey].employee;
-            const empList = { ...employees };
             const permission = (
                 <PermissionsForm
-                    employees={empList}
+                    employees={{ ...empoList }}
                     employee={currentEmp}
                     permissionIdentifier={permissionKey}
                     permission={permissions[permissionKey].permission}
@@ -60,7 +63,7 @@ class Permissions extends React.Component {
                     onChange={this.setPermission}
                 />
             );
-            // delete employees[currentEmp];
+            delete empoList[currentEmp];
             return permission;
         });
     }

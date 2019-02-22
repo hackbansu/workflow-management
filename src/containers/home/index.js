@@ -41,9 +41,9 @@ export class Home extends React.Component {
         super(props);
         this.onLogoutClick = this.onLogoutClick.bind(this);
         const { status } = props.currentUser;
-        this.state = {
-            isPartOfComapany: status === UserConstants.STATUS.ACTIVE,
-        };
+        // this.state = {
+        //     isPartOfComapany: status === UserConstants.STATUS.ACTIVE,
+        // };
     }
 
     componentWillMount() {
@@ -82,8 +82,13 @@ export class Home extends React.Component {
                 }
 
                 const { response, body } = obj;
+
+                if (response.status === 404) {
+                    return;
+                }
+
                 if (response.status !== 200) {
-                    this.setState({ isPartOfComapany: false });
+                    // this.setState({ isPartOfComapany: false });
                     const errMsg = errorParser(body, 'Company details update failed');
                     showToast(errMsg);
                     return;
@@ -134,10 +139,12 @@ export class Home extends React.Component {
     };
 
     render() {
-        const { isPartOfComapany } = this.state;
+        // const { isPartOfComapany } = this.state;
         const { currentUser, location } = this.props;
         const { firstName, lastName, isAdmin, profilePhoto } = currentUser;
         let { company } = currentUser;
+        const { status: userStatus } = currentUser;
+        const isPartOfComapany = userStatus === UserConstants.STATUS.ACTIVE;
 
         if (!company) {
             company = {};
@@ -176,7 +183,7 @@ export class Home extends React.Component {
                                     exact
                                     path={ApiConstants.WORKFLOWS_PAGE}
                                     component={Workflows}
-                                    condition={isAdmin}
+                                    condition={isPartOfComapany}
                                     redirectUrl={ApiConstants.HOME_PAGE}
                                 />
                                 <PrivateRoute

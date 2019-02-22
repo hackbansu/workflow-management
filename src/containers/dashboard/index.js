@@ -22,6 +22,7 @@ class DashBoard extends React.Component {
             if (!response.ok) {
                 const errMsg = errorParser(body);
                 showToast(errMsg);
+                return;
             }
             const tasks = formatTasks(body);
             updateTasks(tasks);

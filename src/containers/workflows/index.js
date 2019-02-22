@@ -14,40 +14,44 @@ import { showModal } from 'utils/helpers/modal';
 This module is not implemented yet, exclude it from review.
 */
 
-/**
- * Login page component.
- */
 export class Workflows extends React.Component {
-    /**
-     * Constructor for the component.
-     * @param {object} props - props object for the component.
-     */
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    /**
-     * function to render the component.
-     */
-    render() {
-        return (
-            <div className="container col-12">
+    createWorkFlowButton() {
+        const { currentUser } = this.props;
+        if (currentUser.isAdmin) {
+            return (
                 <Link to={ApiConstants.TEMPLATES_PAGE}>
                     <button type="button" className="btn btn-primary">
                         New Workflow
                     </button>
                 </Link>
+            );
+        }
+        return (<></>);
+    }
+
+    render() {
+        return (
+            <div className="container col-12">
+                {this.createWorkFlowButton()}
             </div>
         );
     }
 }
 
-Workflows.propTypes = {};
+Workflows.propTypes = {
+    currentUser: PropTypes.object.isRequired,
+};
 
 Workflows.defaultProps = {};
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    currentUser: state.currentUser,
+});
 
 const mapDispatchToProps = dispatch => ({});
 

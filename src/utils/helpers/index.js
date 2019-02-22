@@ -3,24 +3,36 @@ import _ from 'lodash';
 import ApiConstants from 'constants/api';
 import TaskConstants from 'constants/task';
 import { isAbsoluteUrl } from 'constants/index.js';
+import moment from 'moment';
 
 export function parseEmployeeData(emp) {
-    const { first_name: firstName, last_name: lastName, email, profile_photo_url: profilePhoto, id: userId } = emp.user;
-    const { designation, is_admin: isAdmin, status, id: employeeId } = emp;
+    const {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        profile_photo_url: profilePhoto,
+        id: userId,
+    } = emp.user;
+    const { designation, is_admin: isAdmin, status, id: employeeId, join_at: joinAt, left_at: leftAt } = emp;
 
-    return {
+    const data = {
         user: {
             firstName,
             lastName,
             profilePhoto: isAbsoluteUrl(profilePhoto) ? profilePhoto : `${ApiConstants.MEDIA_URL}${profilePhoto}`,
-            email,
+            email: email || '',
             id: userId,
         },
         designation,
         isAdmin,
         status,
         id: employeeId,
+        joinAt,
+        leftAt,
     };
+    data.joinAt = data.joinAt ? (moment(data.joinAt)).format('YYYY-MM-DD HH:mm') : '';
+    data.leftAt = data.leftAt ? (moment(data.leftAt)).format('YYYY-MM-DD HH:mm') : '';
+    return data;
 }
 
 export function getRandomBorder() {

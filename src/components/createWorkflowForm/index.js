@@ -121,6 +121,13 @@ export class CreateWorkflow extends React.Component {
                     />
                 </Form.Row>
                 <Form.Row className="col-12">{this.createTasks()}</Form.Row>
+                <Form.Group>
+                    <Col sm={8}>
+                        <Button variant="primary" type="submit">
+                            Create Workflow
+                        </Button>
+                    </Col>
+                </Form.Group>
             </Form>
         );
     }

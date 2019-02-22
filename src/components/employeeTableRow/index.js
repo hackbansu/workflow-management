@@ -5,17 +5,30 @@ import { LinkContainer } from 'react-router-bootstrap';
 import userConstants from 'constants/user';
 import ApiConstants from 'constants/api';
 
+function extraDetails({ isAdmin, email, joinAt, leftAt }) {
+    if (isAdmin) {
+        return (
+            <React.Fragment>
+                <td>{email}</td>
+                <td>{joinAt}</td>
+                <td>{leftAt}</td>
+            </React.Fragment>
+        );
+    }
+    return (<></>);
+}
+
 /**
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const EmployeeTableRow = ({ data, isVisible }) => {
+export const EmployeeTableRow = ({ isAdmin, data, isVisible }) => {
     if (!isVisible) {
         return '';
     }
 
-    const { user, id, designation, status } = data;
-    const { firstName, profilePhoto } = user;
+    const { user, id, designation, status, joinAt, leftAt } = data;
+    const { firstName, profilePhoto, email } = user;
     const lastName = user.lastName || ' ';
     return (
         <LinkContainer to={`${ApiConstants.EMPLOYEE_PAGE}/${id}`}>
@@ -33,7 +46,7 @@ export const EmployeeTableRow = ({ data, isVisible }) => {
                 <td>{firstName}</td>
                 <td>{lastName}</td>
                 <td>{designation}</td>
-                <td>{userConstants.STATUS[status]}</td>
+                {extraDetails({ isAdmin, email, joinAt, leftAt })}
             </tr>
         </LinkContainer>
     );
@@ -42,6 +55,7 @@ export const EmployeeTableRow = ({ data, isVisible }) => {
 EmployeeTableRow.propTypes = {
     data: PropTypes.object.isRequired,
     isVisible: PropTypes.bool,
+    isAdmin: PropTypes.bool.isRequired,
 };
 
 EmployeeTableRow.defaultProps = {

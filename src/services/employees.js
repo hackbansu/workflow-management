@@ -6,7 +6,10 @@ const employeeApiUrls = ApiConstants.api.employee;
 /**
  * Utility function to send the fetch employees request to the server.
  */
-export function makeFetchAllRequest() {
+export function makeFetchAllRequest(isAdmin) {
+    if (isAdmin) {
+        return makeApiRequest(employeeApiUrls.FETCH_ALL_ADMIN, 'GET');
+    }
     return makeApiRequest(employeeApiUrls.FETCH_ALL, 'GET');
 }
 

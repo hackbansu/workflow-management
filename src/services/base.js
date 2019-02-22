@@ -1,6 +1,9 @@
 import ApiConstants from 'constants/api';
+import { push } from 'connected-react-router';
+import { logoutAction } from 'actions/user';
 import { showToast } from 'utils/helpers/toast';
 import { errorParser } from 'utils/helpers/errorHandler';
+
 import store from '../store';
 
 /**
@@ -10,13 +13,20 @@ import store from '../store';
  */
 function apiErrorHandler(response, body) {
     body = body || { detail: 'Error occur' };
+    let errorMsg;
     if (response.status >= 500) {
-        showToast('Internal Server error occur');
+        errorMsg = errorParser(body, 'Internal Server error occur');
     }
-    if (response.status >= 405) {
-        showToast('Api error occur');
+    // Logout current user if token is invalid
+    if (response.status === 401) {
+        store.dispatch(logoutAction());
+        store.dispatch(push(ApiConstants.LOGIN_PAGE));
+        showToast('Please login');
+        return null;
     }
-    const errorMsg = errorParser(body);
+    if (response.status >= 400) {
+        errorMsg = errorParser(body, 'Api error occur');
+    }
     showToast(errorMsg);
     return null;
 }
@@ -58,7 +68,7 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             .then(body => ({ response, body }))
             .catch(err => ({ response, body: null })))
         .then(({ response, body }) => {
-            if (response.status >= 405) {
+            if (response.status >= 400) {
                 apiErrorHandler(response, body);
             }
             return { response, body };

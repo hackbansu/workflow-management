@@ -41,6 +41,7 @@ export default {
             CREATE_COMPANY: 'company/new-company/',
         },
         employee: {
+            FETCH_ALL_ADMIN: 'employees-admin/',
             FETCH_ALL: 'employees/',
             FETCH: 'employee-detail/',
             UPDATE: 'employee/',

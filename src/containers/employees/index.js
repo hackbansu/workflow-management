@@ -36,9 +36,9 @@ export class Profile extends React.Component {
     }
 
     componentWillMount() {
-        const { updateEmployees } = this.props;
+        const { updateEmployees, isAdmin } = this.props;
 
-        makeFetchAllRequest().then(obj => {
+        makeFetchAllRequest(isAdmin).then(obj => {
             if (!obj) {
                 return;
             }
@@ -53,7 +53,7 @@ export class Profile extends React.Component {
             const inactiveEmployees = {};
             const invitedEmployees = {};
 
-            const data = body.forEach(emp => {
+            body.forEach(emp => {
                 const employeeData = parseEmployeeData(emp);
 
                 const { status, id: employeeId } = employeeData;
@@ -157,6 +157,19 @@ export class Profile extends React.Component {
         });
     }
 
+    extraDetails(isAdmin) {
+        if (isAdmin) {
+            return (
+                <React.Fragment>
+                    <th scope="col">EMAIL</th>
+                    <th scope="col">JOIN ON</th>
+                    <th scope="col">LEFT ON</th>
+                </React.Fragment>
+            );
+        }
+        return (<></>);
+    }
+
     /**
      * function to render the component.
      */
@@ -175,12 +188,12 @@ export class Profile extends React.Component {
                             <th scope="col">First NAME</th>
                             <th scope="col">Last NAME</th>
                             <th scope="col">DESIGNATION</th>
-                            <th scope="col">STATUS</th>
+                            {this.extraDetails(isAdmin)}
                         </tr>
                     </thead>
                     <tbody>
                         {filteredEmployees.map(data => (
-                            <EmployeeTableRow data={data} key={`${data.id}-${data.user.id}`} />
+                            <EmployeeTableRow isAdmin={isAdmin} data={data} key={`${data.id}-${data.user.id}`} />
                         ))}
                     </tbody>
                 </table>

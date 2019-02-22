@@ -71,6 +71,10 @@ export class CreateWorkflow extends React.Component {
         }
     }
 
+    onSubmit(data) {
+        return data;
+    }
+
     render() {
         const { employees, templates } = this.props;
         const { activeEmployees } = employees;
@@ -80,7 +84,11 @@ export class CreateWorkflow extends React.Component {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col md={10} sm xs={12}>
-                        <CreateWorkflowFrom templateStructure={template.structure} activeEmployees={activeEmployees} />
+                        <CreateWorkflowFrom
+                            onSubmit={this.onSubmit}
+                            templateStructure={template.structure}
+                            activeEmployees={activeEmployees}
+                        />
                     </Col>
                 </Row>
             </Container>

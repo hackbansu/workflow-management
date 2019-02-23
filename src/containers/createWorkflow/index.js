@@ -1,13 +1,14 @@
+import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React from 'react';
 import { Row, Col, Form, Button, Container } from 'react-bootstrap';
-import _ from 'lodash';
 
 import { makeFetchTemplate } from 'services/templates';
-import { makeFetchActiveEmployeeRequest } from 'services/employees';
+import { makeFetchActiveEmployeeAdminRequest } from 'services/employees';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { showModal } from 'utils/helpers/modal';
+import { parseEmployeeData } from 'utils/helpers';
 import { updateEmployeesAction } from 'actions/employees';
 import { updateTemplatesAction } from 'actions/templates';
 import CreateWorkflowFrom from 'components/createWorkflowForm';
@@ -32,12 +33,13 @@ export class CreateWorkflow extends React.Component {
         // fetch active employees
         if (!Object.hasOwnProperty.call(employees, 'activeEmployees')
         || !Object.keys(employees.activeEmployees).length) {
-            makeFetchActiveEmployeeRequest()
+            makeFetchActiveEmployeeAdminRequest()
                 .then(({ response, body }) => {
                     if (response.ok) {
                         if (body.length === 0) {
                             showModal('fatal Error', 'No active Employees in Company');
                         } else {
+                            body = body.map(data => parseEmployeeData(data));
                             updateEmployeesAction(_.keyBy(body, 'id'));
                         }
                     } else {
@@ -72,7 +74,13 @@ export class CreateWorkflow extends React.Component {
     }
 
     onSubmit(data) {
-        return data;
+        const { templateId } = this.state;
+        const submitData = {
+            template: templateId,
+            name: data.workflowName,
+            start_at: data.startDateTime.toISOString(),
+            // duration: data.
+        };
     }
 
     render() {

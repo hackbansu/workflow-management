@@ -17,6 +17,8 @@ class TaskForm extends React.Component {
         this.assignee = React.createRef();
         this.taskStartDeltaTime = React.createRef();
         this.taskStartDeltaDays = React.createRef();
+        this.taskDurationTime = React.createRef();
+        this.taskDurationDays = React.createRef();
         this.taskDetail = React.createRef();
         this.parentTask = React.createRef();
     }
@@ -31,9 +33,10 @@ class TaskForm extends React.Component {
     }
 
     employeesOptions(employees) {
+        employees = employees || {};
         return Object.keys(employees).map(key => (
             <option key={`${key}-employee-key`} value={`${key}`}>
-                {employees[key].user.email}
+                {`${employees[key].user.firstName} ${employees[key].user.lastName}` }
             </option>
         ));
     }
@@ -45,6 +48,8 @@ class TaskForm extends React.Component {
             taskTitle: this.taskTitle.current.value,
             taskStartDeltaTime: this.taskStartDeltaTime.current.value,
             taskStartDeltaDays: this.taskStartDeltaDays.current.value,
+            taskDurationTime: this.taskDurationTime.current.value,
+            taskDurationDays: this.taskDurationDays.current.value,
             taskDetail: this.taskDetail.current.value,
             parentTask: this.parentTask.current.value,
             assignee: this.assignee.current.value,
@@ -55,7 +60,12 @@ class TaskForm extends React.Component {
     render() {
         // TODO:Implement to render extra field in taks using task props.
         const { task: taskStructure, employees, taskId, taskInformation } = this.props;
-        const { taskTitle, taskStartDeltaTime, taskStartDeltaDays, taskDetail, parentTask, assignee } = taskInformation;
+        const { taskTitle, taskDetail, parentTask, assignee } = taskInformation;
+        let { taskStartDeltaTime, taskStartDeltaDays, taskDurationDays, taskDurationTime } = taskInformation;
+        taskStartDeltaDays = taskStartDeltaDays || 0;
+        taskStartDeltaTime = taskStartDeltaTime || '00:00';
+        taskDurationTime = taskDurationTime || '00:00';
+        taskDurationDays = taskDurationTime || 0;
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Form.Row>
@@ -101,9 +111,29 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Days</Form.Label>
                         <Form.Control
-                            type="date"
+                            type="number"
+                            min="0"
                             defaultValue={taskStartDeltaDays}
                             ref={this.taskStartDeltaDays}
+                        />
+                    </Form.Group>
+                </Form.Row>
+                <Form.Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Duration Time</Form.Label>
+                        <Form.Control
+                            type="time"
+                            defaultValue={taskDurationTime}
+                            ref={this.taskDurationTime}
+                        />
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>Duration Days</Form.Label>
+                        <Form.Control
+                            type="number"
+                            min="0"
+                            defaultValue={taskDurationDays}
+                            ref={this.taskDurationDays}
                         />
                     </Form.Group>
                 </Form.Row>

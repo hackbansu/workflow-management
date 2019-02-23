@@ -18,6 +18,19 @@ function extraDetails({ isAdmin, email, joinAt, leftAt }) {
     return (<></>);
 }
 
+function employeeClass(status) {
+    switch (status) {
+    case userConstants.STATUS.ACTIVE:
+        return 'active-employee';
+    case userConstants.STATUS.INACTIVE:
+        return 'inactive-employee';
+    case userConstants.STATUS.INVITED:
+        return 'invited-employee';
+    default:
+        return 'active-employee';
+    }
+}
+
 /**
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
@@ -32,7 +45,7 @@ export const EmployeeTableRow = ({ isAdmin, data, isVisible }) => {
     const lastName = user.lastName || ' ';
     return (
         <LinkContainer to={`${ApiConstants.EMPLOYEE_PAGE}/${id}`}>
-            <tr className={userConstants.STATUS[status].toLowerCase() + '-employee'}>
+            <tr className={employeeClass(status)}>
                 <td className="employee-pic">
                     <img
                         src={profilePhoto}

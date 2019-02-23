@@ -57,6 +57,6 @@ export function makeCsvInviteRequest(csvFile) {
     return makeApiRequest(employeeApiUrls.INVITE_CSV, 'POST', formData, null);
 }
 
-export function makeFetchActiveEmployeeRequest() {
-    return makeApiRequest(employeeApiUrls.FETCH_ACTIVE, 'GET');
+export function makeFetchActiveEmployeeAdminRequest() {
+    return makeApiRequest(employeeApiUrls.FETCH_ACTIVE_ADMIN, 'GET');
 }

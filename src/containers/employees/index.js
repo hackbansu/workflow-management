@@ -52,17 +52,12 @@ export class Profile extends React.Component {
             const activeEmployees = {};
             const inactiveEmployees = {};
             const invitedEmployees = {};
-
             body.forEach(emp => {
                 const employeeData = parseEmployeeData(emp);
 
                 const { status, id: employeeId } = employeeData;
 
                 switch (status) {
-                case userConstants.STATUS.ACTIVE:
-                    activeEmployees[employeeId] = employeeData;
-                    break;
-
                 case userConstants.STATUS.INACTIVE:
                     inactiveEmployees[employeeId] = employeeData;
                     break;
@@ -70,6 +65,7 @@ export class Profile extends React.Component {
                     invitedEmployees[employeeId] = employeeData;
                     break;
                 default:
+                    activeEmployees[employeeId] = employeeData;
                     break;
                 }
             });

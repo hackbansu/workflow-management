@@ -41,14 +41,15 @@ export default {
             CREATE_COMPANY: 'company/new-company/',
         },
         employee: {
-            FETCH_ALL_ADMIN: 'employees-admin/',
+            FETCH_ACTIVE_ADMIN: 'employee/?status=2',
+            FETCH_ALL_ADMIN: 'employee/',
             FETCH_ALL: 'employees/',
             FETCH: 'employee-detail/',
             UPDATE: 'employee/',
             REMOVE: 'employee/',
             INVITE: 'company/invite-employee/',
             INVITE_CSV: 'company/invite-employee-csv/',
-            FETCH_ACTIVE: 'employees/?status=2',
+            FETCH_ACTIVE: 'employees-admin/?status=2',
         },
         company: {
             FETCH: 'employee/my-company/',

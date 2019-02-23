@@ -15,27 +15,21 @@ export class CreateWorkflow extends React.Component {
         this.state = {
             workflowName: '',
             startDateTime: moment(),
-            expectedEndTime: moment(),
+            completeAt: moment(),
             workflowPermissions: {},
             tasks: {},
         };
         this.createTasks = this.createTasks.bind(this);
         this.setStartDateTime = this.setStartDateTime.bind(this);
-        this.setExpectedEndDateTime = this.setExpectedEndDateTime.bind(this);
         this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
         this.setTask = this.setTask.bind(this);
+        this.updateCompleteAt = this.updateCompleteAt.bind(this);
     }
 
 
     setStartDateTime(value) {
         this.setState({
             startDateTime: value,
-        });
-    }
-
-    setExpectedEndDateTime(value) {
-        this.setState({
-            expectedEndTime: value,
         });
     }
 
@@ -50,7 +44,28 @@ export class CreateWorkflow extends React.Component {
     setTask(value, id) {
         const { tasks } = this.state;
         tasks[id] = value;
-        this.setState({ tasks });
+        const completeAt = this.updateCompleteAt();
+        this.setState({ tasks, completeAt });
+    }
+
+    updateCompleteAt() {
+        const { tasks } = this.state;
+        const completeAt = moment();
+        Object.keys(tasks).map(taskId => {
+            const task = tasks[taskId];
+            const durationTime = {
+                days: task.taskDurationDays,
+                hour: task.taskDurationTime.split(':')[0],
+                minute: task.taskDurationTime.split(':')[1],
+            };
+            const deltaTime = {
+                days: task.taskStartDeltaDays,
+                hour: task.taskStartDeltaTime.split(':')[0],
+                minute: task.taskStartDeltaTime.split(':')[1],
+            };
+            return completeAt.add(durationTime).add(deltaTime);
+        });
+        return completeAt;
     }
 
     createTasks() {
@@ -72,10 +87,11 @@ export class CreateWorkflow extends React.Component {
     }
 
     render() {
-        const { workflowName, startDateTime, expectedEndTime, workflowPermissions, tasks } = this.state;
-        const { activeEmployees } = this.props;
+        const { workflowName, startDateTime, completeAt, workflowPermissions, tasks } = this.state;
+        const { activeEmployees, onSubmit } = this.props;
+        const formData = this.state;
         return (
-            <Form>
+            <Form onSubmit={e => { e.preventDefault(); onSubmit(formData); }}>
                 <Form.Group as={Row} controlId="WorkflowName">
                     <Form.Label column sm={4}>
                         {'Name'}
@@ -103,13 +119,13 @@ export class CreateWorkflow extends React.Component {
                 </Form.Group>
                 <Form.Group as={Row} controlId="WorkflowEndTime">
                     <Form.Label column sm={4}>
-                        {'Expected End Time'}
+                        {'Complete At '}
                     </Form.Label>
                     <Col sm={8}>
-                        <DateTimeField
-                            constraintMoment={startDateTime}
-                            givenMoment={expectedEndTime}
-                            onChange={this.setExpectedEndDateTime}
+                        <Form.Control
+                            type="text"
+                            value={(completeAt).format('YYYY-MM-DD HH:mm')}
+                            readOnly
                         />
                     </Col>
                 </Form.Group>
@@ -136,6 +152,7 @@ export class CreateWorkflow extends React.Component {
 CreateWorkflow.propTypes = {
     templateStructure: PropTypes.object,
     activeEmployees: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired,
 };
 
 CreateWorkflow.defaultProps = {
@@ -144,7 +161,8 @@ CreateWorkflow.defaultProps = {
     },
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+});
 
 const mapDispatchToProps = dispatch => ({});
 

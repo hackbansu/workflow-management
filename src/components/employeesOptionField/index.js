@@ -5,7 +5,7 @@ import { Form, Col, Row } from 'react-bootstrap';
 function createOptions(employees) {
     return Object.keys(employees).map(key => (
         <option key={`${key}-employee-key`} value={`${key}`}>
-            {employees[key].user.email}
+            {`${employees[key].user.firstName} ${employees[key].user.lastName}`}
         </option>
     ));
 }

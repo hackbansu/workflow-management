@@ -50,7 +50,7 @@ export class ResetPasswordForm extends React.Component {
 
         if (password !== confirmPassword) {
             valid = false;
-            newErrors.confirmPassword = 'Confirm password does not';
+            newErrors.confirmPassword = 'Confirm password does not match';
         }
 
         if (!valid) {

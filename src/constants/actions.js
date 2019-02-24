@@ -22,4 +22,7 @@ export default {
         UPDATE_ONGOING_TASKS: 'UPDATE_ONGOING_TASKS',
         UPDATE_UPCOMMIG_TASKS: 'UPDATE_UPCOMMMIG_TASKS',
     },
+    workflow: {
+        UPDATE_WORKFLOW: 'UPDATE_WORKFLOW',
+    },
 };

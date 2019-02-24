@@ -61,5 +61,8 @@ export default {
         task: {
             FETCH: 'task/',
         },
+        workflow: {
+            FETCH: 'workflow/',
+        },
     },
 };

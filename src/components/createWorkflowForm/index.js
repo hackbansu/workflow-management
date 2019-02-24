@@ -3,11 +3,12 @@ import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Row, Col, Form, Button, Container } from 'react-bootstrap';
+import { Row, Col, Form, Button, Container, Alert } from 'react-bootstrap';
 
 import DateTimeField from 'components/dateTimeField';
 import TaskForm from 'components/taskForm';
 import WorkflowPermissions from 'components/workflowPermissions';
+import { validateTextString, validateDate } from 'utils/validators';
 
 export class CreateWorkflow extends React.Component {
     constructor(props) {
@@ -18,12 +19,15 @@ export class CreateWorkflow extends React.Component {
             completeAt: moment(),
             workflowPermissions: {},
             tasks: {},
+            errors: [],
         };
         this.createTasks = this.createTasks.bind(this);
         this.setStartDateTime = this.setStartDateTime.bind(this);
         this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
         this.setTask = this.setTask.bind(this);
         this.updateCompleteAt = this.updateCompleteAt.bind(this);
+        this.validate = this.validate.bind(this);
+        this.validationErrors = this.validationErrors.bind(this);
     }
 
 
@@ -48,9 +52,41 @@ export class CreateWorkflow extends React.Component {
         this.setState({ tasks, completeAt });
     }
 
+    validate() {
+        const errors = [];
+        const { workflowName, startDateTime } = this.state;
+        let validation = validateTextString(workflowName);
+        if (!validation.isValid) {
+            errors.push({ heading: 'Name', errors: validation.message });
+        }
+        validation = validateDate(startDateTime);
+        if (!validation.isValid) {
+            errors.push({ heading: 'Start Time', errors: validation.message });
+        }
+        this.setState({ errors });
+        return errors.length === 0;
+    }
+
+    validationErrors() {
+        const { errors } = this.state;
+        return (
+            errors.map((err, idx) => (
+                <Alert variant="danger" key={`${Math.random()}`}>
+                    <Alert.Heading>
+                        {err.heading}
+                    </Alert.Heading>
+                    <p>
+                        {err.errors}
+                    </p>
+                </Alert>
+            ))
+        );
+    }
+
     updateCompleteAt() {
+        const { startDateTime } = this.state;
         const { tasks } = this.state;
-        const completeAt = moment();
+        const completeAt = moment(startDateTime);
         Object.keys(tasks).map(taskId => {
             const task = tasks[taskId];
             const durationTime = {
@@ -91,7 +127,18 @@ export class CreateWorkflow extends React.Component {
         const { activeEmployees, onSubmit } = this.props;
         const formData = this.state;
         return (
-            <Form onSubmit={e => { e.preventDefault(); onSubmit(formData); }}>
+            <Form onSubmit={e => {
+                e.preventDefault();
+                if (!this.validate()) {
+                    e.stopPropagation();
+                    return;
+                }
+                onSubmit(formData);
+            }}
+            >
+                <Container>
+                    {this.validationErrors()}
+                </Container>
                 <Form.Group as={Row} controlId="WorkflowName">
                     <Form.Label column sm={4}>
                         {'Name'}

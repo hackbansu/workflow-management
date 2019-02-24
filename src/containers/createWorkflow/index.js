@@ -6,6 +6,7 @@ import { Row, Col, Form, Button, Container } from 'react-bootstrap';
 
 import { makeFetchTemplate } from 'services/templates';
 import { makeFetchActiveEmployeeAdminRequest } from 'services/employees';
+import { makeCreateWorkflow } from 'services/workflow';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { showModal } from 'utils/helpers/modal';
 import { parseEmployeeData } from 'utils/helpers';
@@ -24,6 +25,7 @@ export class CreateWorkflow extends React.Component {
         this.state = {
             templateId,
         };
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     componentWillMount() {
@@ -79,8 +81,26 @@ export class CreateWorkflow extends React.Component {
             template: templateId,
             name: data.workflowName,
             start_at: data.startDateTime.toISOString(),
-            // duration: data.
+            tasks: Object.keys(data.tasks).map(taskId => {
+                const task = data.tasks[taskId];
+                return {
+                    title: task.taskTitle,
+                    start_delta: `${task.taskStartDeltaDays}:${task.taskStartDeltaTime}`,
+                    duration: `${task.taskDurationDays}:${task.taskDurationTime}`,
+                    description: task.taskDetail,
+                    assignee: task.assignee,
+                    parent_task: task.parentTask,
+                };
+            }),
+            accessors: Object.keys(data.workflowPermissions)
+                .map(permissionId => data.workflowPermissions[permissionId]),
         };
+        console.log('submit, data', submitData);
+        makeCreateWorkflow(submitData)
+            .then(res => {
+                console.log('workflow submitted');
+                console.log(res);
+            });
     }
 
     render() {

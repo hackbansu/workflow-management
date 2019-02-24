@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button, Alert, Container } from 'react-bootstrap';
 import _ from 'lodash';
 
 import { getRandomBorder } from 'utils/helpers';
+import { validateTextString } from 'utils/validators';
 
 class TaskForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            errors: [],
+        };
 
         this.saveTask = this.saveTask.bind(this);
-
         this.parentOptions = this.parentOptions.bind(this);
+        this.validateTask = this.validateTask.bind(this);
+        this.validationErros = this.validationErrors.bind(this);
+
         this.taskTitle = React.createRef();
         this.assignee = React.createRef();
         this.taskStartDeltaTime = React.createRef();
@@ -41,8 +46,59 @@ class TaskForm extends React.Component {
         ));
     }
 
+    validateTask(taskInformation) {
+        const errors = [];
+        const { taskTitle,
+            taskDetail,
+            taskStartDeltaTime,
+            taskStartDeltaDays,
+            taskDurationTime,
+            taskDurationDays } = taskInformation;
+        let validation = validateTextString(taskTitle);
+        if (!validation.isValid) {
+            errors.push({ heading: 'title', errors: validation.message });
+        }
+        validation = validateTextString(taskDetail);
+        if (!validation.isValid) {
+            errors.push({ heading: 'task detail', errors: validation.message });
+        }
+        validation = validateTextString(taskStartDeltaTime);
+        if (!validation.isValid) {
+            errors.push({ heading: 'Start Delta Time', errors: validation.message });
+        }
+        validation = validateTextString(taskStartDeltaDays);
+        if (!validation.isValid) {
+            errors.push({ heading: 'Start Delta Days', errors: validation.message });
+        }
+        validation = validateTextString(taskDurationTime);
+        if (!validation.isValid) {
+            errors.push({ heading: 'Duration  Days', errors: validation.message });
+        }
+        validation = validateTextString(taskDurationDays);
+        if (!validation.isValid) {
+            errors.push({ heading: 'Duration  Days', errors: validation.message });
+        }
+        this.setState({ errors });
+        return errors.length === 0;
+    }
 
-    saveTask() {
+    validationErrors() {
+        const { errors } = this.state;
+        return (
+            errors.map((err, idx) => (
+                <Alert variant="danger" key={`${Math.random()}`}>
+                    <Alert.Heading>
+                        {err.heading}
+                    </Alert.Heading>
+                    <p>
+                        {err.errors}
+                    </p>
+                </Alert>
+            ))
+        );
+    }
+
+    saveTask(e) {
         const { taskId, onChange } = this.props;
         const taskInformation = {
             taskTitle: this.taskTitle.current.value,
@@ -54,6 +110,11 @@ class TaskForm extends React.Component {
             parentTask: this.parentTask.current.value,
             assignee: this.assignee.current.value,
         };
+        if (!this.validateTask(taskInformation)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
         onChange(taskInformation, taskId);
     }
 
@@ -65,9 +126,12 @@ class TaskForm extends React.Component {
         taskStartDeltaDays = taskStartDeltaDays || 0;
         taskStartDeltaTime = taskStartDeltaTime || '00:00';
         taskDurationTime = taskDurationTime || '00:00';
-        taskDurationDays = taskDurationTime || 0;
+        taskDurationDays = taskDurationDays || 0;
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
+                <Container>
+                    {this.validationErrors()}
+                </Container>
                 <Form.Row>
                     <Form.Group as={Row} controlId="TaskId">
                         <Form.Label column sm={4}>
@@ -161,7 +225,7 @@ class TaskForm extends React.Component {
                     </Form.Group>
                 </Form.Row>
                 <Form.Row as={Row} className="py-4">
-                    <Button variant="success" onClick={e => this.saveTask()}>Save Task</Button>
+                    <Button variant="success" onClick={e => this.saveTask(e)}>Save Task</Button>
                 </Form.Row>
             </div>
         );

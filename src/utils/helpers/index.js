@@ -6,13 +6,7 @@ import { isAbsoluteUrl } from 'constants/index.js';
 import moment from 'moment';
 
 export function parseEmployeeData(emp) {
-    const {
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        profile_photo_url: profilePhoto,
-        id: userId,
-    } = emp.user;
+    const { first_name: firstName, last_name: lastName, email, profile_photo_url: profilePhoto, id: userId } = emp.user;
     const { designation, is_admin: isAdmin, status, id: employeeId, join_at: joinAt, left_at: leftAt } = emp;
 
     const data = {
@@ -30,8 +24,8 @@ export function parseEmployeeData(emp) {
         joinAt,
         leftAt,
     };
-    data.joinAt = data.joinAt ? (moment(data.joinAt)).format('YYYY-MM-DD HH:mm') : '';
-    data.leftAt = data.leftAt ? (moment(data.leftAt)).format('YYYY-MM-DD HH:mm') : '';
+    data.joinAt = data.joinAt ? moment(data.joinAt).format('YYYY-MM-DD HH:mm') : '';
+    data.leftAt = data.leftAt ? moment(data.leftAt).format('YYYY-MM-DD HH:mm') : '';
     return data;
 }
 
@@ -50,4 +44,8 @@ export function formatTasks(tasks) {
         ongoing: _.keyBy(ongoing, 'id'),
         complete: _.keyBy(complete, 'id'),
     };
+}
+
+export function parseDateTime(dateTime) {
+    return moment(dateTime).format('YYYY:MM:DD HH:MM');
 }

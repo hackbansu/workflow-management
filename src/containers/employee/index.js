@@ -7,7 +7,7 @@ import React from 'react';
 import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
-import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest, makeFetchRequest } from 'services/employees';
+import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest, getEmployee } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
 import { updateEmployeeAction } from 'actions/employees';
 import { parseEmployeeData } from 'utils/helpers';
@@ -48,25 +48,12 @@ export class Employee extends React.Component {
         const { updateEmployee, match } = this.props;
         const { id: employeeId } = match.params;
 
-        makeFetchRequest(employeeId).then(obj => {
-            if (!obj) {
-                return;
-            }
-            const { response, body } = obj;
-            if (response.status !== 200) {
-                showToast('Employees update failed');
-                return;
-            }
-
-            const employeeData = parseEmployeeData(body);
-
-            this.setState({
-                currentEmployee: employeeData,
+        getEmployee(employeeId)
+            .then(employee => {
+                this.setState({
+                    currentEmployee: employee,
+                });
             });
-
-            // dispatch action to update employees
-            updateEmployee(employeeData);
-        });
     }
 
     /**

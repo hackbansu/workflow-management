@@ -24,5 +24,6 @@ export default {
     },
     workflow: {
         UPDATE_WORKFLOW: 'UPDATE_WORKFLOW',
+        UPDATE_WORKFLOWS: 'UPDATE_WORKFLOWS',
     },
 };

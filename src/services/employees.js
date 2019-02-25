@@ -1,7 +1,21 @@
 import { makeApiRequest } from 'services/base';
 import ApiConstants from 'constants/api';
+import userConstants from 'constants/user';
+import { errorParser } from 'utils/helpers/errorHandler';
+import { parseEmployeeData } from 'utils/helpers';
+import { showToast } from 'utils/helpers/toast';
+import { updateEmployeesAction, updateEmployeeAction } from 'actions/employees';
+import store from '../store';
 
 const employeeApiUrls = ApiConstants.api.employee;
+
+function updateEmployees(...args) {
+    return store.dispatch(updateEmployeesAction(...args));
+}
+
+function updateEmployee(...args) {
+    return store.dispatch(updateEmployeeAction(...args));
+}
 
 /**
  * Utility function to send the fetch employees request to the server.
@@ -59,4 +73,62 @@ export function makeCsvInviteRequest(csvFile) {
 
 export function makeFetchActiveEmployeeAdminRequest() {
     return makeApiRequest(employeeApiUrls.FETCH_ACTIVE_ADMIN, 'GET');
+}
+
+export function getAllEmployees(isAdmin = false) {
+    return makeFetchAllRequest(isAdmin).then(obj => {
+        if (!obj) {
+            return;
+        }
+
+        const { response, body } = obj;
+        if (response.status !== 200) {
+            showToast('Employees update failed');
+            return;
+        }
+
+        const activeEmployees = {};
+        const inactiveEmployees = {};
+        const invitedEmployees = {};
+        body.forEach(emp => {
+            const employeeData = parseEmployeeData(emp);
+
+            const { status, id: employeeId } = employeeData;
+
+            switch (status) {
+            case userConstants.STATUS.INACTIVE:
+                inactiveEmployees[employeeId] = employeeData;
+                break;
+            case userConstants.STATUS.INVITED:
+                invitedEmployees[employeeId] = employeeData;
+                break;
+            default:
+                activeEmployees[employeeId] = employeeData;
+                break;
+            }
+        });
+
+        // dispatch action to update employees
+        updateEmployees(activeEmployees, inactiveEmployees, invitedEmployees);
+    });
+}
+
+export function getEmployee(employeeId) {
+    return makeFetchRequest(employeeId).then(obj => {
+        if (!obj) {
+            return Promise.reject();
+        }
+        const { response, body } = obj;
+        if (response.status !== 200) {
+            const errMsg = errorParser(body, 'Employees update failed');
+            showToast(errMsg);
+            return Promise.reject();
+        }
+
+        const employeeData = parseEmployeeData(body);
+
+        // dispatch action to update employees
+        updateEmployee(employeeData);
+        return Promise.resolve(employeeData);
+    });
 }

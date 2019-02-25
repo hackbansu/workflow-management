@@ -32,8 +32,10 @@ export class CreateWorkflow extends React.Component {
 
 
     setStartDateTime(value) {
+        const completeAt = this.updateCompleteAt(value);
         this.setState({
             startDateTime: value,
+            completeAt,
         });
     }
 
@@ -83,8 +85,11 @@ export class CreateWorkflow extends React.Component {
         );
     }
 
-    updateCompleteAt() {
-        const { startDateTime } = this.state;
+    updateCompleteAt(startDT) {
+        // replace startDateTime if already given
+        let { startDateTime } = this.state;
+        startDateTime = startDT || startDateTime;
+
         const { tasks } = this.state;
         const completeAt = moment(startDateTime);
         Object.keys(tasks).map(taskId => {
@@ -111,11 +116,11 @@ export class CreateWorkflow extends React.Component {
         const { tasks: taskInformation } = this.state;
         return tasks.map((task, idx) => (
             <TaskForm
+                taskId={idx}
                 employees={activeEmployees}
                 task={task}
                 key={`${Math.random()}-task`}
                 parents={this.getPossibleParents(idx)}
-                taskId={idx}
                 onChange={this.setTask}
                 taskInformation={taskInformation[idx]}
             />

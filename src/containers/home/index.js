@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // importing containers for routing
-import Default from 'containers/default';
 import Dashboard from 'containers/dashboard';
 import WorkflowTemplates from 'containers/workflowTemplates';
 import Workflows from 'containers/workflows';
@@ -16,6 +15,7 @@ import Profile from 'containers/profile';
 import Company from 'containers/company';
 import CreateCompany from 'containers/createCompany';
 import CreateWorkflow from 'containers/createWorkflow';
+import Workflow from 'containers/workflow';
 
 // import Constants from constant file.
 import UserConstants from 'constants/user';
@@ -184,6 +184,19 @@ export class Home extends React.Component {
                                     path={ApiConstants.WORKFLOWS_PAGE}
                                     component={Workflows}
                                     condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.WORKFLOW_PAGE}/:id`}
+                                    component={Workflow}
+                                    condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    path={ApiConstants.TEMPLATES_PAGE}
+                                    component={WorkflowTemplates}
+                                    condition={isAdmin}
                                     redirectUrl={ApiConstants.HOME_PAGE}
                                 />
                                 <PrivateRoute
@@ -210,12 +223,6 @@ export class Home extends React.Component {
                                 <PrivateRoute
                                     path={ApiConstants.INVITE_PAGE}
                                     component={Invite}
-                                    condition={isAdmin}
-                                    redirectUrl={ApiConstants.HOME_PAGE}
-                                />
-                                <PrivateRoute
-                                    path={ApiConstants.TEMPLATES_PAGE}
-                                    component={WorkflowTemplates}
                                     condition={isAdmin}
                                     redirectUrl={ApiConstants.HOME_PAGE}
                                 />

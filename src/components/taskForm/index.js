@@ -25,7 +25,9 @@ class TaskForm extends React.Component {
         this.taskDurationTime = React.createRef();
         this.taskDurationDays = React.createRef();
         this.taskDetail = React.createRef();
-        this.parentTask = React.createRef();
+        // this.parentTask = React.createRef();
+        this.renderTaskId = this.renderTaskId.bind(this);
+        this.renderParentTask = this.renderParentTask.bind(this);
     }
 
     parentOptions() {
@@ -107,7 +109,7 @@ class TaskForm extends React.Component {
             taskDurationTime: this.taskDurationTime.current.value,
             taskDurationDays: this.taskDurationDays.current.value,
             taskDetail: this.taskDetail.current.value,
-            parentTask: this.parentTask.current.value,
+            // parentTask: this.parentTask.current.value,
             assignee: this.assignee.current.value,
         };
         if (!this.validateTask(taskInformation)) {
@@ -118,10 +120,52 @@ class TaskForm extends React.Component {
         onChange(taskInformation, taskId);
     }
 
+    renderTaskId() {
+        const { taskId, showTaskId } = this.props;
+        if (showTaskId) {
+            return (
+                <Form.Row>
+                    <Form.Group as={Row} controlId="TaskId">
+
+                        <Form.Label column sm={4}>
+                            {'Task Id'}
+                        </Form.Label>
+                        <Col sm={6}>
+                            <Form.Control type="text" value={taskId} plaintext readOnly />
+                        </Col>
+                    </Form.Group>
+                </Form.Row>
+            );
+        }
+        return <></>;
+    }
+
+    renderParentTask() {
+        const { taskId, taskInformation } = this.props;
+        const { parentTask } = taskInformation;
+        if (taskId && false) {
+            return (
+                <Form.Row>
+                    <Form.Group as={Col}>
+                        <Form.Label>Parent Task</Form.Label>
+                        <Form.Control
+                            as="select"
+                            defaultValue={parentTask}
+                            ref={this.parentTask}
+                        >
+                            {this.parentOptions()}
+                        </Form.Control>
+                    </Form.Group>
+                </Form.Row>
+            );
+        }
+        return <></>;
+    }
+
     render() {
         // TODO:Implement to render extra field in taks using task props.
         const { task: taskStructure, employees, taskId, taskInformation } = this.props;
-        const { taskTitle, taskDetail, parentTask, assignee } = taskInformation;
+        const { taskTitle, taskDetail, assignee } = taskInformation;
         let { taskStartDeltaTime, taskStartDeltaDays, taskDurationDays, taskDurationTime } = taskInformation;
         taskStartDeltaDays = taskStartDeltaDays || 0;
         taskStartDeltaTime = taskStartDeltaTime || '00:00';
@@ -132,16 +176,7 @@ class TaskForm extends React.Component {
                 <Container>
                     {this.validationErrors()}
                 </Container>
-                <Form.Row>
-                    <Form.Group as={Row} controlId="TaskId">
-                        <Form.Label column sm={4}>
-                            {'Task Id'}
-                        </Form.Label>
-                        <Col sm={6}>
-                            <Form.Control type="text" value={taskId} plaintext readOnly />
-                        </Col>
-                    </Form.Group>
-                </Form.Row>
+                { this.renderTaskId() }
                 <Form.Row>
                     <Form.Group as={Col} controlId="TaskTitle">
                         <Form.Label>Title</Form.Label>
@@ -212,18 +247,7 @@ class TaskForm extends React.Component {
                         />
                     </Form.Group>
                 </Form.Row>
-                <Form.Row>
-                    <Form.Group as={Col}>
-                        <Form.Label>Parent Task</Form.Label>
-                        <Form.Control
-                            as="select"
-                            defaultValue={parentTask}
-                            ref={this.parentTask}
-                        >
-                            {this.parentOptions()}
-                        </Form.Control>
-                    </Form.Group>
-                </Form.Row>
+                { this.renderParentTask() }
                 <Form.Row as={Row} className="py-4">
                     <Button variant="success" onClick={e => this.saveTask(e)}>Save Task</Button>
                 </Form.Row>

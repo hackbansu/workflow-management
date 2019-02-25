@@ -6,7 +6,6 @@ import { DatetimePickerTrigger } from 'rc-datetime-picker';
 import { validateDate } from 'utils/validators';
 import { showToast } from 'utils/helpers/toast';
 
-
 import 'rc-datetime-picker/dist/picker.css';
 
 class DateTimeField extends React.Component {
@@ -17,6 +16,13 @@ class DateTimeField extends React.Component {
             currentMoment: givenMoment,
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.givenMoment !== prevState.givenMoment) {
+            return { currentMoment: nextProps.givenMoment };
+        }
+        return null;
     }
 
     handleChange(value) {
@@ -43,11 +49,7 @@ class DateTimeField extends React.Component {
         const { currentMoment } = this.state;
         return (
             <DatetimePickerTrigger shortcuts={shortcuts} moment={currentMoment} onChange={this.handleChange}>
-                <input
-                    type="text"
-                    value={currentMoment.format('YYYY-MM-DD HH:mm')}
-                    readOnly
-                />
+                <input type="text" value={currentMoment.format('YYYY-MM-DD HH:mm')} readOnly />
             </DatetimePickerTrigger>
         );
     }

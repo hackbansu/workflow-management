@@ -1,7 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import ApiConstants from 'constants/api';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { Row, Col, Form, Button, Container } from 'react-bootstrap';
 
 import { makeFetchTemplate } from 'services/templates';
@@ -9,6 +11,7 @@ import { makeFetchActiveEmployeeAdminRequest } from 'services/employees';
 import { makeCreateWorkflow } from 'services/workflow';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { showModal } from 'utils/helpers/modal';
+import { showToast } from 'utils/helpers/toast';
 import { parseEmployeeData } from 'utils/helpers';
 import { updateEmployeesAction } from 'actions/employees';
 import { updateTemplatesAction } from 'actions/templates';
@@ -95,11 +98,16 @@ export class CreateWorkflow extends React.Component {
             accessors: Object.keys(data.workflowPermissions)
                 .map(permissionId => data.workflowPermissions[permissionId]),
         };
-        console.log('submit, data', submitData);
         makeCreateWorkflow(submitData)
             .then(res => {
-                console.log('workflow submitted');
-                console.log(res);
+                const { redirect } = this.props;
+                const { response, body } = res;
+                if (response.status !== 201) {
+                    const errMsg = errorParser(body, 'failed to create workflow');
+                    showModal('Error', errMsg);
+                    return;
+                }
+                redirect(ApiConstants.WORKFLOWS_PAGE);
             });
     }
 
@@ -128,8 +136,10 @@ CreateWorkflow.propTypes = {
     match: PropTypes.object.isRequired,
     templates: PropTypes.object.isRequired,
     employees: PropTypes.object.isRequired,
+
     updateEmployeesAction: PropTypes.func.isRequired,
     updateTemplatesAction: PropTypes.func.isRequired,
+    redirect: PropTypes.func.isRequired,
 };
 
 CreateWorkflow.defaultProps = {};
@@ -142,6 +152,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     updateEmployeesAction: activeEmployees => dispatch(updateEmployeesAction(activeEmployees)),
     updateTemplatesAction: (...args) => dispatch(updateTemplatesAction(...args)),
+    redirect: url => dispatch(push(url)),
 });
 
 export default connect(

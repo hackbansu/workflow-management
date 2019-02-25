@@ -46,6 +46,31 @@ export function formatTasks(tasks) {
     };
 }
 
+function formatWorkflow(workflow) {
+    const { start_at: startAt, complete_at: completeAt } = workflow;
+    let { tasks } = workflow;
+    tasks = tasks.map(task => {
+        const { parent_task: parentTask, start_delta: startDelta, completed_at: completedAt } = task;
+        delete task.parent_task;
+        delete task.start_delta;
+        delete task.completed_at;
+        task = { parentTask, startDelta, completedAt, ...task };
+        return task;
+    });
+    delete workflow.start_at;
+    delete workflow.complete_at;
+    delete workflow.tasks;
+
+    return { startAt, completeAt, tasks, ...workflow };
+}
+
+export function parseWorkflow(workflows) {
+    if (workflows instanceof Array) {
+        return workflows.map(workflow => formatWorkflow(workflow));
+    }
+    return formatWorkflow(workflows);
+}
+
 export function parseDateTime(dateTime) {
     return moment(dateTime).format('YYYY:MM:DD HH:MM');
 }

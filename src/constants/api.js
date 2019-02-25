@@ -1,11 +1,11 @@
 import { FIELD_TYPE } from 'constants/navigation';
 
 export default {
-    API_URL: 'http://localhost:8000/api/',
-    MEDIA_URL: 'http://localhost:8000/media/',
+    // API_URL: 'http://localhost:8000/api/',
+    // MEDIA_URL: 'http://localhost:8000/media/',
 
-    // API_URL: 'http://192.168.1.140:8000/api/',
-    // MEDIA_URL: 'http://192.168.1.140:8000/media/',
+    API_URL: 'http://192.168.1.61:8000/api/',
+    MEDIA_URL: 'http://192.168.1.61:8000/media/',
 
     LOGIN_PAGE: '/login',
     SIGNUP_PAGE: '/signup',
@@ -16,6 +16,7 @@ export default {
     HOME_PAGE: '/',
     DASHBOARD_PAGE: `/${FIELD_TYPE.DASHBOARD}`,
     WORKFLOWS_PAGE: `/${FIELD_TYPE.WORKFLOWS}`,
+    WORKFLOW_PAGE: '/workflow',
     NEW_WORKFLOW_PAGE: `/${FIELD_TYPE.WORKFLOWS}/new`,
     EMPLOYEES_PAGE: `/${FIELD_TYPE.EMPLOYEES}`,
     EMPLOYEE_PAGE: '/employee',

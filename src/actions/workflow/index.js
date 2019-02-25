@@ -1,10 +1,17 @@
 import actions from 'constants/actions';
 
-const { workflow } = actions;
+const { workflow: actionType } = actions;
 
-export function updateWorkflowAction(workflows) {
+export function updateWorkflowsAction(workflows) {
     return {
-        type: workflow.UPDATE_WORKFLOW,
+        type: actionType.UPDATE_WORKFLOWS,
         workflows,
+    };
+}
+
+export function updateWorkflowAction(workflow) {
+    return {
+        type: actionType.UPDATE_WORKFLOW,
+        workflow,
     };
 }

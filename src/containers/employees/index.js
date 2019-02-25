@@ -6,7 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import React from 'react';
 
 import { updateEmployeesAction } from 'actions/employees';
-import { makeFetchAllRequest } from 'services/employees';
+import { getAllEmployees } from 'services/employees';
 import userConstants from 'constants/user';
 import ApiConstants from 'constants/api';
 import { showToast } from 'utils/helpers/toast';
@@ -37,42 +37,7 @@ export class Profile extends React.Component {
 
     componentWillMount() {
         const { updateEmployees, isAdmin } = this.props;
-
-        makeFetchAllRequest(isAdmin).then(obj => {
-            if (!obj) {
-                return;
-            }
-
-            const { response, body } = obj;
-            if (response.status !== 200) {
-                showToast('Employees update failed');
-                return;
-            }
-
-            const activeEmployees = {};
-            const inactiveEmployees = {};
-            const invitedEmployees = {};
-            body.forEach(emp => {
-                const employeeData = parseEmployeeData(emp);
-
-                const { status, id: employeeId } = employeeData;
-
-                switch (status) {
-                case userConstants.STATUS.INACTIVE:
-                    inactiveEmployees[employeeId] = employeeData;
-                    break;
-                case userConstants.STATUS.INVITED:
-                    invitedEmployees[employeeId] = employeeData;
-                    break;
-                default:
-                    activeEmployees[employeeId] = employeeData;
-                    break;
-                }
-            });
-
-            // dispatch action to update employees
-            updateEmployees(activeEmployees, inactiveEmployees, invitedEmployees);
-        });
+        getAllEmployees(isAdmin);
     }
 
     componentWillReceiveProps(nextProps) {

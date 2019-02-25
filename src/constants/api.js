@@ -1,11 +1,11 @@
 import { FIELD_TYPE } from 'constants/navigation';
 
 export default {
-    // API_URL: 'http://localhost:8000/api/',
-    // MEDIA_URL: 'http://localhost:8000/media/',
+    API_URL: 'http://localhost:8000/api/',
+    MEDIA_URL: 'http://localhost:8000/media/',
 
-    API_URL: 'http://192.168.1.61:8000/api/',
-    MEDIA_URL: 'http://192.168.1.61:8000/media/',
+    // API_URL: 'http://192.168.1.61:8000/api/',
+    // MEDIA_URL: 'http://192.168.1.61:8000/media/',
 
     LOGIN_PAGE: '/login',
     SIGNUP_PAGE: '/signup',

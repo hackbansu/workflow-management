@@ -17,7 +17,7 @@ function employeesOptionField({ label, employees, employeeId, onChange }) {
                 {label}
             </Form.Label>
             <Col sm={12}>
-                <Form.Control as="select" value={employeeId} onChange={e => onChange(e.target.value)}>
+                <Form.Control size="sm" as="select" value={employeeId} onChange={e => onChange(e.target.value)}>
                     {createOptions(employees)}
                 </Form.Control>
             </Col>

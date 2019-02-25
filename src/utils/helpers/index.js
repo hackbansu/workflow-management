@@ -2,8 +2,56 @@ import _ from 'lodash';
 
 import ApiConstants from 'constants/api';
 import TaskConstants from 'constants/task';
-import { isAbsoluteUrl } from 'constants/index.js';
+import { isAbsoluteUrl, regexConst } from 'constants/index.js';
 import moment from 'moment';
+
+export function apiTaskFormCouple(task) {
+    // couple api task format for taskform variable format
+
+    // assignee: 2
+    // completedAt: "2019-02-23T08:52:27Z"
+    // description: "kajsndkjn"
+    // duration: "00:00:00"
+    // id: 1
+    // parentTask: null
+    // startDelta: "00:00:00"
+    // status: 2
+    // title: "Task 1"
+    // workflow: 1
+    const { title: taskTitle, description: taskDetail } = task;
+    let { duration, startDelta } = task;
+
+    startDelta = startDelta.match(regexConst.splitDateTime).groups;
+    const taskStartDeltaDays = startDelta.days;
+    const taskStartDeltaTime = startDelta.time;
+
+    duration = duration.match(regexConst.splitDateTime).groups;
+    const taskDurationDays = duration.days;
+    const taskDurationTime = duration.time;
+    ['title', 'description', 'duration', 'startDelta'].map(prop => delete task[prop]);
+
+    return {
+        ...task,
+        taskDetail,
+        taskTitle,
+        taskStartDeltaDays,
+        taskDurationDays,
+        taskDurationTime,
+        taskStartDeltaTime,
+    };
+}
+
+export function taskFormApiCouple(task) {
+    // couple task form data to api format
+    return {
+        title: task.taskTitle,
+        start_delta: `${task.taskStartDeltaDays}:${task.taskStartDeltaTime}`,
+        duration: `${task.taskDurationDays}:${task.taskDurationTime}`,
+        description: task.taskDetail,
+        assignee: task.assignee,
+        parent_task: task.parentTask,
+    };
+}
 
 export function parseEmployeeData(emp) {
     const { first_name: firstName, last_name: lastName, email, profile_photo_url: profilePhoto, id: userId } = emp.user;
@@ -55,12 +103,13 @@ function formatWorkflow(workflow) {
         delete task.start_delta;
         delete task.completed_at;
         task = { parentTask, startDelta, completedAt, ...task };
+        task = apiTaskFormCouple(task);
         return task;
     });
+    tasks = _.keyBy(tasks, 'id');
     delete workflow.start_at;
     delete workflow.complete_at;
     delete workflow.tasks;
-
     return { startAt, completeAt, tasks, ...workflow };
 }
 

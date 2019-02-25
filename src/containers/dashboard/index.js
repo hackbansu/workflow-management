@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card, Row, Col, ListGroup } from 'react-bootstrap';
 
 import { updateCompleteTasks, updateOngoingTasks, updateUpcommingTasks } from 'actions/tasks';
 import { errorParser } from 'utils/helpers/errorHandler';
@@ -32,18 +32,31 @@ class DashBoard extends React.Component {
     renderCard(tasks) {
         // TODO:add link to go to the respective task detail
         tasks = tasks || {};
-        return Object.keys(tasks).map(taskId => (
-            <Card key={`${Math.random()}-#-card`} className="mt-2">
-                <Card.Header>
-                </Card.Header>
-                <Card.Body>
-                    <Card.Title>{tasks[taskId].title}</Card.Title>
-                    <Card.Text>
-                        {tasks[taskId].description}
-                    </Card.Text>
-                </Card.Body>
-            </Card>
-        ));
+        return Object.keys(tasks).map(taskId => {
+            const task = tasks[taskId];
+            return (
+                <Card key={`${Math.random()}-#-card`} className="mt-2">
+                    <Card.Header className="clearfix">
+                        <h4 className="float-left">
+                            {task.title}
+                        </h4>
+                        <div className="float-right">
+                            <small>
+                                {'Task id : '}
+                            </small>
+                            <small>
+                                {task.id}
+                            </small>
+                        </div>
+                    </Card.Header>
+                    <ListGroup>
+                        <ListGroup.Item>
+                            {tasks[taskId].description}
+                        </ListGroup.Item>
+                    </ListGroup>
+                </Card>
+            );
+        });
     }
 
     renderTask(task, heading) {

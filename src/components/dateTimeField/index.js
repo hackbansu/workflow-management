@@ -49,7 +49,12 @@ class DateTimeField extends React.Component {
         const { currentMoment } = this.state;
         return (
             <DatetimePickerTrigger shortcuts={shortcuts} moment={currentMoment} onChange={this.handleChange}>
-                <input type="text" value={currentMoment.format('YYYY-MM-DD HH:mm')} readOnly />
+                <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    value={currentMoment.format('YYYY-MM-DD HH:mm')}
+                    readOnly
+                />
             </DatetimePickerTrigger>
         );
     }

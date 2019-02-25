@@ -44,7 +44,7 @@ export class Employee extends React.Component {
         this.state = { currentEmployee };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { updateEmployee, match } = this.props;
         const { id: employeeId } = match.params;
 

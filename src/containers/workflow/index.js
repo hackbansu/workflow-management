@@ -41,25 +41,21 @@ export class Workflows extends React.Component {
         const workflow = workflows[this.workflowId];
         if (workflow) {
             const { name: workflowName, startDateTime, creator } = workflow;
+            this.constrainStartDateTime = moment(startDateTime);
+            this.setCreator(creator);
             this.state = {
+                ...this.state,
                 workflowName,
                 startDateTime,
-                creator: {
-                    user: {
-                        email: '',
-                        firstName: '',
-                        lastName: '',
-                    },
-                },
             };
         }
+
+        // bind functions.
         this.setCreator = this.setCreator.bind(this);
     }
 
-    componentWillMount() {
-        const { updateWorkflowAction, workflows } = this.props;
-        const { employees } = this.props;
-        // const { activeEmployees, inactiveEmployees } = employees;
+    componentDidMount() {
+        const { updateWorkflowAction, workflows, activeEmployees, inactiveEmployees } = this.props;
         getAllEmployees();
 
         if (!Object.hasOwnProperty.call(workflows, this.workflowId)) {
@@ -98,18 +94,17 @@ export class Workflows extends React.Component {
                 });
         }
         const workflow = workflows[this.workflowId];
-        console.log(workflow);
         return this.setCreator(workflow.creator);
     }
 
     async setCreator(creator) {
-        const { employees } = this.props;
+        const { activeEmployees, inactiveEmployees } = this.props;
 
         // check creator in active and inactive employees or fetch it
-        if (Object.hasOwnProperty.call(employees.activeEmployees, creator)) {
-            this.setState({ creator: employees.activeEmployees[creator] });
-        } else if (Object.hasOwnProperty.call(employees.inactiveEmployees, creator)) {
-            this.setState({ creator: employees.inactiveEmployees[creator] });
+        if (Object.hasOwnProperty.call(activeEmployees, creator)) {
+            this.setState({ creator: activeEmployees[creator] });
+        } else if (Object.hasOwnProperty.call(inactiveEmployees, creator)) {
+            this.setState({ creator: inactiveEmployees[creator] });
         } else {
             this.setState({
                 creator: await getEmployee(creator),
@@ -153,17 +148,14 @@ export class Workflows extends React.Component {
     }
 
     possibleParents(workflow) {
-        return workflow.tasks.map(task => task.id);
+        return Object.keys(workflow.tasks);
     }
 
     createTasks() {
-        const { workflows } = this.props;
-        const { employees } = this.props;
-
+        const { workflows, activeEmployees } = this.props;
         if (Object.hasOwnProperty.call(workflows, this.workflowId)) {
             const workflow = workflows[this.workflowId];
             const { tasks } = workflow;
-            const { activeEmployees } = employees;
             return Object.keys(tasks).map((taskId, idx) => (
                 <TaskForm
                     taskId={parseInt(taskId)}
@@ -194,6 +186,7 @@ export class Workflows extends React.Component {
                                 </Form.Label>
                                 <Col sm={8}>
                                     <Form.Control
+                                        size="sm"
                                         type="text"
                                         placeholder="Workflow Name"
                                         value={workflowName}
@@ -219,6 +212,7 @@ export class Workflows extends React.Component {
                                 </Form.Label>
                                 <Col sm={8}>
                                     <Form.Control
+                                        size="sm"
                                         type="text"
                                         value={`${creator.user.firstName} ${creator.user.lastName}`}
                                         readOnly
@@ -238,17 +232,21 @@ Workflows.propTypes = {
     currentUser: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     workflows: PropTypes.object.isRequired,
-    employees: PropTypes.object.isRequired,
+    activeEmployees: PropTypes.object,
+    inactiveEmployees: PropTypes.object,
 
     updateWorkflowAction: PropTypes.func.isRequired,
     redirect: PropTypes.func.isRequired,
 };
 
-Workflows.defaultProps = {};
+Workflows.defaultProps = {
+    activeEmployees: {},
+    inactiveEmployees: {},
+};
 
 const mapStateToProps = state => ({
     currentUser: state.currentUser,
-    employees: state.employees,
+    activeEmployees: state.employees.activeEmployees,
     workflows: state.workflows,
 });
 

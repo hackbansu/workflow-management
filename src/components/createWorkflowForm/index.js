@@ -150,6 +150,7 @@ export class CreateWorkflow extends React.Component {
                     </Form.Label>
                     <Col sm={8}>
                         <Form.Control
+                            size="sm"
                             type="text"
                             placeholder="Workflow Name"
                             value={workflowName}
@@ -175,6 +176,7 @@ export class CreateWorkflow extends React.Component {
                     </Form.Label>
                     <Col sm={8}>
                         <Form.Control
+                            size="sm"
                             type="text"
                             value={(completeAt).format('YYYY-MM-DD HH:mm')}
                             readOnly

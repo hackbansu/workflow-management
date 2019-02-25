@@ -114,7 +114,7 @@ export class LoginForm extends React.Component {
                         name="First Name"
                         inputName="firstName"
                         type="text"
-                        value={null}
+                        value={firstName}
                         onChange={e => {
                             const { value } = e.target;
                             return this.setState(prevState => ({
@@ -130,7 +130,7 @@ export class LoginForm extends React.Component {
                         name="Last Name"
                         inputName="lastName"
                         type="text"
-                        value={null}
+                        value={lastName}
                         onChange={e => {
                             const { value } = e.target;
                             return this.setState(prevState => ({
@@ -146,7 +146,7 @@ export class LoginForm extends React.Component {
                         name="Email"
                         inputName="email"
                         type="email"
-                        value={null}
+                        value={email}
                         onChange={e => {
                             const { value } = e.target;
                             return this.setState(prevState => ({
@@ -162,7 +162,7 @@ export class LoginForm extends React.Component {
                         name="Designation"
                         inputName="designation"
                         type="text"
-                        value={null}
+                        value={designation}
                         onChange={e => {
                             const { value } = e.target;
                             return this.setState(prevState => ({
@@ -177,7 +177,7 @@ export class LoginForm extends React.Component {
                         name="Company Name"
                         inputName="companyName"
                         type="text"
-                        value={null}
+                        value={companyName}
                         onChange={e => {
                             const { value } = e.target;
                             return this.setState(prevState => ({
@@ -192,7 +192,7 @@ export class LoginForm extends React.Component {
                         name="Company Address"
                         inputName="companyAddress"
                         type="text"
-                        value={null}
+                        value={companyAddress}
                         onChange={e => {
                             const { value } = e.target;
                             return this.setState(prevState => ({

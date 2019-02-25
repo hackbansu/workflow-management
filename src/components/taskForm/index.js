@@ -131,7 +131,7 @@ class TaskForm extends React.Component {
                             {'Task Id'}
                         </Form.Label>
                         <Col sm={6}>
-                            <Form.Control type="text" value={taskId} plaintext readOnly />
+                            <Form.Control size="sm" type="text" value={taskId} plaintext readOnly />
                         </Col>
                     </Form.Group>
                 </Form.Row>
@@ -141,6 +141,7 @@ class TaskForm extends React.Component {
     }
 
     renderParentTask() {
+        // TODO feature
         const { taskId, taskInformation } = this.props;
         const { parentTask } = taskInformation;
         if (taskId && false) {
@@ -149,6 +150,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Parent Task</Form.Label>
                         <Form.Control
+                            size="sm"
                             as="select"
                             defaultValue={parentTask}
                             ref={this.parentTask}
@@ -164,7 +166,7 @@ class TaskForm extends React.Component {
 
     render() {
         // TODO:Implement to render extra field in taks using task props.
-        const { task: taskStructure, employees, taskId, taskInformation } = this.props;
+        const { task: taskStructure, employees, taskInformation } = this.props;
         const { taskTitle, taskDetail, assignee } = taskInformation;
         let { taskStartDeltaTime, taskStartDeltaDays, taskDurationDays, taskDurationTime } = taskInformation;
         taskStartDeltaDays = taskStartDeltaDays || 0;
@@ -181,6 +183,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col} controlId="TaskTitle">
                         <Form.Label>Title</Form.Label>
                         <Form.Control
+                            size="sm"
                             type="text"
                             placeholder="Task title"
                             defaultValue={taskTitle}
@@ -192,7 +195,7 @@ class TaskForm extends React.Component {
                             Assignee
                         </Form.Label>
                         <Col sm={12}>
-                            <Form.Control as="select" defaultValue={assignee} ref={this.assignee}>
+                            <Form.Control size="sm" as="select" defaultValue={assignee} ref={this.assignee}>
                                 {this.employeesOptions(employees)}
                             </Form.Control>
                         </Col>
@@ -202,6 +205,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Time</Form.Label>
                         <Form.Control
+                            size="sm"
                             type="time"
                             defaultValue={taskStartDeltaTime}
                             ref={this.taskStartDeltaTime}
@@ -210,6 +214,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Days</Form.Label>
                         <Form.Control
+                            size="sm"
                             type="number"
                             min="0"
                             defaultValue={taskStartDeltaDays}
@@ -221,6 +226,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Duration Time</Form.Label>
                         <Form.Control
+                            size="sm"
                             type="time"
                             defaultValue={taskDurationTime}
                             ref={this.taskDurationTime}
@@ -229,6 +235,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Duration Days</Form.Label>
                         <Form.Control
+                            size="sm"
                             type="number"
                             min="0"
                             defaultValue={taskDurationDays}
@@ -263,6 +270,7 @@ TaskForm.propTypes = {
     taskId: PropTypes.number.isRequired,
     taskInformation: PropTypes.object,
     onChange: PropTypes.func.isRequired,
+    showTaskId: PropTypes.bool,
 };
 TaskForm.defaultProps = {
     taskInformation: {
@@ -273,6 +281,7 @@ TaskForm.defaultProps = {
         parentTask: 0,
         assignee: '',
     },
+    showTaskId: false,
 };
 
 export default TaskForm;

@@ -47,6 +47,7 @@ class PermissionForm extends React.Component {
                     </Form.Label>
                     <Col sm={12}>
                         <Form.Control
+                            size="sm"
                             as="select"
                             value={permission}
                             onChange={e => this.handleAccessChange(e.target.value)}

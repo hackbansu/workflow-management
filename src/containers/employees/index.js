@@ -1,9 +1,10 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import React from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import { updateEmployeesAction } from 'actions/employees';
 import { getAllEmployees } from 'services/employees';
@@ -16,7 +17,7 @@ import './index.scss';
 
 // import components
 import EmployeesNavbar from 'components/employeesNavbar';
-import EmployeeTableRow from 'components/employeeTableRow';
+import EmployeeCard from 'components/employeeCard';
 
 /**
  * Login page component.
@@ -138,27 +139,16 @@ export class Profile extends React.Component {
         const { filteredEmployees } = this.state;
         const { isAdmin } = this.props;
         return (
-            <div>
+            <React.Fragment>
                 <EmployeesNavbar isAdmin={isAdmin} onClick={this.filterEmployees} onSearch={this.searchEmployees} />
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" className="employee-pic">
-                                Profile Pic
-                            </th>
-                            <th scope="col">First NAME</th>
-                            <th scope="col">Last NAME</th>
-                            <th scope="col">DESIGNATION</th>
-                            {this.extraDetails(isAdmin)}
-                        </tr>
-                    </thead>
-                    <tbody>
+                <Container>
+                    <Row>
                         {filteredEmployees.map(data => (
-                            <EmployeeTableRow isAdmin={isAdmin} data={data} key={`${data.id}-${data.user.id}`} />
+                            <EmployeeCard isAdmin={isAdmin} data={data} key={`${data.id}-${data.user.id}`} />
                         ))}
-                    </tbody>
-                </table>
-            </div>
+                    </Row>
+                </Container>
+            </React.Fragment>
         );
     }
 }

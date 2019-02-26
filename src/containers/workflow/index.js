@@ -5,11 +5,11 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Container, Row, Col, Card, Button, ListGroup, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import DateTimeField from 'components/dateTimeField';
-import TaskForm from 'components/taskForm';
+import TaskWorkflowCard from 'components/taskWorkflowCard';
 import WorkflowPermissions from 'components/workflowPermissions';
 import { getWorkflow } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
@@ -39,7 +39,6 @@ export class Workflows extends React.Component {
         if (workflow) {
             const { name: workflowName, startDateTime, creator } = workflow;
             this.constrainStartDateTime = moment(startDateTime);
-            this.setCreator(creator);
             this.state = {
                 ...this.state,
                 workflowName,
@@ -50,6 +49,7 @@ export class Workflows extends React.Component {
         // bind functions.
         this.setCreator = this.setCreator.bind(this);
         this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
+        this.setStartDateTime = this.setStartDateTime.bind(this);
     }
 
     async componentDidMount() {
@@ -63,7 +63,7 @@ export class Workflows extends React.Component {
                 const workflow = await getWorkflow(this.workflowId);
                 const { creator } = workflow;
                 this.constrainStartDateTime = moment(workflow.startAt);
-                this.setState({ 
+                this.setState({
                     workflowName: workflow.name,
                     startDateTime: this.constrainStartDateTime,
                     workflowPermissions: formatPermission(workflow.accessors, 'id'),
@@ -141,14 +141,10 @@ export class Workflows extends React.Component {
             const workflow = workflows[this.workflowId];
             const { tasks } = workflow;
             return Object.keys(tasks).map((taskId, idx) => (
-                <TaskForm
-                    taskId={parseInt(taskId)}
-                    showTaskId
-                    employees={activeEmployees}
-                    task={tasks[taskId]}
+                <TaskWorkflowCard
                     key={`${Math.random()}-task`}
-                    parents={this.possibleParents(workflow)}
-                    onChange={() => console.log('dummy called')}
+                    taskId={parseInt(taskId)}
+                    employees={activeEmployees}
                     taskInformation={tasks[taskId]}
                 />
             ));

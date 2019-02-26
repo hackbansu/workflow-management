@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React from 'react';
 
+import { push } from 'connected-react-router';
 import { showLoader } from 'utils/helpers/loader';
 import { makeSignupRequest } from 'services/auth';
 import { showModal } from 'utils/helpers/modal';
@@ -37,8 +38,7 @@ export class Signup extends React.Component {
         companyName,
         companyAddress,
     ) => {
-        const { history } = this.props;
-
+        const { redirect } = this.props;
         // dispatch action to show loader
         showLoader(true);
 
@@ -56,26 +56,26 @@ export class Signup extends React.Component {
         };
 
         // call the service function
-        makeSignupRequest(data).then(obj => {
-            showLoader(false);
+        return makeSignupRequest(data)
+            .then(obj => {
+                if (!obj) {
+                    return Promise.reject();
+                }
 
-            if (!obj) {
-                return;
-            }
-
-            const { response, body } = obj;
-            if (response.status !== 201) {
-                showModal('Signup Failed', 'Signup request failed');
-                return;
-            }
-
-            showModal('Signup Successful', 'Confirmation link has been sent to your email.');
-        });
+                const { response, body } = obj;
+                if (response.status !== 201) {
+                    return Promise.reject();
+                    // showModal('Signup Failed', 'Signup request failed');
+                }
+                showModal('Signup Successful', 'Confirmation link has been sent to your email.');
+                redirect('/');
+                return Promise.resolve();
+            })
+            .finally(() => {
+                showLoader(false);
+            });
     };
 
-    /**
-     * function to render the component.
-     */
     render() {
         return (
             <div className="container entry-form-container">
@@ -90,14 +90,16 @@ export class Signup extends React.Component {
 }
 
 Signup.propTypes = {
-    history: PropTypes.object.isRequired,
+    redirect: PropTypes.func.isRequired,
 };
 
 Signup.defaultProps = {};
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    redirect: url => dispatch(push(url)),
+});
 
 export default connect(
     mapStateToProps,

@@ -101,7 +101,6 @@ export async function getWorkflow(wfid) {
         const { response } = obj;
         let { body } = obj;
         if (response.status === 404) {
-            const { redirect } = this.props;
             redirect(ApiConst.DASHBOARD_PAGE);
         }
         if (!response.ok) {

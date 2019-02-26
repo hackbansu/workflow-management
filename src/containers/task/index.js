@@ -9,6 +9,7 @@ import { push } from 'connected-react-router';
 
 import TaskForm from 'components/taskForm';
 import { updateWorkflowAction } from 'actions/workflow';
+import { Link } from 'react-router-dom';
 import { getTask } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
 import { apiTaskFormCouple } from 'utils/helpers';
@@ -32,6 +33,7 @@ export class Task extends React.Component {
     componentDidMount() {
         const { task } = this.state;
         const { activeEmployees } = this.props;
+        // fetch all active employees, if only assignee missing then only assignee will be fetched
         if (Object.keys(activeEmployees).length === 0) {
             getAllEmployees();
         } else if (!Object.hasOwnProperty.call(task, 'assignee')) {
@@ -74,7 +76,6 @@ export class Task extends React.Component {
     createTasks() {
         const { activeEmployees } = this.props;
         const { task } = this.state;
-        // console.log('task', task);
         return (
             <TaskForm
                 taskId={parseInt(this.taskId)}
@@ -89,10 +90,14 @@ export class Task extends React.Component {
     }
 
     render() {
+        const { task } = this.state;
         return (
             <Container>
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-center">
                     <Col md={10} sm xs={12}>
+                        <Link to={`${ApiConstants.WORKFLOW_PAGE}/${task.workflow}`} className="text-info ml-2 mb-2">
+                            {'<< Workflow'}
+                        </Link>
                         <Form>
                             <Form.Row className="col-12">{this.createTasks()}</Form.Row>
                         </Form>

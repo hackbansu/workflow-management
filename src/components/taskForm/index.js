@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Row, Col, Button, Alert, Container } from 'react-bootstrap';
 import _ from 'lodash';
+import { connect } from 'react-redux';
 
-import { getRandomBorder, apiTaskFormCouple } from 'utils/helpers';
+
+import taskConstants from 'constants/task';
+import { getRandomBorder } from 'utils/helpers';
 import { validateTextString } from 'utils/validators';
 
 class TaskForm extends React.Component {
@@ -173,8 +176,8 @@ class TaskForm extends React.Component {
         taskStartDeltaTime = taskStartDeltaTime || '00:00';
         taskDurationTime = taskDurationTime || '00:00';
         taskDurationDays = taskDurationDays || 0;
-        // console.log('taskDetail', taskDetail);
-        // console.log('taskInformation', taskInformation);
+        const editableFields = true;
+        console.log('employees', employees);
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Container>
@@ -185,6 +188,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col} controlId="TaskTitle">
                         <Form.Label>Title</Form.Label>
                         <Form.Control
+                            disabled={editableFields}
                             size="sm"
                             type="text"
                             placeholder="Task title"
@@ -196,9 +200,15 @@ class TaskForm extends React.Component {
                         <Form.Label column sm={12}>
                             Assignee
                         </Form.Label>
-                        <Col sm={12}>
-                            <Form.Control size="sm" as="select" defaultValue={assignee} ref={this.assignee}>
-                                {this.employeesOptions(employees)}
+                        <Col sm={12} key={`${assignee}-assignee`}>
+                            <Form.Control
+                                disabled={editableFields}
+                                size="sm"
+                                as="select"
+                                defaultValue={assignee}
+                                ref={this.assignee}
+                            >
+                                {this.employeesOptions(employees, assignee)}
                             </Form.Control>
                         </Col>
                     </Form.Group>
@@ -207,6 +217,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Time</Form.Label>
                         <Form.Control
+                            disabled={editableFields}
                             size="sm"
                             type="time"
                             defaultValue={taskStartDeltaTime}
@@ -216,6 +227,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Days</Form.Label>
                         <Form.Control
+                            disabled={editableFields}
                             size="sm"
                             type="number"
                             min="0"
@@ -228,6 +240,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Duration Time</Form.Label>
                         <Form.Control
+                            disabled={editableFields}
                             size="sm"
                             type="time"
                             defaultValue={taskDurationTime}
@@ -237,6 +250,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Duration Days</Form.Label>
                         <Form.Control
+                            disabled={editableFields}
                             size="sm"
                             type="number"
                             min="0"
@@ -246,9 +260,10 @@ class TaskForm extends React.Component {
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col}>
+                    <Form.Group as={Col} key={taskDetail}>
                         <Form.Label>Task Detail</Form.Label>
                         <textarea
+                            disabled={editableFields}
                             className="form-control"
                             row="4"
                             defaultValue={taskDetail}
@@ -286,4 +301,7 @@ TaskForm.defaultProps = {
     showTaskId: false,
 };
 
-export default TaskForm;
+const mapStateToProps = state => ({
+});
+
+export default connect(mapStateToProps)(TaskForm);

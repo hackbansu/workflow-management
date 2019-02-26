@@ -89,11 +89,31 @@ export class LoginForm extends React.Component {
         }
 
         if (isNewUser) {
-            onSubmit(firstName, lastName, email, designation, companyName, companyAddress);
+            onSubmit(firstName, lastName, email, designation, companyName, companyAddress)
+                .then(() => {
+                    this.clearForm();
+                })
+                .catch();
         } else {
-            onSubmit(designation, companyName, companyAddress);
+            onSubmit(designation, companyName, companyAddress)
+                .then(() => {
+                    this.clearForm();
+                })
+                .catch();
         }
     };
+
+    clearForm() {
+        this.setState({
+            email: '',
+            firstName: '',
+            lastName: '',
+            designation: '',
+            companyName: '',
+            companyAddress: '',
+            errors: {},
+        });
+    }
 
     /**
      * Function to return the component rendering.

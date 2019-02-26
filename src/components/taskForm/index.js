@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Row, Col, Button, Alert, Container } from 'react-bootstrap';
 import _ from 'lodash';
 
-import { getRandomBorder } from 'utils/helpers';
+import { getRandomBorder, apiTaskFormCouple } from 'utils/helpers';
 import { validateTextString } from 'utils/validators';
 
 class TaskForm extends React.Component {
@@ -173,6 +173,8 @@ class TaskForm extends React.Component {
         taskStartDeltaTime = taskStartDeltaTime || '00:00';
         taskDurationTime = taskDurationTime || '00:00';
         taskDurationDays = taskDurationDays || 0;
+        // console.log('taskDetail', taskDetail);
+        // console.log('taskInformation', taskInformation);
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Container>

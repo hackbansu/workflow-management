@@ -84,91 +84,89 @@ export class ProfileForm extends React.Component {
         const { email, firstName, lastName, isAdmin, designation, status, profilePhoto, errors } = this.state;
 
         return (
-            <div>
-                <form method="post" onSubmit={this.submitForm(firstName, lastName, profilePhoto)}>
-                    <fieldset>
-                        {/* email */}
-                        <FormField
-                            name="Email"
-                            inputName="email"
-                            type="email"
-                            placeholder="eg. user@example.com"
-                            value={email}
-                            disabled="disabled"
-                        />
-                        {/* first name */}
-                        <FormField
-                            name="First Name"
-                            inputName="firstName"
-                            type="text"
-                            placeholder="eg. nitin"
-                            value={firstName}
-                            onChange={e => {
-                                const { value } = e.target;
-                                return this.setState(prevState => ({
-                                    firstName: value,
-                                    errors: { ...prevState.errors, firstName: validateTextString(value).message },
-                                }));
-                            }}
-                            errorMsg={errors.firstName}
-                        />
-                        {/* last name */}
-                        <FormField
-                            name="Last Name"
-                            inputName="lastName"
-                            type="text"
-                            placeholder="eg. singh"
-                            value={lastName}
-                            onChange={e => {
-                                const { value } = e.target;
-                                return this.setState(prevState => ({
-                                    lastName: value,
-                                    errors: { ...prevState.errors, lastName: validateTextString(value).message },
-                                }));
-                            }}
-                            errorMsg={errors.lastName}
-                        />
-                        {/* designation */}
-                        <FormField
-                            name="Designation"
-                            inputName="designation"
-                            type="text"
-                            placeholder="eg. CEO"
-                            value={designation}
-                            disabled="disabled"
-                        />
-                        {/* status */}
-                        <FormField
-                            name="Status"
-                            inputName="status"
-                            type="text"
-                            placeholder="eg. active"
-                            value={userConstants.STATUS[status]}
-                            disabled="disabled"
-                        />
-                        {/* isAdmin */}
-                        <FormField
-                            name="Admin"
-                            inputName="isAdmin"
-                            type="checkbox"
-                            disabled="disabled"
-                            checked={isAdmin ? 'checked' : ''}
-                        />
-                        {/* profile photo */}
-                        <UploadField
-                            name="Profile Picture"
-                            inputName="profilePhoto"
-                            type="file"
-                            accept={constants.PROFILE_PIC_TYPES}
-                            onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
-                            errorMsg={errors.profilePhoto}
-                            fileName={profilePhoto ? profilePhoto.name : 'No file selected'}
-                        />
-                        {/* update profile button */}
-                        <FormSubmitButton name="Update" />
-                    </fieldset>
-                </form>
-            </div>
+            <form method="post" onSubmit={this.submitForm(firstName, lastName, profilePhoto)}>
+                <fieldset>
+                    {/* email */}
+                    <FormField
+                        name="Email"
+                        inputName="email"
+                        type="email"
+                        placeholder="eg. user@example.com"
+                        value={email}
+                        disabled="disabled"
+                    />
+                    {/* first name */}
+                    <FormField
+                        name="First Name"
+                        inputName="firstName"
+                        type="text"
+                        placeholder="eg. nitin"
+                        value={firstName}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                firstName: value,
+                                errors: { ...prevState.errors, firstName: validateTextString(value).message },
+                            }));
+                        }}
+                        errorMsg={errors.firstName}
+                    />
+                    {/* last name */}
+                    <FormField
+                        name="Last Name"
+                        inputName="lastName"
+                        type="text"
+                        placeholder="eg. singh"
+                        value={lastName}
+                        onChange={e => {
+                            const { value } = e.target;
+                            return this.setState(prevState => ({
+                                lastName: value,
+                                errors: { ...prevState.errors, lastName: validateTextString(value).message },
+                            }));
+                        }}
+                        errorMsg={errors.lastName}
+                    />
+                    {/* designation */}
+                    <FormField
+                        name="Designation"
+                        inputName="designation"
+                        type="text"
+                        placeholder="eg. CEO"
+                        value={designation}
+                        disabled="disabled"
+                    />
+                    {/* status */}
+                    <FormField
+                        name="Status"
+                        inputName="status"
+                        type="text"
+                        placeholder="eg. active"
+                        value={userConstants.STATUS[status]}
+                        disabled="disabled"
+                    />
+                    {/* isAdmin */}
+                    <FormField
+                        name="Admin"
+                        inputName="isAdmin"
+                        type="checkbox"
+                        disabled="disabled"
+                        checked={isAdmin ? 'checked' : ''}
+                    />
+                    {/* profile photo */}
+                    <UploadField
+                        name="Profile Picture"
+                        inputName="profilePhoto"
+                        type="file"
+                        accept={constants.PROFILE_PIC_TYPES}
+                        onChange={e => this.setState({ profilePhoto: e.target.files[0] })}
+                        errorMsg={errors.profilePhoto}
+                        fileName={profilePhoto ? profilePhoto.name : 'No file selected'}
+                    />
+                    {/* update profile button */}
+                    <FormSubmitButton name="Update" />
+                </fieldset>
+            </form>
         );
     }
 }

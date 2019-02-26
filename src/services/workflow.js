@@ -3,12 +3,15 @@ import _ from 'lodash';
 import ApiConst from 'constants/api';
 import TaskConstant from 'constants/task';
 
-import { updateWorkflowsAction } from 'actions/workflow';
+import { updateWorkflowsAction, updateWorkflowAction } from 'actions/workflow';
+import { updateCompleteTasks, updateOngoingTasks, updateUpcommingTasks } from 'actions/tasks';
 import { makeApiRequest } from 'services/base';
 import { showLoader } from 'utils/helpers/loader';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { showToast } from 'utils/helpers/toast';
-import { parseWorkflow } from 'utils/helpers';
+import { parseWorkflow, formatTasks, apiTaskFormCouple } from 'utils/helpers';
+import { push } from 'connected-react-router';
+
 import store from '../store';
 
 const { task, workflow } = ApiConst.api;
@@ -17,8 +20,27 @@ function updateWorkflows(...args) {
     return store.dispatch(updateWorkflowsAction(...args));
 }
 
+function updateWorkflow(...args) {
+    return store.dispatch(updateWorkflowAction(...args));
+}
+
+function updateTasks(tasks) {
+    const { upcomming, ongoing, complete } = tasks;
+    store.dispatch(updateCompleteTasks(complete));
+    store.dispatch(updateUpcommingTasks(upcomming));
+    store.dispatch(updateOngoingTasks(ongoing));
+}
+
+function redirect(url) {
+    return store.dispatch(push(url));
+}
+
 export function makefetchAllTasks() {
     return makeApiRequest(task.FETCH);
+}
+
+export function makeFetchTaskRequest(taskId) {
+    return makeApiRequest(`${task.FETCH}${taskId}/`);
 }
 
 export function makeCreateWorkflow(data) {
@@ -54,4 +76,85 @@ export function getAllWorkflows() {
         .finally(() => {
             showLoader(false);
         });
+}
+
+export async function getAllTasks() {
+    showLoader(true);
+    try {
+        const { response, body } = await makefetchAllTasks();
+        if (!response.ok) {
+            const errMsg = errorParser(body);
+            showToast(errMsg);
+            return;
+        }
+        const tasks = formatTasks(body);
+        updateTasks(tasks);
+    } finally {
+        showLoader(false);
+    }
+}
+
+export async function getWorkflow(wfid) {
+    showLoader(true);
+    try {
+        const obj = await makeFetchWorkflow(wfid);
+        const { response } = obj;
+        let { body } = obj;
+        if (response.status === 404) {
+            const { redirect } = this.props;
+            redirect(ApiConst.DASHBOARD_PAGE);
+        }
+        if (!response.ok) {
+            const errMsg = errorParser(body);
+            showToast(errMsg);
+            return Promise.reject();
+        }
+        body = parseWorkflow(body);
+        const workflows = {};
+        workflows[body.id] = body;
+        updateWorkflow(workflows);
+        return body;
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
+}
+
+
+export async function getTask(taskId) {
+    showLoader(true);
+    try {
+        const { response, body } = await makeFetchTaskRequest(taskId);
+        if (!response.ok) {
+            const errMsg = errorParser(body);
+            showToast(errMsg);
+            return Promise.reject();
+        }
+        const task = {};
+        task[body.id] = apiTaskFormCouple(body);
+        /*
+        * UPCOMMING: 1,
+        * ONGOING: 2,
+        * COMPLETE: 3,
+        */
+        switch (task[body.id].status) {
+        case TaskConstant.STATUS.UPCOMMING:
+            store.dispatch(updateUpcommingTasks(task));
+            break;
+        case TaskConstant.STATUS.ONGOING:
+            store.dispatch(updateUpcommingTasks(task));
+            break;
+        case TaskConstant.STATUS.COMPLETE:
+            store.dispatch(updateUpcommingTasks(task));
+            break;
+        default:
+            break;
+        }
+        return task[body.id];
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
 }

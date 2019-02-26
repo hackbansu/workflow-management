@@ -5,17 +5,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // importing containers for routing
-import Dashboard from 'containers/dashboard';
-import WorkflowTemplates from 'containers/workflowTemplates';
-import Workflows from 'containers/workflows';
-import Employees from 'containers/employees';
-import Employee from 'containers/employee';
-import Invite from 'containers/invite';
-import Profile from 'containers/profile';
 import Company from 'containers/company';
 import CreateCompany from 'containers/createCompany';
 import CreateWorkflow from 'containers/createWorkflow';
+import Dashboard from 'containers/dashboard';
+import Employee from 'containers/employee';
+import Employees from 'containers/employees';
+import Invite from 'containers/invite';
+import Profile from 'containers/profile';
 import Workflow from 'containers/workflow';
+import Workflows from 'containers/workflows';
+import WorkflowTemplates from 'containers/workflowTemplates';
+import Task from 'containers/task';
 
 // import Constants from constant file.
 import UserConstants from 'constants/user';
@@ -32,6 +33,7 @@ import { showLoader } from 'utils/helpers/loader';
 import { showToast } from 'utils/helpers/toast';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
+import { Container } from 'react-bootstrap';
 
 /**
  * Home component.
@@ -190,6 +192,13 @@ export class Home extends React.Component {
                                     exact
                                     path={`${ApiConstants.WORKFLOW_PAGE}/:id`}
                                     component={Workflow}
+                                    condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.TASK_PAGE}/:id`}
+                                    component={Task}
                                     condition={isPartOfComapany}
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                 />

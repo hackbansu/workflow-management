@@ -7,17 +7,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Row, Col, Card, Button, ListGroup, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { push } from 'connected-react-router';
 
 import DateTimeField from 'components/dateTimeField';
 import TaskForm from 'components/taskForm';
-import { updateWorkflowAction } from 'actions/workflow';
-import { makeFetchWorkflow } from 'services/workflow';
+import WorkflowPermissions from 'components/workflowPermissions';
+import { getWorkflow } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
-import { errorParser } from 'utils/helpers/errorHandler';
+import { formatPermission } from 'utils/helpers';
 import { showLoader } from 'utils/helpers/loader';
-import { showToast } from 'utils/helpers/toast';
-import { parseWorkflow } from 'utils/helpers';
 
 
 export class Workflows extends React.Component {
@@ -52,46 +49,29 @@ export class Workflows extends React.Component {
 
         // bind functions.
         this.setCreator = this.setCreator.bind(this);
+        this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
     }
 
-    componentDidMount() {
-        const { updateWorkflowAction, workflows, activeEmployees, inactiveEmployees } = this.props;
+    async componentDidMount() {
+        const { workflows } = this.props;
         getAllEmployees();
 
         if (!Object.hasOwnProperty.call(workflows, this.workflowId)) {
             showLoader(true);
             // fetch workflow if not in store
-            return makeFetchWorkflow(this.workflowId)
-                .then(obj => {
-                    if (!obj) {
-                        return;
-                    }
-                    const { response } = obj;
-                    let { body } = obj;
-
-                    if (response.status === 404) {
-                        const { redirect } = this.props;
-                        redirect(ApiConstants.DASHBOARD_PAGE);
-                    }
-                    if (response.status !== 200) {
-                        const errMsg = errorParser(body);
-                        showToast(errMsg);
-                        return;
-                    }
-                    body = parseWorkflow(body);
-                    const workflows = {};
-                    workflows[body.id] = body;
-                    updateWorkflowAction(workflows);
-                    const workflow = workflows[this.workflowId];
-                    const { creator } = workflow;
-                    this.constrainStartDateTime = moment(workflow.startAt);
-                    this.setState({ workflowName: workflow.name, startDateTime: this.constrainStartDateTime });
-                    this.setCreator(creator);
-                })
-                // finally shut the loader
-                .finally(() => {
-                    showLoader(false);
+            try {
+                const workflow = await getWorkflow(this.workflowId);
+                const { creator } = workflow;
+                this.constrainStartDateTime = moment(workflow.startAt);
+                this.setState({ 
+                    workflowName: workflow.name,
+                    startDateTime: this.constrainStartDateTime,
+                    workflowPermissions: formatPermission(workflow.accessors, 'id'),
                 });
+                return this.setCreator(creator);
+            } catch (e) {
+                return Promise.reject(e);
+            }
         }
         const workflow = workflows[this.workflowId];
         return this.setCreator(workflow.creator);
@@ -116,6 +96,10 @@ export class Workflows extends React.Component {
         this.setState({
             startDateTime: value,
         });
+    }
+
+    setWorkFlowPermissions(value) {
+        this.setState({ workflowPermissions: value });
     }
 
     createWorkFlowButton() {
@@ -173,8 +157,8 @@ export class Workflows extends React.Component {
     }
 
     render() {
-        const { workflows } = this.props;
-        const { workflowName, creator, startDateTime } = this.state;
+        const { workflowName, creator, startDateTime, workflowPermissions } = this.state;
+        const { activeEmployees } = this.props;
         return (
             <Container>
                 <Row className="justify-content-md-center">
@@ -219,6 +203,13 @@ export class Workflows extends React.Component {
                                     />
                                 </Col>
                             </Form.Group>
+                            <Form.Row className="col-12">
+                                <WorkflowPermissions
+                                    employees={activeEmployees}
+                                    onChange={this.setWorkFlowPermissions}
+                                    workflowPermissions={workflowPermissions}
+                                />
+                            </Form.Row>
                             <Form.Row className="col-12">{this.createTasks()}</Form.Row>
                         </Form>
                     </Col>
@@ -235,8 +226,6 @@ Workflows.propTypes = {
     activeEmployees: PropTypes.object,
     inactiveEmployees: PropTypes.object,
 
-    updateWorkflowAction: PropTypes.func.isRequired,
-    redirect: PropTypes.func.isRequired,
 };
 
 Workflows.defaultProps = {
@@ -251,8 +240,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateWorkflowAction: (...args) => dispatch(updateWorkflowAction(...args)),
-    redirect: url => dispatch(push(url)),
 });
 
 export default connect(

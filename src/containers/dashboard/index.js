@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Card, Row, Col, ListGroup } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
-import { updateCompleteTasks, updateOngoingTasks, updateUpcommingTasks } from 'actions/tasks';
-import { errorParser } from 'utils/helpers/errorHandler';
-import { makefetchAllTasks } from 'services/workflow';
-import { showToast } from 'utils/helpers/toast';
-import { formatTasks, getRandomBorder } from 'utils/helpers';
+import ApiConstants from 'constants/api';
+import { getAllTasks } from 'services/workflow';
+import { getRandomBorder } from 'utils/helpers';
 
 class DashBoard extends React.Component {
     constructor(props) {
@@ -17,16 +16,7 @@ class DashBoard extends React.Component {
     }
 
     componentWillMount() {
-        const { updateTasks } = this.props;
-        makefetchAllTasks().then(({ response, body }) => {
-            if (!response.ok) {
-                const errMsg = errorParser(body);
-                showToast(errMsg);
-                return;
-            }
-            const tasks = formatTasks(body);
-            updateTasks(tasks);
-        });
+        getAllTasks();
     }
 
     renderCard(tasks) {
@@ -35,26 +25,28 @@ class DashBoard extends React.Component {
         return Object.keys(tasks).map(taskId => {
             const task = tasks[taskId];
             return (
-                <Card key={`${Math.random()}-#-card`} className="mt-2">
-                    <Card.Header className="clearfix">
-                        <h4 className="float-left">
-                            {task.title}
-                        </h4>
-                        <div className="float-right">
-                            <small>
-                                {'Task id : '}
-                            </small>
-                            <small>
-                                {task.id}
-                            </small>
-                        </div>
-                    </Card.Header>
-                    <ListGroup>
-                        <ListGroup.Item>
-                            {tasks[taskId].description}
-                        </ListGroup.Item>
-                    </ListGroup>
-                </Card>
+                <LinkContainer key={`${Math.random()}-#-card`} to={`${ApiConstants.TASK_PAGE}/${task.id}`}>
+                    <Card className="mt-2">
+                        <Card.Header className="clearfix">
+                            <h4 className="float-left">
+                                {task.title}
+                            </h4>
+                            <div className="float-right">
+                                <small>
+                                    {'Task id : '}
+                                </small>
+                                <small>
+                                    {task.id}
+                                </small>
+                            </div>
+                        </Card.Header>
+                        <ListGroup>
+                            <ListGroup.Item>
+                                {tasks[taskId].description}
+                            </ListGroup.Item>
+                        </ListGroup>
+                    </Card>
+                </LinkContainer>
             );
         });
     }
@@ -86,7 +78,6 @@ class DashBoard extends React.Component {
 }
 
 DashBoard.propTypes = {
-    updateTasks: PropTypes.func.isRequired,
     tasks: PropTypes.object.isRequired,
 };
 
@@ -95,12 +86,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    updateTasks: (tasks) => {
-        const { upcomming, ongoing, complete } = tasks;
-        dispatch(updateCompleteTasks(complete));
-        dispatch(updateUpcommingTasks(upcomming));
-        dispatch(updateOngoingTasks(ongoing));
-    },
 });
 
 export default connect(

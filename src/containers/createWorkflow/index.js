@@ -107,6 +107,7 @@ export class CreateWorkflow extends React.Component {
                     showModal('Error', errMsg);
                     return;
                 }
+                showToast('WOrkflow Created');
                 redirect(ApiConstants.WORKFLOWS_PAGE);
             });
     }

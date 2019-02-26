@@ -39,41 +39,40 @@ export class LoginPage extends React.Component {
         showLoader(true);
 
         // call the service function
-        makeLoginRequest(email, password).then(obj => {
-            showLoader(false);
+        makeLoginRequest(email, password)
+            .then(obj => {
+                if (!obj) {
+                    return;
+                }
 
-            if (!obj) {
-                return;
-            }
+                const { response, body } = obj;
+                if (response.status !== 200) {
+                    const msg = errorParser(body);
+                    showModal('Login Failed', msg);
+                    return;
+                }
 
-            const { response, body } = obj;
-            if (response.status !== 200) {
-                const msg = errorParser(body);
-                showModal('Login Failed', msg);
-                return;
-            }
+                const {
+                    token,
+                    email,
+                    id,
+                    first_name: firstName,
+                    last_name: lastName,
+                    profile_photo_url: profilePhoto,
+                } = body;
 
-            const {
-                token,
-                email,
-                id,
-                first_name: firstName,
-                last_name: lastName,
-                profile_photo_url: profilePhoto,
-            } = body;
+                // dispatch action to update user token and data
+                updateToken(token);
+                updateProfile(firstName, lastName, profilePhoto, email, id);
 
-            // dispatch action to update user token and data
-            updateToken(token);
-            updateProfile(firstName, lastName, profilePhoto, email, id);
-
-            // redirect to home page
-            redirectPage(ApiConstants.HOME_PAGE);
-        });
+                // redirect to home page
+                redirectPage(ApiConstants.HOME_PAGE);
+            })
+            .finally(() => {
+                showLoader(false);
+            });
     };
 
-    /**
-     * function to render the component.
-     */
     render() {
         return (
             <div className="container entry-form-container">

@@ -33,13 +33,13 @@ function extraDetails({ isAdmin, email, joinAt, leftAt }) {
 function employeeClass(status) {
     switch (status) {
     case userConstants.STATUS.ACTIVE:
-        return 'active-employee';
+        return 'far fa-check-circle text-success';
     case userConstants.STATUS.INACTIVE:
-        return 'inactive-employee';
+        return 'fas fa-asterisk text-danger';
     case userConstants.STATUS.INVITED:
-        return 'invited-employee';
+        return 'far fa-clock text-info';
     default:
-        return 'active-employee';
+        return 'far fa-check-circle text-success';
     }
 }
 
@@ -47,7 +47,7 @@ function employeeClass(status) {
  * Functional component of the loader.
  * @param {object} param0 - props object for the component.
  */
-export const EmployeeTableRow = ({ isAdmin, data, isVisible }) => {
+export const EmployeeCard = ({ isAdmin, data, isVisible }) => {
     if (!isVisible) {
         return '';
     }
@@ -60,13 +60,16 @@ export const EmployeeTableRow = ({ isAdmin, data, isVisible }) => {
             <Col md={3} className="my-1">
                 <Card className="h-100 p-2">
                     <Card.Img
-                        className={`p-2 circle-image w-75 ${employeeClass(status)}`}
+                        className="p-2 circle-image w-75"
                         variant="top"
                         src={profilePhoto}
                     />
                     <Card.Body>
-                        <Card.Title>
-                            {`${firstName} ${lastName}`}
+                        <Card.Title className="clearfix">
+                            <span className="float-left">
+                                {`${firstName} ${lastName}`}
+                            </span>
+                            <span className={`float-right ${employeeClass(status)}`} />
                         </Card.Title>
                         <div className="p-0 clearfix">
                             <small className="float-left font-weight-bold">Designation </small>
@@ -80,14 +83,14 @@ export const EmployeeTableRow = ({ isAdmin, data, isVisible }) => {
     );
 };
 
-EmployeeTableRow.propTypes = {
+EmployeeCard.propTypes = {
     data: PropTypes.object.isRequired,
     isVisible: PropTypes.bool,
     isAdmin: PropTypes.bool.isRequired,
 };
 
-EmployeeTableRow.defaultProps = {
+EmployeeCard.defaultProps = {
     isVisible: true,
 };
 
-export default EmployeeTableRow;
+export default EmployeeCard;

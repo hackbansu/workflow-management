@@ -11,9 +11,12 @@ import { LinkContainer } from 'react-router-bootstrap';
 import DateTimeField from 'components/dateTimeField';
 import TaskWorkflowCard from 'components/taskWorkflowCard';
 import WorkflowPermissions from 'components/workflowPermissions';
-import { getWorkflow } from 'services/workflow';
+import UserConstants from 'constants/user';
+import { getWorkflow, makeUpdateWorflow as makeUpdateWorflowRequest, makeUpdatePermissions } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
 import { formatPermission } from 'utils/helpers';
+import { errorParser } from 'utils/helpers/errorHandler';
+import { showToast } from 'utils/helpers/toast';
 import { showLoader } from 'utils/helpers/loader';
 
 
@@ -46,35 +49,38 @@ export class Workflows extends React.Component {
             };
         }
 
+        this.removePermission = new Set();
+
         // bind functions.
         this.setCreator = this.setCreator.bind(this);
         this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
         this.setStartDateTime = this.setStartDateTime.bind(this);
+        this.updateWorkflow = this.updateWorkflow.bind(this);
     }
 
     async componentDidMount() {
         const { workflows } = this.props;
         getAllEmployees();
 
-        if (!Object.hasOwnProperty.call(workflows, this.workflowId)) {
-            showLoader(true);
-            // fetch workflow if not in store
-            try {
-                const workflow = await getWorkflow(this.workflowId);
-                const { creator } = workflow;
-                this.constrainStartDateTime = moment(workflow.startAt);
-                this.setState({
-                    workflowName: workflow.name,
-                    startDateTime: this.constrainStartDateTime,
-                    workflowPermissions: formatPermission(workflow.accessors, 'id'),
-                });
-                return this.setCreator(creator);
-            } catch (e) {
-                return Promise.reject(e);
-            }
+        // if (!Object.hasOwnProperty.call(workflows, this.workflowId)) {
+        showLoader(true);
+        // fetch workflow if not in store
+        try {
+            const workflow = await getWorkflow(this.workflowId);
+            const { creator } = workflow;
+            this.constrainStartDateTime = moment(workflow.startAt);
+            this.setState({
+                workflowName: workflow.name,
+                startDateTime: this.constrainStartDateTime,
+                workflowPermissions: formatPermission(workflow.accessors, 'id'),
+            });
+            return this.setCreator(creator);
+        } catch (e) {
+            return Promise.reject(e);
         }
-        const workflow = workflows[this.workflowId];
-        return this.setCreator(workflow.creator);
+        // }
+        // const workflow = workflows[this.workflowId];
+        // return this.setCreator(workflow.creator);
     }
 
     async setCreator(creator) {
@@ -99,6 +105,17 @@ export class Workflows extends React.Component {
     }
 
     setWorkFlowPermissions(value) {
+        const { workflowPermissions } = this.state;
+        // add all current permission to remove permissions.
+        Object.keys(workflowPermissions).map(pId => {
+            const permission = workflowPermissions[pId];
+            return this.removePermission.add(permission.employee);
+        });
+        // remove common permissions from set.
+        Object.keys(value).map(pId => {
+            const permission = value[pId];
+            return this.removePermission.delete(permission.employee);
+        });
         this.setState({ workflowPermissions: value });
     }
 
@@ -152,14 +169,84 @@ export class Workflows extends React.Component {
         return <></>;
     }
 
+    updateWorkflow() {
+        const { startDateTime, workflowName, workflowPermissions } = this.state;
+        let workflowUpdateData;
+        if (startDateTime > moment()) {
+            workflowUpdateData = {
+                start_at: startDateTime.toISOString(),
+                name: workflowName,
+            };
+        } else {
+            workflowUpdateData = {
+                name: workflowName,
+            };
+        }
+        const readPermissions = [];
+        const writePermissions = [];
+
+        Object.keys(workflowPermissions).map(pId => {
+            const permission = workflowPermissions[pId];
+            console.log('permission', permission);
+            if (permission.permission === String(UserConstants.PERMISSION.READ)) {
+                readPermissions.push(parseInt(permission.employee));
+            } else {
+                writePermissions.push(parseInt(permission.employee));
+            }
+            return null;
+        });
+
+        const permissionData = {
+            read_permissions: readPermissions,
+            write_permissions: writePermissions,
+        };
+
+        // make workflow detail Api Request
+        showLoader(true);
+        function resultHandler(res, successMsg = 'request done', failMsg = 'request failed') {
+            const { response, body } = res;
+            if (!response.ok) {
+                const errMsg = errorParser(body, failMsg);
+                showToast(errMsg);
+            } else {
+                showToast(successMsg);
+            }
+        }
+
+        Promise.all([
+            makeUpdateWorflowRequest(this.workflowId, workflowUpdateData),
+            makeUpdatePermissions(this.workflowId, permissionData), 
+        ])
+            .then(result => {
+                resultHandler(result[0], 'workflow updated', 'failed to update workflow');
+                resultHandler(result[0], 'permissions updated', 'failed to update permissions');
+            })
+            .catch(err => {
+                errorParser(err, 'workflow update failed');
+            })
+            .finally(() => {
+                showLoader(false);
+            });
+    }
+
     render() {
         const { workflowName, creator, startDateTime, workflowPermissions } = this.state;
+
+        // Copy is required to prevent refernced object operatios.
+        const workflowPermissionsCopy = { ...workflowPermissions }; 
+
         const { activeEmployees } = this.props;
         return (
             <Container>
                 <Row className="justify-content-md-center">
                     <Col md={10} sm xs={12}>
-                        <Form>
+                        <Form onSubmit={
+                            e => {
+                                e.preventDefault();
+                                this.updateWorkflow();
+                            }
+                        }
+                        >
                             <Form.Group as={Row} controlId="WorkflowName">
                                 <Form.Label column sm={4}>
                                     {'Name'}
@@ -180,6 +267,7 @@ export class Workflows extends React.Component {
                                 </Form.Label>
                                 <Col sm={8}>
                                     <DateTimeField
+                                        disabled={startDateTime < moment()}
                                         constraintMoment={moment()}
                                         givenMoment={startDateTime}
                                         onChange={this.setStartDateTime}
@@ -203,10 +291,17 @@ export class Workflows extends React.Component {
                                 <WorkflowPermissions
                                     employees={activeEmployees}
                                     onChange={this.setWorkFlowPermissions}
-                                    workflowPermissions={workflowPermissions}
+                                    workflowPermissions={workflowPermissionsCopy}
                                 />
                             </Form.Row>
                             <Form.Row className="col-12">{this.createTasks()}</Form.Row>
+                            <Form.Group>
+                                <Col sm={8}>
+                                    <Button variant="primary" type="submit">
+                                        Update Workflow
+                                    </Button>
+                                </Col>
+                            </Form.Group>
                         </Form>
                     </Col>
                 </Row>

@@ -54,6 +54,13 @@ export function makeFetchAllWorkflow() {
 export function makeFetchWorkflow(wfId) {
     return makeApiRequest(`${workflow.FETCH}${wfId}/`, 'GET');
 }
+export function makeUpdateWorflow(wfId, data) {
+    return makeApiRequest(`${workflow.FETCH}${wfId}/`, 'PATCH', data);
+}
+
+export function makeUpdatePermissions(wfId, data) {
+    return makeApiRequest(`${workflow.FETCH}${wfId}/accessor/`, 'POST', data);
+}
 
 export function getAllWorkflows() {
     showLoader(true);

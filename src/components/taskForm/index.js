@@ -14,23 +14,50 @@ class TaskForm extends React.Component {
         super(props);
         this.state = {
             errors: [],
+            taskDetail: '',
+            taskTitle: '',
+            assignee: 0,
+            taskStartDeltaTime: '00:00',
+            taskStartDeltaDays: 0,
+            taskDurationTime: '00:00',
+            taskDurationDays: 0,
         };
-
         this.saveTask = this.saveTask.bind(this);
         this.parentOptions = this.parentOptions.bind(this);
         this.validateTask = this.validateTask.bind(this);
         this.validationErros = this.validationErrors.bind(this);
 
-        this.taskTitle = React.createRef();
-        this.assignee = React.createRef();
-        this.taskStartDeltaTime = React.createRef();
-        this.taskStartDeltaDays = React.createRef();
-        this.taskDurationTime = React.createRef();
-        this.taskDurationDays = React.createRef();
-        this.taskDetail = React.createRef();
-        // this.parentTask = React.createRef();
         this.renderTaskId = this.renderTaskId.bind(this);
         this.renderParentTask = this.renderParentTask.bind(this);
+        this.statePropMap = this.statePropMap.bind(this);
+    }
+
+    componentDidMount() {
+        this.statePropMap();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.statePropMap(nextProps);
+    }
+
+    statePropMap(nextProps) {
+        const prop = nextProps || this.props;
+        const { taskInformation } = prop;
+        const { taskTitle, taskDetail, assignee } = taskInformation;
+        let { taskStartDeltaTime, taskStartDeltaDays, taskDurationDays, taskDurationTime } = taskInformation;
+        taskStartDeltaDays = taskStartDeltaDays || 0;
+        taskStartDeltaTime = taskStartDeltaTime || '00:00';
+        taskDurationTime = taskDurationTime || '00:00';
+        taskDurationDays = taskDurationDays || 0;
+        this.setState({
+            taskDetail: taskDetail || '',
+            taskTitle: taskTitle || '',
+            assignee,
+            taskStartDeltaTime,
+            taskStartDeltaDays,
+            taskDurationTime,
+            taskDurationDays,
+        });
     }
 
     parentOptions() {
@@ -105,15 +132,22 @@ class TaskForm extends React.Component {
 
     saveTask(e) {
         const { taskId, onChange } = this.props;
+        const {
+            taskTitle,
+            taskDetail,
+            assignee,
+            taskStartDeltaTime,
+            taskStartDeltaDays,
+            taskDurationDays,
+            taskDurationTime } = this.state;
         const taskInformation = {
-            taskTitle: this.taskTitle.current.value,
-            taskStartDeltaTime: this.taskStartDeltaTime.current.value,
-            taskStartDeltaDays: this.taskStartDeltaDays.current.value,
-            taskDurationTime: this.taskDurationTime.current.value,
-            taskDurationDays: this.taskDurationDays.current.value,
-            taskDetail: this.taskDetail.current.value,
-            // parentTask: this.parentTask.current.value,
-            assignee: this.assignee.current.value,
+            taskTitle,
+            taskStartDeltaTime,
+            taskStartDeltaDays,
+            taskDurationTime,
+            taskDurationDays,
+            taskDetail,
+            assignee,
         };
         if (!this.validateTask(taskInformation)) {
             e.preventDefault();
@@ -170,14 +204,15 @@ class TaskForm extends React.Component {
     render() {
         // TODO:Implement to render extra field in taks using task props.
         const { task: taskStructure, employees, taskInformation } = this.props;
-        const { taskTitle, taskDetail, assignee } = taskInformation;
-        let { taskStartDeltaTime, taskStartDeltaDays, taskDurationDays, taskDurationTime } = taskInformation;
-        taskStartDeltaDays = taskStartDeltaDays || 0;
-        taskStartDeltaTime = taskStartDeltaTime || '00:00';
-        taskDurationTime = taskDurationTime || '00:00';
-        taskDurationDays = taskDurationDays || 0;
-        const editableFields = true;
-        console.log('employees', employees);
+        const {
+            taskTitle,
+            taskDetail,
+            assignee,
+            taskStartDeltaTime,
+            taskStartDeltaDays,
+            taskDurationDays,
+            taskDurationTime } = this.state;
+        const editableFields = false;
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Container>
@@ -191,9 +226,8 @@ class TaskForm extends React.Component {
                             disabled={editableFields}
                             size="sm"
                             type="text"
-                            placeholder="Task title"
-                            defaultValue={taskTitle}
-                            ref={this.taskTitle}
+                            value={taskTitle}
+                            onChange={e => this.setState({ taskTitle: e.target.value })}
                         />
                     </Form.Group>
                     <Form.Group as={Col} controlId="employeeSelect">
@@ -205,8 +239,8 @@ class TaskForm extends React.Component {
                                 disabled={editableFields}
                                 size="sm"
                                 as="select"
-                                defaultValue={assignee}
-                                ref={this.assignee}
+                                value={assignee}
+                                onChange={e => this.setState({ assignee: e.target.value })}
                             >
                                 {this.employeesOptions(employees, assignee)}
                             </Form.Control>
@@ -220,8 +254,8 @@ class TaskForm extends React.Component {
                             disabled={editableFields}
                             size="sm"
                             type="time"
-                            defaultValue={taskStartDeltaTime}
-                            ref={this.taskStartDeltaTime}
+                            value={taskStartDeltaTime}
+                            onChange={e => this.setState({ taskStartDeltaTime: e.target.value })}
                         />
                     </Form.Group>
                     <Form.Group as={Col}>
@@ -231,8 +265,8 @@ class TaskForm extends React.Component {
                             size="sm"
                             type="number"
                             min="0"
-                            defaultValue={taskStartDeltaDays}
-                            ref={this.taskStartDeltaDays}
+                            value={taskStartDeltaDays}
+                            onChange={e => this.setState({ taskStartDeltaDays: e.target.value })}
                         />
                     </Form.Group>
                 </Form.Row>
@@ -243,8 +277,8 @@ class TaskForm extends React.Component {
                             disabled={editableFields}
                             size="sm"
                             type="time"
-                            defaultValue={taskDurationTime}
-                            ref={this.taskDurationTime}
+                            value={taskDurationTime}
+                            onChange={e => this.setState({ taskDurationTime: e.target.value })}
                         />
                     </Form.Group>
                     <Form.Group as={Col}>
@@ -254,20 +288,20 @@ class TaskForm extends React.Component {
                             size="sm"
                             type="number"
                             min="0"
-                            defaultValue={taskDurationDays}
-                            ref={this.taskDurationDays}
+                            value={taskDurationDays}
+                            onChange={e => this.setState({ taskDurationDays: e.target.value })}
                         />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <Form.Group as={Col} key={taskDetail}>
+                    <Form.Group as={Col}>
                         <Form.Label>Task Detail</Form.Label>
                         <textarea
                             disabled={editableFields}
                             className="form-control"
                             row="4"
-                            defaultValue={taskDetail}
-                            ref={this.taskDetail}
+                            value={taskDetail}
+                            onChange={e => this.setState({ taskDetail: e.target.value })}
                         />
                     </Form.Group>
                 </Form.Row>

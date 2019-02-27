@@ -28,6 +28,7 @@ export class Task extends React.Component {
 
         // bind functions.
         this.fetchTask = this.fetchTask.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
 
     componentDidMount() {
@@ -46,16 +47,16 @@ export class Task extends React.Component {
         const { redirect } = this.props;
         try {
             const { ongoingTasks, upcommingTasks, completeTasks } = this.props;
-            if (Object.hasOwnProperty.call(ongoingTasks, this.taskId)) {
-                this.setState({ task: apiTaskFormCouple(ongoingTasks[this.taskId]) });
-            } else if (Object.hasOwnProperty.call(upcommingTasks, this.taskId)) {
-                this.setState({ task: apiTaskFormCouple(upcommingTasks[this.taskId]) });
-            } else if (Object.hasOwnProperty.call(completeTasks, this.taskId)) {
-                this.setState({ task: apiTaskFormCouple(completeTasks[this.taskId]) });
-            } else {
-                const task = await getTask(this.taskId);
-                this.setState({ task });
-            }
+            // if (Object.hasOwnProperty.call(ongoingTasks, this.taskId)) {
+            //     this.setState({ task: apiTaskFormCouple(ongoingTasks[this.taskId]) });
+            // } else if (Object.hasOwnProperty.call(upcommingTasks, this.taskId)) {
+            //     this.setState({ task: apiTaskFormCouple(upcommingTasks[this.taskId]) });
+            // } else if (Object.hasOwnProperty.call(completeTasks, this.taskId)) {
+            //     this.setState({ task: apiTaskFormCouple(completeTasks[this.taskId]) });
+            // } else {
+            const task = await getTask(this.taskId);
+            this.setState({ task });
+            // }
         } catch (error) {
             // // redairect(ApiConstants.DASHBOARD_PAGE)a
         }
@@ -73,23 +74,12 @@ export class Task extends React.Component {
         return [];
     }
 
-    createTasks() {
-        const { activeEmployees } = this.props;
-        const { task } = this.state;
-        return (
-            <TaskForm
-                taskId={parseInt(this.taskId)}
-                showTaskId
-                employees={activeEmployees}
-                task={task}
-                parents={this.possibleParents()}
-                onChange={() => console.log('dummy called')}
-                taskInformation={task}
-            />
-        );
+    submitForm(taskInformation, taskId) {
+        console.log(taskInformation);
     }
 
     render() {
+        const { activeEmployees } = this.props;
         const { task } = this.state;
         return (
             <Container>
@@ -99,7 +89,17 @@ export class Task extends React.Component {
                             {'<< Workflow'}
                         </Link>
                         <Form>
-                            <Form.Row className="col-12">{this.createTasks()}</Form.Row>
+                            <Form.Row className="col-12">
+                                <TaskForm
+                                    taskId={parseInt(this.taskId)}
+                                    showTaskId
+                                    employees={activeEmployees}
+                                    task={task}
+                                    parents={this.possibleParents()}
+                                    onChange={this.submitForm}
+                                    taskInformation={task}
+                                />
+                            </Form.Row>
                         </Form>
                     </Col>
                 </Row>

@@ -47,8 +47,9 @@ class DateTimeField extends React.Component {
             Tomorrow: moment().add(1, 'days'),
         };
         const { currentMoment } = this.state;
+        const { disabled } = this.props;
         return (
-            <DatetimePickerTrigger shortcuts={shortcuts} moment={currentMoment} onChange={this.handleChange}>
+            <DatetimePickerTrigger disabled={disabled || false} shortcuts={shortcuts} moment={currentMoment} onChange={this.handleChange}>
                 <input
                     type="text"
                     className="form-control form-control-sm"

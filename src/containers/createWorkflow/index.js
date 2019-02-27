@@ -12,6 +12,7 @@ import { makeCreateWorkflow } from 'services/workflow';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { showModal } from 'utils/helpers/modal';
 import { showToast } from 'utils/helpers/toast';
+import { showLoader } from 'utils/helpers/loader';
 import { parseEmployeeData } from 'utils/helpers';
 import { updateEmployeesAction } from 'actions/employees';
 import { updateTemplatesAction } from 'actions/templates';
@@ -98,6 +99,7 @@ export class CreateWorkflow extends React.Component {
             accessors: Object.keys(data.workflowPermissions)
                 .map(permissionId => data.workflowPermissions[permissionId]),
         };
+        showLoader(true);
         makeCreateWorkflow(submitData)
             .then(res => {
                 const { redirect } = this.props;
@@ -109,6 +111,9 @@ export class CreateWorkflow extends React.Component {
                 }
                 showToast('WOrkflow Created');
                 redirect(ApiConstants.WORKFLOWS_PAGE);
+            })
+            .finally(() => {
+                showLoader(false);
             });
     }
 

@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showModal } from 'utils/helpers/modal';
 import { updateProfileAction, updateCompanyAction } from 'actions/user';
 import { makeUpdateRequest, makeFetchRequest } from 'services/company';
+import { errorParser } from 'utils/helpers/errorHandler';
 
 // importing components
 import CompanyForm from 'components/companyForm';
@@ -35,7 +36,8 @@ export class Company extends React.Component {
             }
             const { response, body } = obj;
             if (response.status !== 200) {
-                showToast('Company details update failed');
+                const errMsg = errorParser(body, 'Company details update failed');
+                toast.error(errMsg);
                 return;
             }
 
@@ -74,7 +76,7 @@ export class Company extends React.Component {
                 return;
             }
 
-            showToast('Update Successful');
+            toast.success('Update Successful');
             const { address, city, state, links, logo_url: logo } = body;
 
             // dispatch action to update company data in store

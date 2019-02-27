@@ -5,7 +5,6 @@ import { Form, Button } from 'react-bootstrap';
 import userConstants from 'constants/user.js';
 import PermissionsForm from 'components/permissionForm';
 import { getRandomBorder } from 'utils/helpers';
-import { showToast } from 'utils/helpers/toast';
 
 class Permissions extends React.Component {
     constructor(props) {

@@ -1,7 +1,7 @@
 import ApiConstants from 'constants/api';
 import { push } from 'connected-react-router';
 import { logoutAction } from 'actions/user';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { errorParser } from 'utils/helpers/errorHandler';
 
 import store from '../store';
@@ -21,13 +21,13 @@ function apiErrorHandler(response, body) {
     if (response.status === 401) {
         store.dispatch(logoutAction());
         store.dispatch(push(ApiConstants.LOGIN_PAGE));
-        showToast('Please login');
+        toast.info('Please login');
         return null;
     }
     if (response.status >= 400) {
         errorMsg = errorParser(body, 'Api error occur');
     }
-    showToast(errorMsg);
+    toast.error(errorMsg);
     return null;
 }
 
@@ -74,7 +74,7 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             return { response, body };
         })
         .catch(err => {
-            showToast(String(err));
+            toast.error(String(err));
             return Promise.reject(err);
         });
 }

@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 import currentUserReducer from './currentUserReducer';
 import employeesReducer from './employeesReducer';
 import loaderReducer from './loaderReducer';
-import toastReducer from './toastReducer';
 import modalReducer from './modalReducer';
 import templateReducer from './templateReducer';
 import taskReducer from './taskReducer';
@@ -15,7 +14,6 @@ const appReducer = combineReducers({
     currentUser: currentUserReducer,
     employees: employeesReducer,
     loader: loaderReducer,
-    toast: toastReducer,
     modal: modalReducer,
     templates: templateReducer,
     tasks: taskReducer,

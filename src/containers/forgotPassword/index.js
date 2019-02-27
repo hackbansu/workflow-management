@@ -3,9 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { showToast } from 'utils/helpers/toast';
 import { showLoader } from 'utils/helpers/loader';
-import { updateTokenAction, updateProfileAction } from 'actions/user';
 import { makePasswordResetRequest } from 'services/auth';
 import { showModal } from 'utils/helpers/modal';
 import ApiConstants from 'constants/api';

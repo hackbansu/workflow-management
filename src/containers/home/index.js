@@ -30,7 +30,7 @@ import { errorParser } from 'utils/helpers/errorHandler';
 import { makeLogoutRequest } from 'services/auth';
 import { updateProfileAction, updateCompanyAction, logoutAction } from 'actions/user';
 import { showLoader } from 'utils/helpers/loader';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { makeFetchRequest as makeUserFetchRequest } from 'services/user';
 import { makeFetchRequest as makeCompanyFetchRequest } from 'services/company';
 import { Container } from 'react-bootstrap';
@@ -61,7 +61,7 @@ export class Home extends React.Component {
             const { response, body } = obj;
             if (response.status !== 200) {
                 const errMsg = errorParser(body, 'Profile update failed');
-                showToast(errMsg);
+                toast.error(errMsg);
                 return;
             }
 
@@ -92,7 +92,7 @@ export class Home extends React.Component {
                 if (response.status !== 200) {
                     // this.setState({ isPartOfComapany: false });
                     const errMsg = errorParser(body, 'Company details update failed');
-                    showToast(errMsg);
+                    toast.error(errMsg);
                     return;
                 }
 
@@ -126,14 +126,14 @@ export class Home extends React.Component {
 
             if (response.status !== 204 && response.status !== 401) {
                 const errMsg = errorParser(body, 'logout Failed');
-                showToast(errMsg);
+                toast.error(errMsg);
                 return;
             }
 
             // dispatch action to logout user
             logout();
 
-            showToast('Logout successful');
+            toast.success('Logout successful');
 
             // redirect to login page
             redirectPage(ApiConstants.LOGIN_PAGE);

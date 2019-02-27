@@ -11,7 +11,7 @@ import { makeFetchActiveEmployeeAdminRequest } from 'services/employees';
 import { makeCreateWorkflow } from 'services/workflow';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { showModal } from 'utils/helpers/modal';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showLoader } from 'utils/helpers/loader';
 import { parseEmployeeData } from 'utils/helpers';
 import { updateEmployeesAction } from 'actions/employees';
@@ -109,7 +109,7 @@ export class CreateWorkflow extends React.Component {
                     showModal('Error', errMsg);
                     return;
                 }
-                showToast('WOrkflow Created');
+                toast.success('Workflow Created');
                 redirect(ApiConstants.WORKFLOWS_PAGE);
             })
             .finally(() => {

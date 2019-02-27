@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showLoader } from 'utils/helpers/loader';
 import { showModal } from 'utils/helpers/modal';
 import { updateProfileAction } from 'actions/user';
@@ -55,7 +55,7 @@ export class Profile extends React.Component {
             // dispatch action to update user data in store
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);
 
-            showToast('Profile Updated');
+            toast.info('Profile Updated');
         });
     };
 

@@ -2,8 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { updateTokenAction } from 'actions/user';
 import ApiConstants from 'constants/api';
 
 import LoginPage from 'containers/loginPage';
@@ -15,7 +16,6 @@ import Home from 'containers/home';
 import Default from 'containers/default';
 import Loader from 'components/loader';
 import Modal from 'components/modal';
-import Toast from 'components/toast';
 import PrivateRoute from 'components/privateRoute';
 
 /**
@@ -75,7 +75,7 @@ export class App extends React.Component {
                     />
                     <Route component={Default} />
                 </Switch>
-                <Toast show={toast.show} text={toast.text} />
+                <ToastContainer autoClose={4000} />
                 <Loader show={loader.show} />
                 <Modal heading={modal.heading} text={modal.text} showModal={modal.showModal} />
             </React.Fragment>
@@ -117,10 +117,6 @@ App.defaultProps = {
 
 const mapStateToProps = state => ({
     token: state.currentUser.token,
-    toast: {
-        show: state.toast.show,
-        text: state.toast.text,
-    },
     modal: {
         heading: state.modal.heading,
         text: state.modal.text,

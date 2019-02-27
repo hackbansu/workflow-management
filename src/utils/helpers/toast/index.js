@@ -1,4 +1,5 @@
 import { changeToastStateAction } from 'actions/common';
+import { toast } from 'react-toastify';
 import store from 'store';
 
 const { dispatch } = store;
@@ -8,8 +9,5 @@ const { dispatch } = store;
  * @param {string} text - text to show in toast message
  */
 export function showToast(text) {
-    dispatch(changeToastStateAction(true, text));
-    setTimeout(() => {
-        dispatch(changeToastStateAction(false, ''));
-    }, 3000);
+    toast(text);
 }

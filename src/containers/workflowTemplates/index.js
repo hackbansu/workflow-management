@@ -11,7 +11,7 @@ import { errorParser } from 'utils/helpers/errorHandler';
 import { updateTemplatesAction } from 'actions/templates';
 import { makeFetchAllTemplatesRequest } from 'services/templates';
 import ApiConstants from 'constants/api';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 
 import TemplateCard from 'components/workflowTemplateCard';
 
@@ -34,7 +34,7 @@ export class Templates extends React.Component {
             const { response, body } = obj;
             if (response.status !== 200) {
                 const errorMsg = errorParser(response, 'Employees update failed');
-                showToast(errorMsg);
+                toast.error(errorMsg);
                 return;
             }
 

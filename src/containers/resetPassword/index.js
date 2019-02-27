@@ -5,7 +5,7 @@ import { push } from 'connected-react-router';
 
 import { showLoader } from 'utils/helpers/loader';
 import { makePasswordUpdateRequest } from 'services/auth';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showModal } from 'utils/helpers/modal';
 import { errorParser } from 'utils/helpers/errorHandler';
 import ApiConstants from 'constants/api';
@@ -46,7 +46,7 @@ export class ResetPassword extends React.Component {
             const { response, body } = obj;
             if (response.status !== 200) {
                 const errMsg = errorParser(body, 'This link has expired');
-                showToast(errMsg);
+                toast.error(errMsg);
                 redirectPage(ApiConstants.LOGIN_PAGE);
                 return;
             }
@@ -89,7 +89,7 @@ export class ResetPassword extends React.Component {
                 return;
             }
 
-            showToast('Password has been reset');
+            toast.success('Password has been reset');
 
             // redirect to home page
             redirectPage(ApiConstants.LOGIN_PAGE);

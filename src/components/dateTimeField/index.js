@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { DatetimePickerTrigger } from 'rc-datetime-picker';
 import { validateDate } from 'utils/validators';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 
 import 'rc-datetime-picker/dist/picker.css';
 
@@ -29,7 +29,7 @@ class DateTimeField extends React.Component {
         const { constraintMoment } = this.props;
         const validationResponse = validateDate(value, constraintMoment);
         if (!validationResponse.isValid) {
-            showToast(validationResponse.message);
+            toast.warn(validationResponse.message);
             this.setState({
                 currentMoment: constraintMoment,
             });
@@ -49,7 +49,12 @@ class DateTimeField extends React.Component {
         const { currentMoment } = this.state;
         const { disabled } = this.props;
         return (
-            <DatetimePickerTrigger disabled={disabled || false} shortcuts={shortcuts} moment={currentMoment} onChange={this.handleChange}>
+            <DatetimePickerTrigger
+                disabled={disabled}
+                shortcuts={shortcuts}
+                moment={currentMoment}
+                onChange={this.handleChange}
+            >
                 <input
                     type="text"
                     className="form-control form-control-sm"
@@ -64,9 +69,11 @@ DateTimeField.propTypes = {
     onChange: PropTypes.func.isRequired,
     givenMoment: PropTypes.object,
     constraintMoment: PropTypes.object.isRequired,
+    disabled: PropTypes.bool,
 };
 DateTimeField.defaultProps = {
     givenMoment: moment(),
+    disabled: false,
 };
 
 export default DateTimeField;

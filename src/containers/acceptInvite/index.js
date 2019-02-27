@@ -5,7 +5,6 @@ import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
 import { makeInviteAcceptRequest } from 'services/auth';
-import { showToast } from 'utils/helpers/toast';
 import { showModal } from 'utils/helpers/modal';
 import ApiConstants from 'constants/api';
 

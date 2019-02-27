@@ -3,7 +3,7 @@ import ApiConstants from 'constants/api';
 import userConstants from 'constants/user';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { parseEmployeeData } from 'utils/helpers';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { updateEmployeesAction, updateEmployeeAction } from 'actions/employees';
 import store from '../store';
 
@@ -83,7 +83,8 @@ export function getAllEmployees(isAdmin = false) {
 
         const { response, body } = obj;
         if (response.status !== 200) {
-            showToast('Employees update failed');
+            const errMsg = errorParser(body, 'failed to fetch employees');
+            toast.error(errMsg);
             return;
         }
 
@@ -121,7 +122,7 @@ export function getEmployee(employeeId) {
         const { response, body } = obj;
         if (response.status !== 200) {
             const errMsg = errorParser(body, 'Employees update failed');
-            showToast(errMsg);
+            toast.error(errMsg);
             return Promise.reject();
         }
 

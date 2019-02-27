@@ -9,6 +9,8 @@ import DateTimeField from 'components/dateTimeField';
 import TaskForm from 'components/taskForm';
 import WorkflowPermissions from 'components/workflowPermissions';
 import { validateTextString, validateDate } from 'utils/validators';
+import { toast } from 'react-toastify';
+
 
 export class CreateWorkflow extends React.Component {
     constructor(props) {
@@ -51,7 +53,7 @@ export class CreateWorkflow extends React.Component {
         const { tasks } = this.state;
         tasks[id] = value;
         const completeAt = this.updateCompleteAt();
-        this.setState({ tasks, completeAt });
+        this.setState({ tasks, completeAt }, () => { toast.info('task saved'); });
     }
 
     validate() {

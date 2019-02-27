@@ -5,12 +5,12 @@ import { push } from 'connected-react-router';
 import React from 'react';
 
 import { showLoader } from 'utils/helpers/loader';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showModal } from 'utils/helpers/modal';
 import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest, getEmployee } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
 import { updateEmployeeAction } from 'actions/employees';
-import { parseEmployeeData } from 'utils/helpers';
+import { errorParser } from 'utils/helpers/errorHandler'; 
 import ApiConstants from 'constants/api';
 
 // importing components
@@ -79,7 +79,8 @@ export class Employee extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 200) {
-                showModal('Update Failed', 'Employee update failed');
+                const errMsg = errorParser(body, 'Employee update failed');
+                showModal('Update Failed', errMsg);
                 return;
             }
 
@@ -96,7 +97,7 @@ export class Employee extends React.Component {
                 updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, status);
             }
 
-            showToast('Update Successful');
+            toast.success('Update Successful');
             redirectPage(ApiConstants.EMPLOYEES_PAGE);
         });
     };
@@ -128,7 +129,7 @@ export class Employee extends React.Component {
                 return;
             }
 
-            showToast('Invite Sent');
+            toast.info('Invite Sent');
         });
     };
 
@@ -153,11 +154,12 @@ export class Employee extends React.Component {
 
             const { response, body } = obj;
             if (response.status !== 204) {
-                showModal('Removal Failed', 'Failed to remove the employee');
+                const errMsg = errorParser(body, 'Failed to remove the employee');
+                showModal('Removal Failed', errMsg);
                 return;
             }
 
-            showToast('Removal Successful');
+            toast.success('Removal Successful');
             redirectPage(ApiConstants.EMPLOYEES_PAGE);
         });
     };

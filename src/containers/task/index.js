@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import ApiConstants from 'constants/api';
-import taskConstants from 'constants/task';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,9 +9,11 @@ import { push } from 'connected-react-router';
 import TaskForm from 'components/taskForm';
 import { updateWorkflowAction } from 'actions/workflow';
 import { Link } from 'react-router-dom';
-import { getTask } from 'services/workflow';
+import { getTask, makeUpdateTask } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
-import { apiTaskFormCouple } from 'utils/helpers';
+import { errorParser } from 'utils/helpers/errorHandler';
+import { toast } from 'react-toastify';
+import { showLoader } from 'utils/helpers/loader';
 
 export class Task extends React.Component {
     constructor(props) {
@@ -46,7 +47,7 @@ export class Task extends React.Component {
     async fetchTask() {
         const { redirect } = this.props;
         try {
-            const { ongoingTasks, upcommingTasks, completeTasks } = this.props;
+            // const { ongoingTasks, upcommingTasks, completeTasks } = this.props;
             // if (Object.hasOwnProperty.call(ongoingTasks, this.taskId)) {
             //     this.setState({ task: apiTaskFormCouple(ongoingTasks[this.taskId]) });
             // } else if (Object.hasOwnProperty.call(upcommingTasks, this.taskId)) {
@@ -58,7 +59,7 @@ export class Task extends React.Component {
             this.setState({ task });
             // }
         } catch (error) {
-            // // redairect(ApiConstants.DASHBOARD_PAGE)a
+            redirect(ApiConstants.DASHBOARD_PAGE);
         }
     }
 
@@ -75,7 +76,35 @@ export class Task extends React.Component {
     }
 
     submitForm(taskInformation, taskId) {
-        console.log(taskInformation);
+        const {
+            assignee,
+            taskDetail,
+            taskDurationDays,
+            taskDurationTime,
+            taskStartDeltaDays,
+            taskStartDeltaTime,
+            taskTitle } = taskInformation;
+        const submitData = {
+            title: taskTitle,
+            description: taskDetail,
+            assignee,
+            start_delta: `${taskStartDeltaDays}:${taskStartDeltaTime}`,
+            duration: `${taskDurationDays}:${taskDurationTime}`,
+        };
+        showLoader(true);
+        makeUpdateTask(taskId, submitData)
+            .then(res => {
+                const { response, body } = res;
+                if (!response.ok) {
+                    const errMsg = errorParser(body, 'failed to update task');
+                    toast.error(errMsg);
+                    return;
+                }
+                toast.success('task updated successfully');
+            })
+            .finally(() => {
+                showLoader(false);
+            });
     }
 
     render() {
@@ -112,18 +141,12 @@ Task.propTypes = {
     currentUser: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     activeEmployees: PropTypes.object,
-    upcommingTasks: PropTypes.object,
-    ongoingTasks: PropTypes.object,
-    completeTasks: PropTypes.object,
 
     redirect: PropTypes.func.isRequired,
 };
 
 Task.defaultProps = {
     activeEmployees: {},
-    upcommingTasks: {},
-    ongoingTasks: {},
-    completeTasks: {},
 };
 
 const mapStateToProps = state => ({

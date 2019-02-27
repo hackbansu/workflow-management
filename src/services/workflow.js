@@ -8,7 +8,7 @@ import { updateCompleteTasks, updateOngoingTasks, updateUpcommingTasks } from 'a
 import { makeApiRequest } from 'services/base';
 import { showLoader } from 'utils/helpers/loader';
 import { errorParser } from 'utils/helpers/errorHandler';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { parseWorkflow, formatTasks, apiTaskFormCouple } from 'utils/helpers';
 import { push } from 'connected-react-router';
 
@@ -43,6 +43,10 @@ export function makeFetchTaskRequest(taskId) {
     return makeApiRequest(`${task.FETCH}${taskId}/`);
 }
 
+export function makeUpdateTask(taskId, data) {
+    return makeApiRequest(`${task.FETCH}${taskId}/`, 'PATCH', data);
+}
+
 export function makeCreateWorkflow(data) {
     return makeApiRequest(workflow.FETCH, 'POST', data);
 }
@@ -73,7 +77,7 @@ export function getAllWorkflows() {
             let { body } = obj;
             if (response.status !== 200) {
                 const errMsg = errorParser(body);
-                showToast(errMsg);
+                toast.error(errMsg);
                 return Promise.reject();
             }
             body = parseWorkflow(body);
@@ -91,7 +95,7 @@ export async function getAllTasks() {
         const { response, body } = await makefetchAllTasks();
         if (!response.ok) {
             const errMsg = errorParser(body);
-            showToast(errMsg);
+            toast.error(errMsg);
             return;
         }
         const tasks = formatTasks(body);
@@ -112,7 +116,7 @@ export async function getWorkflow(wfid) {
         }
         if (!response.ok) {
             const errMsg = errorParser(body);
-            showToast(errMsg);
+            toast.error(errMsg);
             return Promise.reject();
         }
         body = parseWorkflow(body);
@@ -127,14 +131,13 @@ export async function getWorkflow(wfid) {
     }
 }
 
-
 export async function getTask(taskId) {
     showLoader(true);
     try {
         const { response, body } = await makeFetchTaskRequest(taskId);
         if (!response.ok) {
             const errMsg = errorParser(body);
-            showToast(errMsg);
+            toast.error(errMsg);
             return Promise.reject();
         }
         const task = {};

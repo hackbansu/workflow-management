@@ -16,7 +16,7 @@ import { getWorkflow, makeUpdateWorflow as makeUpdateWorflowRequest, makeUpdateP
 import { getEmployee, getAllEmployees } from 'services/employees';
 import { formatPermission } from 'utils/helpers';
 import { errorParser } from 'utils/helpers/errorHandler';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showLoader } from 'utils/helpers/loader';
 
 
@@ -187,7 +187,6 @@ export class Workflows extends React.Component {
 
         Object.keys(workflowPermissions).map(pId => {
             const permission = workflowPermissions[pId];
-            console.log('permission', permission);
             if (permission.permission === String(UserConstants.PERMISSION.READ)) {
                 readPermissions.push(parseInt(permission.employee));
             } else {
@@ -201,25 +200,24 @@ export class Workflows extends React.Component {
             write_permissions: writePermissions,
         };
 
-        // make workflow detail Api Request
         showLoader(true);
         function resultHandler(res, successMsg = 'request done', failMsg = 'request failed') {
             const { response, body } = res;
             if (!response.ok) {
                 const errMsg = errorParser(body, failMsg);
-                showToast(errMsg);
-            } else {
-                showToast(successMsg);
+                toast.error(errMsg);
+                return;
             }
+            toast.success(successMsg);
         }
 
         Promise.all([
             makeUpdateWorflowRequest(this.workflowId, workflowUpdateData),
-            makeUpdatePermissions(this.workflowId, permissionData), 
+            makeUpdatePermissions(this.workflowId, permissionData),
         ])
             .then(result => {
-                resultHandler(result[0], 'workflow updated', 'failed to update workflow');
-                resultHandler(result[0], 'permissions updated', 'failed to update permissions');
+                resultHandler(result[0], 'Workflow update successfully', 'failed to update workflow');
+                resultHandler(result[0], 'Workflow Permissions updated successfully', 'failed to update permissions');
             })
             .catch(err => {
                 errorParser(err, 'workflow update failed');
@@ -233,7 +231,7 @@ export class Workflows extends React.Component {
         const { workflowName, creator, startDateTime, workflowPermissions } = this.state;
 
         // Copy is required to prevent refernced object operatios.
-        const workflowPermissionsCopy = { ...workflowPermissions }; 
+        const workflowPermissionsCopy = { ...workflowPermissions };
 
         const { activeEmployees } = this.props;
         return (

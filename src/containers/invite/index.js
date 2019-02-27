@@ -5,7 +5,7 @@ import React from 'react';
 
 import { makeInviteRequest, makeCsvInviteRequest } from 'services/employees';
 import { showLoader } from 'utils/helpers/loader';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { showModal } from 'utils/helpers/modal';
 import { errorParser } from 'utils/helpers/errorHandler';
 
@@ -47,11 +47,11 @@ export class Invite extends React.Component {
 
             if (response.status !== 200) {
                 const errorMsg = errorParser(body);
-                showToast(errorMsg);
+                toast.error(errorMsg);
                 return;
             }
 
-            showToast('Invite Sent');
+            toast.info('Invite Sent');
         });
     };
 
@@ -72,7 +72,7 @@ export class Invite extends React.Component {
             const { response, body } = obj;
             if (response.status !== 200) {
                 const errorMsg = errorParser(body);
-                showToast(errorMsg);
+                toast.success(errorMsg);
                 return;
             }
 

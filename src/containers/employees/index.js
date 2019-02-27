@@ -10,7 +10,7 @@ import { updateEmployeesAction } from 'actions/employees';
 import { getAllEmployees } from 'services/employees';
 import userConstants from 'constants/user';
 import ApiConstants from 'constants/api';
-import { showToast } from 'utils/helpers/toast';
+import { toast } from 'react-toastify';
 import { parseEmployeeData } from 'utils/helpers';
 
 import './index.scss';

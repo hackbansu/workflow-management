@@ -16,6 +16,7 @@ function apiErrorHandler(response, body) {
     let errorMsg;
     if (response.status >= 500) {
         errorMsg = errorParser(body, 'Internal Server error occur');
+        toast.error(errorMsg);
     }
     // Logout current user if token is invalid
     if (response.status === 401) {
@@ -24,10 +25,10 @@ function apiErrorHandler(response, body) {
         toast.info('Please login');
         return null;
     }
-    if (response.status >= 400) {
+    if (response.status >= 405) {
         errorMsg = errorParser(body, 'Api error occur');
+        toast.error(errorMsg);
     }
-    toast.error(errorMsg);
     return null;
 }
 

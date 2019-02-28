@@ -10,20 +10,14 @@ import { showModal } from 'utils/helpers/modal';
 import { makeUpdateRequest, makeInviteRequest, makeRemoveRequest, getEmployee } from 'services/employees';
 import { updateProfileAction } from 'actions/user';
 import { updateEmployeeAction } from 'actions/employees';
-import { errorParser } from 'utils/helpers/errorHandler'; 
+import { errorParser } from 'utils/helpers/errorHandler';
 import ApiConstants from 'constants/api';
 
 // importing components
 import EmployeeForm from 'components/employeeForm';
 
-/**
- * Login page component.
- */
+
 export class Employee extends React.Component {
-    /**
-     * Constructor for the component.
-     * @param {object} props - props object for the component.
-     */
     constructor(props) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);

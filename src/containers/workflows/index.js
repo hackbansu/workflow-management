@@ -9,7 +9,8 @@ import taskConstants from 'constants/task';
 import WorkflowCard from 'components/workflowCard';
 
 import { getAllWorkflows } from 'services/workflow';
-import { Container, Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
+import { getAllEmployees } from 'services/employees';
+import { Container, Row, Button } from 'react-bootstrap';
 import { parseDateTime } from 'utils/helpers';
 
 export class Workflows extends React.Component {
@@ -21,6 +22,7 @@ export class Workflows extends React.Component {
 
     componentWillMount() {
         getAllWorkflows();
+        getAllEmployees();
     }
 
     createWorkFlowButton() {
@@ -40,7 +42,7 @@ export class Workflows extends React.Component {
     }
 
     render() {
-        const { workflows } = this.props;
+        const { workflows, employees } = this.props;
         return (
             <Container>
                 <Row>
@@ -50,7 +52,12 @@ export class Workflows extends React.Component {
                     {Object.keys(workflows).map(wfid => {
                         const workflow = workflows[wfid];
                         return (
-                            <WorkflowCard key={`${Math.random()}-workflow`} wfid={wfid} workflow={workflow} />
+                            <WorkflowCard
+                                key={`${Math.random()}-workflow`}
+                                employees={employees}
+                                wfid={wfid}
+                                workflow={workflow}
+                            />
                         );
                     })}
                 </Row>
@@ -62,6 +69,7 @@ export class Workflows extends React.Component {
 Workflows.propTypes = {
     currentUser: PropTypes.object.isRequired,
     workflows: PropTypes.object.isRequired,
+    employees: PropTypes.object.isRequired,
 };
 
 Workflows.defaultProps = {};
@@ -69,6 +77,7 @@ Workflows.defaultProps = {};
 const mapStateToProps = state => ({
     currentUser: state.currentUser,
     workflows: state.workflows,
+    employees: state.employees,
 });
 
 const mapDispatchToProps = dispatch => ({

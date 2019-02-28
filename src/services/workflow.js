@@ -47,6 +47,10 @@ export function makeUpdateTask(taskId, data) {
     return makeApiRequest(`${task.FETCH}${taskId}/`, 'PATCH', data);
 }
 
+export function makeTaskComplete(taskId) {
+    return makeApiRequest(`${task.FETCH}${taskId}/completed/`, 'PATCH');
+}
+
 export function makeCreateWorkflow(data) {
     return makeApiRequest(workflow.FETCH, 'POST', data);
 }
@@ -64,6 +68,10 @@ export function makeUpdateWorflow(wfId, data) {
 
 export function makeUpdatePermissions(wfId, data) {
     return makeApiRequest(`${workflow.FETCH}${wfId}/accessor/`, 'POST', data);
+}
+
+export function makeFetchWorkflowPermissions(wfId) {
+    return makeApiRequest(`${workflow.FETCH}${wfId}/accessor/all/`, 'GET');
 }
 
 export function getAllWorkflows() {

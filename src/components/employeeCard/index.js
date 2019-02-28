@@ -35,12 +35,19 @@ function employeeClass(status) {
     case userConstants.STATUS.ACTIVE:
         return 'far fa-check-circle text-success';
     case userConstants.STATUS.INACTIVE:
-        return 'fas fa-asterisk text-danger';
+        return 'fas fa-ban text-danger';
     case userConstants.STATUS.INVITED:
         return 'far fa-clock text-info';
     default:
         return 'far fa-check-circle text-success';
     }
+}
+
+function isAdminMark(isAdmin) {
+    if (isAdmin) {
+        return (<sup className="fas fa-asterisk text-danger aster-size m-2" />);
+    }
+    return <></>; 
 }
 
 /**
@@ -52,7 +59,7 @@ export const EmployeeCard = ({ isAdmin, data, isVisible }) => {
         return '';
     }
 
-    const { user, id, designation, status, joinAt, leftAt } = data;
+    const { user, id, designation, status, joinAt, leftAt, isAdmin: empAdmin } = data;
     const { firstName, profilePhoto, email } = user;
     const lastName = user.lastName || ' ';
     return (
@@ -68,6 +75,7 @@ export const EmployeeCard = ({ isAdmin, data, isVisible }) => {
                         <Card.Title className="clearfix">
                             <span className="float-left">
                                 {`${firstName} ${lastName}`}
+                                {isAdminMark(empAdmin)}
                             </span>
                             <span className={`float-right ${employeeClass(status)}`} />
                         </Card.Title>

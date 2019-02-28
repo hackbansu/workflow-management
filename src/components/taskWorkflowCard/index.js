@@ -9,10 +9,12 @@ function taskClass(status) {
     switch (status) {
     case taskConstants.STATUS.COMPLETE:
         return 'far fa-check-circle text-success';
+    case taskConstants.STATUS.SCHEDULED:
+        return 'fa fa-spinner text-info';
     case taskConstants.STATUS.ONGOING:
         return 'fas fa fa-ellipsis-h text-warning';
     case taskConstants.STATUS.UPCOMMING:
-        return 'far fa-clock text-info';
+        return 'far fa-clock text-primary';
     default:
         return 'far fa-check-circle text-success';
     }

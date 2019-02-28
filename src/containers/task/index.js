@@ -7,9 +7,10 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 import { push } from 'connected-react-router';
 
 import TaskForm from 'components/taskForm';
+import UserConst from 'constants/user';
 import { updateWorkflowAction } from 'actions/workflow';
 import { Link } from 'react-router-dom';
-import { getTask, makeUpdateTask } from 'services/workflow';
+import { getTask, makeUpdateTask, makeTaskComplete, makeFetchWorkflowPermissions } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { toast } from 'react-toastify';
@@ -25,11 +26,15 @@ export class Task extends React.Component {
             task: {
                 assignee: currentUser.id,
             },
+            editable: true,
         };
 
         // bind functions.
         this.fetchTask = this.fetchTask.bind(this);
+        this.markComplete = this.markComplete.bind(this);
         this.submitForm = this.submitForm.bind(this);
+        this.fetchPermissions = this.fetchPermissions.bind(this);
+        this.permission = this.permission.bind(this);
     }
 
     componentDidMount() {
@@ -45,6 +50,7 @@ export class Task extends React.Component {
     }
 
     async fetchTask() {
+        showLoader(true);
         const { redirect } = this.props;
         try {
             // const { ongoingTasks, upcommingTasks, completeTasks } = this.props;
@@ -57,17 +63,67 @@ export class Task extends React.Component {
             // } else {
             const task = await getTask(this.taskId);
             this.setState({ task });
+            await this.fetchPermissions();
             // }
         } catch (error) {
             redirect(ApiConstants.DASHBOARD_PAGE);
+        } finally {
+            showLoader(false);
+        }
+    }
+
+    async markComplete() {
+        try {
+            const res = await makeTaskComplete(this.taskId);
+            const { response, body } = res;
+            if (!response.ok) {
+                console.log(body);
+                const errMsg = errorParser(body, 'failed to mark complete the task');
+                toast.error(errMsg);
+                return;
+            }
+            toast.success('Task Completed');
+            this.fetchTask();
+        } catch (err) {
+            const errMsg = errorParser(err, 'failed to complete task');
+            toast.error(errMsg);
+        } finally {
+            showLoader(false);
+        }
+    }
+
+    async fetchPermissions() {
+        showLoader(true);
+        const { task } = this.state;
+        try {
+            const res = await makeFetchWorkflowPermissions(task.workflow);
+            const { response, body } = res;
+            if (!response.ok) {
+                throw new Error(body);
+            }
+            this.setState({ permissions: body }, () => { this.permission(); });
+            // this.permission();
+        } catch (err) {
+            const errMsg = errorParser(err, 'failed to fetch permission');
+            toast.error(errMsg);
+        } finally {
+            showLoader(false);
         }
     }
 
     permission() {
         const { currentUser, redirect } = this.props;
-        const { task } = this.state;
-        if (currentUser.id !== task.assignee && !currentUser.isAdmin) {
+        const { task, permissions } = this.state;
+
+
+        const userPermission = permissions.filter(perm => perm.employee === currentUser.id);
+
+        if (currentUser.id !== task.assignee && !currentUser.isAdmin && !userPermission.length) {
             redirect(ApiConstants.DASHBOARD_PAGE);
+        }
+
+        if (userPermission.length > 0 && userPermission[0].permission === UserConst.PERMISSION.READ) {
+            this.setState({ editable: false });
         }
     }
 
@@ -109,7 +165,7 @@ export class Task extends React.Component {
 
     render() {
         const { activeEmployees } = this.props;
-        const { task } = this.state;
+        const { task, editable } = this.state;
         return (
             <Container>
                 <Row className="justify-content-center">
@@ -120,6 +176,7 @@ export class Task extends React.Component {
                         <Form>
                             <Form.Row className="col-12">
                                 <TaskForm
+                                    disabled={!editable}
                                     taskId={parseInt(this.taskId)}
                                     showTaskId
                                     employees={activeEmployees}
@@ -127,6 +184,7 @@ export class Task extends React.Component {
                                     parents={this.possibleParents()}
                                     onChange={this.submitForm}
                                     taskInformation={task}
+                                    completeAction={this.markComplete}
                                 />
                             </Form.Row>
                         </Form>

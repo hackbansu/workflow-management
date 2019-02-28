@@ -47,12 +47,13 @@ class Permissions extends React.Component {
     }
 
     createUi() {
-        const { employees, workflowPermissions: permissions } = this.props;
+        const { employees, workflowPermissions: permissions, disabled } = this.props;
         const empoList = { ...employees };
         return Object.keys(permissions).map((permissionKey, idx) => {
             const currentEmp = permissions[permissionKey].employee;
             const permission = (
                 <PermissionsForm
+                    disabled={disabled}
                     employees={{ ...empoList }}
                     employee={currentEmp}
                     permissionIdentifier={permissionKey}
@@ -87,9 +88,11 @@ Permissions.propTypes = {
     employees: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     workflowPermissions: PropTypes.object,
+    disabled: PropTypes.bool,
 };
 
 Permissions.defaultProps = {
+    disabled: false,
     workflowPermissions: {},
 };
 

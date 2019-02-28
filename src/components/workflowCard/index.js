@@ -11,6 +11,8 @@ function taskClass(status) {
     switch (status) {
     case taskConstants.STATUS.UPCOMMING:
         return 'info';
+    case taskConstants.STATUS.SCHEDULED:
+        return 'primary';
     case taskConstants.STATUS.ONGOING:
         return 'success';
     case taskConstants.STATUS.COMPLETE:
@@ -20,7 +22,33 @@ function taskClass(status) {
     }
 }
 
-export function WorkflowCard({ workflow, wfid }) {
+function getEmployees(assignee, employees) {
+    let empClss = {};
+    const { activeEmployees, inactiveEmployees, invitedEmployees } = employees;
+    [activeEmployees, inactiveEmployees, invitedEmployees].map(empClass => {
+        if (Object.hasOwnProperty.call(empClass, assignee)) {
+            empClss = empClass;
+        }
+        return null;
+    });
+    return empClss;
+}
+
+function renderAssignee(assignee, employees) {
+    employees = getEmployees(assignee, employees);
+    if (Object.hasOwnProperty.call(employees, assignee)) {
+        return (
+            <div className="clearfix mt-1">
+                <small className="float-right">
+                    {`${employees[assignee].user.firstName} ${employees[assignee].user.lastName}`}
+                </small>
+            </div>
+        );
+    }
+    return (<></>);
+}
+
+export function WorkflowCard({ workflow, wfid, employees }) {
     return (
         <LinkContainer to={`${ApiConstants.WORKFLOW_PAGE}/${wfid}`}>
             <Col md lg xl={4} className="mb-2">
@@ -47,7 +75,10 @@ export function WorkflowCard({ workflow, wfid }) {
                                                 {taskConstants.STATUS[task.status]}
                                             </small>
                                         </div>
-                                        <small className="m-0">{task.taskDetail}</small>
+                                        <div>
+                                            <small className="m-0">{task.taskDetail}</small>
+                                        </div>
+                                        {renderAssignee(task.assignee, employees)}
                                     </ListGroup.Item>
                                 );
                             })}
@@ -62,6 +93,14 @@ export function WorkflowCard({ workflow, wfid }) {
 WorkflowCard.propTypes = {
     workflow: PropTypes.object.isRequired,
     wfid: PropTypes.string.isRequired,
+    employees: PropTypes.object,
+};
+WorkflowCard.defaultProps = {
+    employees: {
+        activeEmployees: {},
+        inactiveEmployees: {},
+        invitedEmployees: {},
+    },
 };
 
 export default WorkflowCard;

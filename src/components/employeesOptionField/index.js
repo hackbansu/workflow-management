@@ -10,14 +10,20 @@ function createOptions(employees) {
     ));
 }
 
-function employeesOptionField({ label, employees, employeeId, onChange }) {
+function employeesOptionField({ label, employees, employeeId, onChange, disabled }) {
     return (
         <Form.Group as={Col} controlId="employeeSelect">
             <Form.Label column sm={12}>
                 {label}
             </Form.Label>
             <Col sm={12}>
-                <Form.Control size="sm" as="select" value={employeeId} onChange={e => onChange(e.target.value)}>
+                <Form.Control
+                    disabled={disabled}
+                    size="sm"
+                    as="select"
+                    value={employeeId}
+                    onChange={e => onChange(e.target.value)}
+                >
                     {createOptions(employees)}
                 </Form.Control>
             </Col>
@@ -30,8 +36,10 @@ employeesOptionField.propTypes = {
     label: PropTypes.string.isRequired,
     employeeId: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
 };
 employeesOptionField.defaultProps = {
+    disabled: false,
     employeeId: '',
 };
 export default employeesOptionField;

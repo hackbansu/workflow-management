@@ -32,10 +32,11 @@ class PermissionForm extends React.Component {
     }
 
     render() {
-        const { employees, employee, permission, permissionIdentifier, removePermission } = this.props;
+        const { employees, employee, permission, permissionIdentifier, removePermission, disabled } = this.props;
         return (
             <Form.Row id={permissionIdentifier}>
                 <EmployeesOptionField
+                    disabled={disabled}
                     label="Employee"
                     employees={employees}
                     employeeId={employee}
@@ -47,6 +48,7 @@ class PermissionForm extends React.Component {
                     </Form.Label>
                     <Col sm={12}>
                         <Form.Control
+                            disabled={disabled}
                             size="sm"
                             as="select"
                             value={permission}
@@ -62,7 +64,7 @@ class PermissionForm extends React.Component {
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="py-4">
-                    <Button variant="danger" onClick={e => removePermission(permissionIdentifier)}>
+                    <Button disabled={disabled} variant="danger" onClick={e => removePermission(permissionIdentifier)}>
                         {'Delete'}
                     </Button>
                 </Form.Group>
@@ -78,9 +80,11 @@ PermissionForm.propTypes = {
     removePermission: PropTypes.func.isRequired,
     employee: PropTypes.string,
     onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
 };
 
 PermissionForm.defaultProps = {
+    disabled: false,
     employee: '',
 };
 

@@ -177,6 +177,18 @@ class TaskForm extends React.Component {
         return <></>;
     }
 
+    renderCompleteBtn() {
+        const { completeAction } = this.props;
+        if (completeAction) {
+            return (
+                <Form.Group className="float-right">
+                    <Button variant="success" onClick={completeAction}>Complete Task</Button>
+                </Form.Group>
+            );
+        }
+        return <></>;
+    }
+
     renderParentTask() {
         // TODO feature
         const { taskId, taskInformation } = this.props;
@@ -204,6 +216,7 @@ class TaskForm extends React.Component {
     render() {
         // TODO:Implement to render extra field in taks using task props.
         const { task: taskStructure, employees, taskInformation } = this.props;
+        let { disabled } = this.props;
         const {
             taskTitle,
             taskDetail,
@@ -212,7 +225,13 @@ class TaskForm extends React.Component {
             taskStartDeltaDays,
             taskDurationDays,
             taskDurationTime } = this.state;
-        const editableFields = false;
+
+        // field permission implementation managment
+        const { status } = taskInformation;
+        const taskStatus = status || taskConstants.STATUS.UPCOMMING;
+        disabled = disabled || taskStatus >= taskConstants.STATUS.COMPLETE;
+
+        const startEditable = taskStatus < taskConstants.STATUS.SCHEDULED;
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
                 <Container>
@@ -223,7 +242,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col} controlId="TaskTitle">
                         <Form.Label>Title</Form.Label>
                         <Form.Control
-                            disabled={editableFields}
+                            disabled={disabled}
                             size="sm"
                             type="text"
                             value={taskTitle}
@@ -236,7 +255,7 @@ class TaskForm extends React.Component {
                         </Form.Label>
                         <Col sm={12} key={`${assignee}-assignee`}>
                             <Form.Control
-                                disabled={editableFields}
+                                disabled={disabled}
                                 size="sm"
                                 as="select"
                                 value={assignee}
@@ -251,7 +270,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Time</Form.Label>
                         <Form.Control
-                            disabled={editableFields}
+                            disabled={disabled || !startEditable}
                             size="sm"
                             type="time"
                             value={taskStartDeltaTime}
@@ -261,7 +280,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Start Delta Days</Form.Label>
                         <Form.Control
-                            disabled={editableFields}
+                            disabled={disabled || !startEditable}
                             size="sm"
                             type="number"
                             min="0"
@@ -274,7 +293,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Duration Time</Form.Label>
                         <Form.Control
-                            disabled={editableFields}
+                            disabled={disabled}
                             size="sm"
                             type="time"
                             value={taskDurationTime}
@@ -284,7 +303,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Duration Days</Form.Label>
                         <Form.Control
-                            disabled={editableFields}
+                            disabled={disabled}
                             size="sm"
                             type="number"
                             min="0"
@@ -297,7 +316,7 @@ class TaskForm extends React.Component {
                     <Form.Group as={Col}>
                         <Form.Label>Task Detail</Form.Label>
                         <textarea
-                            disabled={editableFields}
+                            disabled={disabled}
                             className="form-control"
                             row="4"
                             value={taskDetail}
@@ -306,9 +325,18 @@ class TaskForm extends React.Component {
                     </Form.Group>
                 </Form.Row>
                 { this.renderParentTask() }
-                <Form.Row as={Row} className="py-4">
-                    <Button variant="success" onClick={e => this.saveTask(e)}>Save Task</Button>
-                </Form.Row>
+                <div className="py-4 clearfix">
+                    <Form.Group className="float-left">
+                        <Button
+                            disabled={taskStatus === taskConstants.STATUS.COMPLETE}
+                            variant="success"
+                            onClick={e => this.saveTask(e)}
+                        >
+                            Save Task
+                        </Button>
+                    </Form.Group>
+                    {this.renderCompleteBtn(taskStatus)}
+                </div>
             </div>
         );
     }
@@ -322,8 +350,11 @@ TaskForm.propTypes = {
     taskInformation: PropTypes.object,
     onChange: PropTypes.func.isRequired,
     showTaskId: PropTypes.bool,
+    completeAction: PropTypes.func,
+    disabled: PropTypes.bool,
 };
 TaskForm.defaultProps = {
+    disabled: false,
     taskInformation: {
         taskTitle: '',
         taskStartDeltaTime: '',
@@ -333,6 +364,7 @@ TaskForm.defaultProps = {
         assignee: '',
     },
     showTaskId: false,
+    completeAction: undefined,
 };
 
 const mapStateToProps = state => ({

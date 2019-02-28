@@ -1,17 +1,18 @@
 import _ from 'lodash';
-import ApiConstants from 'constants/api';
-import taskConstants from 'constants/task';
 import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { push } from 'connected-react-router';
 
+import ApiConstants from 'constants/api';
+import taskConstants from 'constants/task';
+import UserConstants from 'constants/user';
 import DateTimeField from 'components/dateTimeField';
 import TaskWorkflowCard from 'components/taskWorkflowCard';
 import WorkflowPermissions from 'components/workflowPermissions';
-import UserConstants from 'constants/user';
 import { getWorkflow, makeUpdateWorflow as makeUpdateWorflowRequest, makeUpdatePermissions } from 'services/workflow';
 import { getEmployee, getAllEmployees } from 'services/employees';
 import { formatPermission } from 'utils/helpers';
@@ -19,7 +20,7 @@ import { errorParser } from 'utils/helpers/errorHandler';
 import { toast } from 'react-toastify';
 import { showLoader } from 'utils/helpers/loader';
 
-
+// Commented code are the features need to discuss.
 export class Workflows extends React.Component {
     constructor(props) {
         super(props);
@@ -37,6 +38,7 @@ export class Workflows extends React.Component {
                     last_name: '',
                 },
             },
+            editable: true,
         };
         const workflow = workflows[this.workflowId];
         if (workflow) {
@@ -49,13 +51,12 @@ export class Workflows extends React.Component {
             };
         }
 
-        this.removePermission = new Set();
-
         // bind functions.
         this.setCreator = this.setCreator.bind(this);
         this.setWorkFlowPermissions = this.setWorkFlowPermissions.bind(this);
         this.setStartDateTime = this.setStartDateTime.bind(this);
         this.updateWorkflow = this.updateWorkflow.bind(this);
+        this.evaluatePermissions = this.evaluatePermissions.bind(this);
     }
 
     async componentDidMount() {
@@ -85,16 +86,22 @@ export class Workflows extends React.Component {
 
     async setCreator(creator) {
         const { activeEmployees, inactiveEmployees } = this.props;
-
-        // check creator in active and inactive employees or fetch it
-        if (Object.hasOwnProperty.call(activeEmployees, creator)) {
-            this.setState({ creator: activeEmployees[creator] });
-        } else if (Object.hasOwnProperty.call(inactiveEmployees, creator)) {
-            this.setState({ creator: inactiveEmployees[creator] });
-        } else {
-            this.setState({
-                creator: await getEmployee(creator),
-            });
+        try {
+            // check creator in active and inactive employees or fetch it
+            if (Object.hasOwnProperty.call(activeEmployees, creator)) {
+                this.setState({ creator: activeEmployees[creator] });
+            } else if (Object.hasOwnProperty.call(inactiveEmployees, creator)) {
+                this.setState({ creator: inactiveEmployees[creator] });
+            } else {
+                this.setState({
+                    creator: await getEmployee(creator),
+                });
+            }
+            // evaluate permission for the current user.
+            this.evaluatePermissions();
+        } catch (err) {
+            const errMsg = errorParser(err, 'failed to set creator');
+            toast.error(errMsg);
         }
     }
 
@@ -105,18 +112,26 @@ export class Workflows extends React.Component {
     }
 
     setWorkFlowPermissions(value) {
-        const { workflowPermissions } = this.state;
-        // add all current permission to remove permissions.
-        Object.keys(workflowPermissions).map(pId => {
-            const permission = workflowPermissions[pId];
-            return this.removePermission.add(permission.employee);
-        });
-        // remove common permissions from set.
-        Object.keys(value).map(pId => {
-            const permission = value[pId];
-            return this.removePermission.delete(permission.employee);
-        });
         this.setState({ workflowPermissions: value });
+    }
+
+    evaluatePermissions() {
+        const { redirect, currentUser } = this.props;
+        const { workflowPermissions } = this.state;
+        let currentPermission;
+        Object.keys(workflowPermissions).map(pId => {
+            const per = workflowPermissions[pId];
+            if (per.employee === currentUser.id) {
+                currentPermission = per;
+            }
+            return null;
+        });
+        if (!currentUser.isAdmin && currentPermission === undefined) {
+            redirect(ApiConstants.WORKFLOWS_PAGE);
+        }
+        if (currentPermission && currentPermission.permission === UserConstants.STATUS.READ) {
+            this.setState({ editable: false });
+        }
     }
 
     createWorkFlowButton() {
@@ -228,7 +243,7 @@ export class Workflows extends React.Component {
     }
 
     render() {
-        const { workflowName, creator, startDateTime, workflowPermissions } = this.state;
+        const { workflowName, creator, startDateTime, workflowPermissions, editable } = this.state;
 
         // Copy is required to prevent refernced object operatios.
         const workflowPermissionsCopy = { ...workflowPermissions };
@@ -251,6 +266,7 @@ export class Workflows extends React.Component {
                                 </Form.Label>
                                 <Col sm={8}>
                                     <Form.Control
+                                        disabled={!editable}
                                         size="sm"
                                         type="text"
                                         placeholder="Workflow Name"
@@ -265,7 +281,7 @@ export class Workflows extends React.Component {
                                 </Form.Label>
                                 <Col sm={8}>
                                     <DateTimeField
-                                        disabled={startDateTime < moment()}
+                                        disabled={(startDateTime < moment()) || !editable}
                                         constraintMoment={moment()}
                                         givenMoment={startDateTime}
                                         onChange={this.setStartDateTime}
@@ -287,6 +303,7 @@ export class Workflows extends React.Component {
                             </Form.Group>
                             <Form.Row className="col-12">
                                 <WorkflowPermissions
+                                    disabled={!editable}
                                     employees={activeEmployees}
                                     onChange={this.setWorkFlowPermissions}
                                     workflowPermissions={workflowPermissionsCopy}
@@ -314,7 +331,7 @@ Workflows.propTypes = {
     workflows: PropTypes.object.isRequired,
     activeEmployees: PropTypes.object,
     inactiveEmployees: PropTypes.object,
-
+    redirect: PropTypes.func.isRequired,
 };
 
 Workflows.defaultProps = {
@@ -329,6 +346,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+    redirect: url => dispatch(push(url)),
 });
 
 export default connect(

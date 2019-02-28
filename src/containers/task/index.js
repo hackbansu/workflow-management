@@ -77,7 +77,6 @@ export class Task extends React.Component {
             const res = await makeTaskComplete(this.taskId);
             const { response, body } = res;
             if (!response.ok) {
-                console.log(body);
                 const errMsg = errorParser(body, 'failed to mark complete the task');
                 toast.error(errMsg);
                 return;

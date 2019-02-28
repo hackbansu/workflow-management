@@ -74,6 +74,10 @@ export function makeFetchWorkflowPermissions(wfId) {
     return makeApiRequest(`${workflow.FETCH}${wfId}/accessor/all/`, 'GET');
 }
 
+export function makeFetchWorkflowHistory(wfId) {
+    return makeApiRequest(`${workflow.FETCH}${wfId}/history/`, 'GET');
+}
+
 export function getAllWorkflows() {
     showLoader(true);
     return makeFetchAllWorkflow()

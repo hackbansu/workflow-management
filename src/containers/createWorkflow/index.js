@@ -99,6 +99,7 @@ export class CreateWorkflow extends React.Component {
             accessors: Object.keys(data.workflowPermissions)
                 .map(permissionId => data.workflowPermissions[permissionId]),
         };
+        console.log(submitData);
         showLoader(true);
         makeCreateWorkflow(submitData)
             .then(res => {

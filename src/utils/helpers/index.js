@@ -141,12 +141,15 @@ export function parseTimeDelta(deltaTime) {
         return '';
     }
 
-    const arr = deltaTime.split(' ');
-    let days = 0;
-    const hourMinuteSeconds = arr.slice(-1)[0].split('.')[0];
-    if (arr.length === 2) {
-        days = arr[0];
-    }
+    const delta = moment.duration(deltaTime);
+    return `${delta.days()} day(s), ${delta.hours()} minutes, ${delta.minutes()} minutes, ${delta.seconds()} seconds`;
+}
 
-    return `${days} day(s) - ${hourMinuteSeconds}`;
+export function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }

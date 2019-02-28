@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import React from 'react';
-import { Container, Row } from 'react-bootstrap';
+import { Card, Container, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Bar, Doughnut } from 'react-chartjs-2';
 
-import { parseDateTime, parseTimeDelta } from 'utils/helpers';
+import { parseDateTime, parseTimeDelta, getRandomColor } from 'utils/helpers';
 import { showLoader } from 'utils/helpers/loader';
 import { getEmployeeReport } from 'services/report';
 import ApiConstants from 'constants/api';
@@ -98,13 +98,22 @@ export class EmployeeReport extends React.Component {
             ],
         };
 
+        const doughnutLabels = [];
+        const doughnutDatasetData = [];
+        const doughnutDatasetBackgroundColor = [];
+        timeSpentOnWorkflows.forEach(obj => {
+            doughnutLabels.push(obj.workflow.name);
+            doughnutDatasetData.push(moment.duration(obj.total_time_spent).asMinutes());
+            doughnutDatasetBackgroundColor.push(getRandomColor());
+        });
+
         const doughnutData = {
-            labels: ['Red', 'Green', 'Yellow'],
+            labels: doughnutLabels,
             datasets: [
                 {
-                    data: [300, 50, 100],
-                    // backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                    // hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                    data: doughnutDatasetData,
+                    backgroundColor: doughnutDatasetBackgroundColor,
+                    hoverBackgroundColor: doughnutDatasetBackgroundColor,
                 },
             ],
         };
@@ -113,7 +122,7 @@ export class EmployeeReport extends React.Component {
             <Container>
                 <Row className="d-flex justify-content-left">
                     <LinkContainer to={backUrl}>
-                        <button type="button" className="btn btn-secondary mr-3 mb-3">
+                        <button type="button" className="btn btn-dark mr-3 mb-3">
                             Back to Employee
                         </button>
                     </LinkContainer>
@@ -155,11 +164,17 @@ export class EmployeeReport extends React.Component {
                         lastWorkflowCompleted ? `${ApiConstants.WORKFLOW_PAGE}/${lastWorkflowCompleted.id}` : undefined
                     }
                 />
-                <Bar data={barData} width={100} height={50} />
-                <Doughnut data={doughnutData} />
+                <ReportField
+                    name="Workflows Completed Monthly (Past 12 Months)"
+                    value={<Bar data={barData} width={100} height={30} />}
+                />
+                <ReportField
+                    name="Time Spent With Workflows (Past 12 Months)"
+                    value={<Doughnut data={doughnutData} height={100} />}
+                />
                 <Row className="d-flex justify-content-center">
                     <LinkContainer to={backUrl}>
-                        <button type="button" className="btn btn-secondary mr-3 mb-3">
+                        <button type="button" className="btn btn-dark mr-3 mb-3">
                             Back to Employee
                         </button>
                     </LinkContainer>

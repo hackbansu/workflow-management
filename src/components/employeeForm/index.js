@@ -35,6 +35,7 @@ export class EmployeeForm extends React.Component {
         this.submitForm = this.submitForm.bind(this);
         this.resendInvite = this.resendInvite.bind(this);
         this.removeEmployee = this.removeEmployee.bind(this);
+        this.employeeReport = this.employeeReport.bind(this);
     }
 
     /**
@@ -117,11 +118,21 @@ export class EmployeeForm extends React.Component {
         });
     };
 
+    employeeReport = () => {
+        const { onReportClick, isUserAdmin } = this.props;
+
+        if (!isUserAdmin) {
+            return;
+        }
+
+        onReportClick();
+    };
+
     /**
      * Function to return the component rendering.
      */
     render() {
-        const { isUserAdmin, onBackClick } = this.props;
+        const { isUserAdmin, onBackClick, onReportClick } = this.props;
         const { email, firstName, lastName, isAdmin, designation, status, errors } = this.state;
 
         let formDisabled = false;
@@ -234,6 +245,13 @@ export class EmployeeForm extends React.Component {
                     >
                         Remove
                     </button>
+                    <button
+                        type="button"
+                        className={'btn btn-secondary mr-3' + (isUserAdmin ? '' : ' hide')}
+                        onClick={this.employeeReport}
+                    >
+                        Report
+                    </button>
                     <button type="button" className="btn btn-dark mr-3" onClick={onBackClick}>
                         Back to employees
                     </button>
@@ -255,6 +273,7 @@ EmployeeForm.propTypes = {
     onRemoveEmployee: PropTypes.func.isRequired,
     onResendInvite: PropTypes.func,
     onBackClick: PropTypes.func.isRequired,
+    onReportClick: PropTypes.func.isRequired,
 };
 
 EmployeeForm.defaultProps = {

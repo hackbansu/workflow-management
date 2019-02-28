@@ -15,7 +15,7 @@ import WorkflowConstants from 'constants/workflow';
 
 // importing components
 import EmployeeForm from 'components/employeeForm';
-import WorkflowReportField from 'components/workflowReportField';
+import ReportField from 'components/reportField';
 
 export class WorkflowReport extends React.Component {
     constructor(props) {
@@ -67,7 +67,7 @@ export class WorkflowReport extends React.Component {
         } = report;
 
         if (!uniqueAssignees) {
-            return uniqueAssignees;
+            return 'assignees error';
         }
 
         const backUrl = `${ApiConstants.WORKFLOW_PAGE}/${workflowId}`;
@@ -81,36 +81,30 @@ export class WorkflowReport extends React.Component {
                         </button>
                     </LinkContainer>
                 </Row>
-                <WorkflowReportField name="Name" value={name} />
-                <WorkflowReportField name="Status" value={WorkflowConstants.STATUS[status]} />
-                <WorkflowReportField name="Start At" value={parseDateTime(moment(startAt))} />
-                <WorkflowReportField
-                    name="Completed At"
-                    value={completedAt ? parseDateTime(moment(completedAt)) : null}
-                />
-                <WorkflowReportField
+                <ReportField name="Name" value={name} />
+                <ReportField name="Status" value={WorkflowConstants.STATUS[status]} />
+                <ReportField name="Start At" value={parseDateTime(moment(startAt))} />
+                <ReportField name="Completed At" value={completedAt ? parseDateTime(moment(completedAt)) : null} />
+                <ReportField
                     name="Creator"
                     value={creator.user.email}
                     redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${creator.id}`}
                 />
-                <WorkflowReportField name="Total Time Spend" value={parseTimeDelta(totalTimeSpend)} />
-                <WorkflowReportField name="Number of Assignees" value={numberOfAssignees} />
-                <WorkflowReportField name="Number of Tasks" value={numberOfTasks} />
-                <WorkflowReportField
-                    name="Average Task Complete Time"
-                    value={parseTimeDelta(averageTaskCompleteTime)}
-                />
-                <WorkflowReportField
+                <ReportField name="Total Time Spend" value={parseTimeDelta(totalTimeSpend)} />
+                <ReportField name="Number of Assignees" value={numberOfAssignees} />
+                <ReportField name="Number of Tasks" value={numberOfTasks} />
+                <ReportField name="Average Task Complete Time" value={parseTimeDelta(averageTaskCompleteTime)} />
+                <ReportField
                     name="Assignee With Minimum Time"
                     value={assingeeWithMinTime.user.email}
                     redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.id}`}
                 />
-                <WorkflowReportField
+                <ReportField
                     name="Assignee With Maximum Time"
                     value={assingeeWithMaxTime.user.email}
                     redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.id}`}
                 />
-                <WorkflowReportField
+                <ReportField
                     name="Unique Assignees:"
                     value={uniqueAssignees.map(assignee => ({
                         url: `${ApiConstants.EMPLOYEE_PAGE}/${assignee.id}`,

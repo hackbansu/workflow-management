@@ -16,7 +16,6 @@ import ApiConstants from 'constants/api';
 // importing components
 import EmployeeForm from 'components/employeeForm';
 
-
 export class Employee extends React.Component {
     constructor(props) {
         super(props);
@@ -24,6 +23,7 @@ export class Employee extends React.Component {
         this.onResendInvite = this.onResendInvite.bind(this);
         this.onRemoveEmployee = this.onRemoveEmployee.bind(this);
         this.onBackClick = this.onBackClick.bind(this);
+        this.onReportClick = this.onReportClick.bind(this);
 
         const { employees, match } = this.props;
         const { id: employeeId } = match.params;
@@ -42,12 +42,11 @@ export class Employee extends React.Component {
         const { updateEmployee, match } = this.props;
         const { id: employeeId } = match.params;
 
-        getEmployee(employeeId)
-            .then(employee => {
-                this.setState({
-                    currentEmployee: employee,
-                });
+        getEmployee(employeeId).then(employee => {
+            this.setState({
+                currentEmployee: employee,
             });
+        });
     }
 
     /**
@@ -163,6 +162,14 @@ export class Employee extends React.Component {
         redirectPage(ApiConstants.EMPLOYEES_PAGE);
     };
 
+    onReportClick = () => {
+        const { redirectPage } = this.props;
+        const { currentEmployee } = this.state;
+        const { id: employeeId } = currentEmployee;
+
+        redirectPage(`${ApiConstants.EMPLOYEE_PAGE}/${employeeId}${ApiConstants.EMPLOYEE_REPORT_PAGE}`);
+    };
+
     /**
      * function to render the component.
      */
@@ -194,6 +201,7 @@ export class Employee extends React.Component {
                         onResendInvite={this.onResendInvite}
                         onRemoveEmployee={this.onRemoveEmployee}
                         onBackClick={this.onBackClick}
+                        onReportClick={this.onReportClick}
                     />
                 </div>
             </div>

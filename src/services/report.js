@@ -27,3 +27,18 @@ export async function getWorkflowReport(workflowId) {
         showLoader(false);
     }
 }
+
+export async function getEmployeeReport(employeeId) {
+    showLoader(true);
+    try {
+        const { response, body } = await makeApiRequest(`${report.EMPLOYEE}${employeeId}/`);
+        if (!response.ok) {
+            redirect(ApiConst.DASHBOARD_PAGE);
+        }
+        return { response, body };
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
+}

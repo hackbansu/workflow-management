@@ -10,6 +10,7 @@ import CreateCompany from 'containers/createCompany';
 import CreateWorkflow from 'containers/createWorkflow';
 import Dashboard from 'containers/dashboard';
 import Employee from 'containers/employee';
+import EmployeeReport from 'containers/employeeReport';
 import Employees from 'containers/employees';
 import Invite from 'containers/invite';
 import Profile from 'containers/profile';
@@ -235,6 +236,13 @@ export class Home extends React.Component {
                                     component={Employee}
                                     condition={isPartOfComapany}
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.EMPLOYEE_PAGE}/:id${ApiConstants.EMPLOYEE_REPORT_PAGE}`}
+                                    component={EmployeeReport}
+                                    condition={isAdmin}
+                                    redirectUrl={`${ApiConstants.WORKFLOW_PAGE}/:id`}
                                 />
                                 <PrivateRoute
                                     path={ApiConstants.INVITE_PAGE}

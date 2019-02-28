@@ -151,19 +151,21 @@ export async function getTask(taskId) {
         const task = {};
         task[body.id] = apiTaskFormCouple(body);
         /*
-        * UPCOMMING: 1,
-        * ONGOING: 2,
-        * COMPLETE: 3,
+        * UPCOMMING: 1
+        * SCHEDULED: 2
+        * ONGOING: 3
+        * COMPLETE: 4
         */
         switch (task[body.id].status) {
         case TaskConstant.STATUS.UPCOMMING:
+        case TaskConstant.STATUS.SCHEDULED:
             store.dispatch(updateUpcommingTasks(task));
             break;
         case TaskConstant.STATUS.ONGOING:
-            store.dispatch(updateUpcommingTasks(task));
+            store.dispatch(updateOngoingTasks(task));
             break;
         case TaskConstant.STATUS.COMPLETE:
-            store.dispatch(updateUpcommingTasks(task));
+            store.dispatch(updateCompleteTasks(task));
             break;
         default:
             break;

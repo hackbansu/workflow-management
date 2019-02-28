@@ -14,6 +14,7 @@ import Employees from 'containers/employees';
 import Invite from 'containers/invite';
 import Profile from 'containers/profile';
 import Workflow from 'containers/workflow';
+import WorkflowReport from 'containers/workflowReport';
 import Workflows from 'containers/workflows';
 import WorkflowTemplates from 'containers/workflowTemplates';
 import Task from 'containers/task';
@@ -75,7 +76,6 @@ export class Home extends React.Component {
 
             // dispatch action to update user token and data
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
-
 
             // fetch user company details.
             makeCompanyFetchRequest().then(obj => {
@@ -197,6 +197,13 @@ export class Home extends React.Component {
                                 />
                                 <PrivateRoute
                                     exact
+                                    path={`${ApiConstants.WORKFLOW_PAGE}/:id${ApiConstants.WORKFLOW_REPORT_PAGE}`}
+                                    component={WorkflowReport}
+                                    condition={isAdmin}
+                                    redirectUrl={`${ApiConstants.WORKFLOW_PAGE}/:id`}
+                                />
+                                <PrivateRoute
+                                    exact
                                     path={`${ApiConstants.TASK_PAGE}/:id`}
                                     component={Task}
                                     condition={isPartOfComapany}
@@ -270,8 +277,7 @@ Home.propTypes = {
     redirectPage: PropTypes.func.isRequired,
 };
 
-Home.defaultProps = {
-};
+Home.defaultProps = {};
 
 const mapStateToProps = state => ({
     currentUser: state.currentUser,

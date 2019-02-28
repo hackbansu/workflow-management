@@ -45,6 +45,9 @@ export default {
         workflow: {
             FETCH: 'workflow/',
         },
+        report: {
+            WORKFLOW: 'workflow-report/',
+        },
     },
     COMPANY_PAGE: `/${FIELD_TYPE.COMPANY}`,
     CREATE_COMPANY_PAGE: `/${FIELD_TYPE.CREATE_COMAPNY}`,
@@ -64,5 +67,6 @@ export default {
     TASK_PAGE: '/task',
     TEMPLATES_PAGE: `/${FIELD_TYPE.WORKFLOWS}/${FIELD_TYPE.TEMPLATES}`,
     WORKFLOW_PAGE: '/workflow',
+    WORKFLOW_REPORT_PAGE: '/report',
     WORKFLOWS_PAGE: `/${FIELD_TYPE.WORKFLOWS}`,
 };

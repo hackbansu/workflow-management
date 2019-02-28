@@ -135,3 +135,18 @@ export function parseWorkflow(workflows) {
 export function parseDateTime(dateTime) {
     return moment(dateTime).format('YYYY:MM:DD HH:MM');
 }
+
+export function parseTimeDelta(deltaTime) {
+    if (!deltaTime) {
+        return '';
+    }
+
+    const arr = deltaTime.split(' ');
+    let days = 0;
+    const hourMinuteSeconds = arr.slice(-1)[0].split('.')[0];
+    if (arr.length === 2) {
+        days = arr[0];
+    }
+
+    return `${days} day(s) - ${hourMinuteSeconds}`;
+}

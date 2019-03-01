@@ -98,13 +98,17 @@ export class WorkflowReport extends React.Component {
                     <ReportField name="Average Task Complete Time" value={parseTimeDelta(averageTaskCompleteTime)} />
                     <ReportField
                         name="Assignee With Minimum Time"
-                        value={assingeeWithMinTime.user.email}
-                        redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.id}`}
+                        value={assingeeWithMinTime ? assingeeWithMinTime.user.email : 'None'}
+                        redirectUrl={
+                            assingeeWithMinTime ? `${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.id}` : undefined
+                        }
                     />
                     <ReportField
                         name="Assignee With Maximum Time"
-                        value={assingeeWithMaxTime.user.email}
-                        redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.id}`}
+                        value={assingeeWithMaxTime ? assingeeWithMaxTime.user.email : 'None'}
+                        redirectUrl={
+                            assingeeWithMaxTime ? `${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.id}` : undefined
+                        }
                     />
                     <ReportField
                         name="Unique Assignees:"

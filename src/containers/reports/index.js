@@ -8,7 +8,7 @@ import { Card, Container, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Doughnut, Line } from 'react-chartjs-2';
 
-import { parseDateTime, parseTimeDelta, getRandomColor } from 'utils/helpers';
+import { parseDateTime, parseTimeDelta, getRandomColor, saveToPNG } from 'utils/helpers';
 import { showLoader } from 'utils/helpers/loader';
 import { getFavouriteEmployeesReport, getIJLEmployeesReport } from 'services/report';
 import ApiConstants from 'constants/api';
@@ -139,24 +139,33 @@ export class Reports extends React.Component {
         const doughnutData03 = this.getDoughnutData(reportFav03);
         const doughnutData12 = this.getDoughnutData(reportFav12);
 
+        const containerId = 'company-report';
+
         return (
             <Container>
-                <ReportField
-                    name="Joined, Left, Invited Employees (Past 12 Months)"
-                    value={<Line data={lineData} width={100} height={30} />}
-                />
-                <ReportField
-                    name="Top 10 Favourite Employees (past 1 month)"
-                    value={<Doughnut data={doughnutData01} height={100} />}
-                />
-                <ReportField
-                    name="Top 10 Favourite Employees (past 3 months)"
-                    value={<Doughnut data={doughnutData03} height={100} />}
-                />
-                <ReportField
-                    name="Top 10 Favourite Employees (past 12 months)"
-                    value={<Doughnut data={doughnutData12} height={100} />}
-                />
+                <Container id={containerId}>
+                    <ReportField
+                        name="Joined, Left, Invited Employees (Past 12 Months)"
+                        value={<Line data={lineData} width={100} height={30} />}
+                    />
+                    <ReportField
+                        name="Top 10 Favourite Employees (past 1 month)"
+                        value={<Doughnut data={doughnutData01} height={100} />}
+                    />
+                    <ReportField
+                        name="Top 10 Favourite Employees (past 3 months)"
+                        value={<Doughnut data={doughnutData03} height={100} />}
+                    />
+                    <ReportField
+                        name="Top 10 Favourite Employees (past 12 months)"
+                        value={<Doughnut data={doughnutData12} height={100} />}
+                    />
+                </Container>
+                <Row className="d-flex justify-content-center">
+                    <button type="button" className="btn btn-info mr-3 mb-3" onClick={() => saveToPNG(containerId)}>
+                        Download Report
+                    </button>
+                </Row>
             </Container>
         );
     }

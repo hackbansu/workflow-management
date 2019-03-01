@@ -7,7 +7,7 @@ import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import { parseDateTime, parseTimeDelta } from 'utils/helpers';
+import { parseDateTime, parseTimeDelta, saveToPNG } from 'utils/helpers';
 import { showLoader } from 'utils/helpers/loader';
 import { getWorkflowReport } from 'services/report';
 import ApiConstants from 'constants/api';
@@ -71,6 +71,7 @@ export class WorkflowReport extends React.Component {
         }
 
         const backUrl = `${ApiConstants.WORKFLOW_PAGE}/${workflowId}`;
+        const containerId = `workflow-report-${workflowId}`;
 
         return (
             <Container>
@@ -81,43 +82,48 @@ export class WorkflowReport extends React.Component {
                         </button>
                     </LinkContainer>
                 </Row>
-                <ReportField name="Name" value={name} />
-                <ReportField name="Status" value={WorkflowConstants.STATUS[status]} />
-                <ReportField name="Start At" value={parseDateTime(moment(startAt))} />
-                <ReportField name="Completed At" value={completedAt ? parseDateTime(moment(completedAt)) : null} />
-                <ReportField
-                    name="Creator"
-                    value={creator.user.email}
-                    redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${creator.id}`}
-                />
-                <ReportField name="Total Time Spend" value={parseTimeDelta(totalTimeSpend)} />
-                <ReportField name="Number of Assignees" value={numberOfAssignees} />
-                <ReportField name="Number of Tasks" value={numberOfTasks} />
-                <ReportField name="Average Task Complete Time" value={parseTimeDelta(averageTaskCompleteTime)} />
-                <ReportField
-                    name="Assignee With Minimum Time"
-                    value={assingeeWithMinTime.user.email}
-                    redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.id}`}
-                />
-                <ReportField
-                    name="Assignee With Maximum Time"
-                    value={assingeeWithMaxTime.user.email}
-                    redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.id}`}
-                />
-                <ReportField
-                    name="Unique Assignees:"
-                    value={uniqueAssignees.map(assignee => ({
-                        url: `${ApiConstants.EMPLOYEE_PAGE}/${assignee.id}`,
-                        value: assignee.user.email,
-                    }))}
-                    isList
-                />
+                <Container id={containerId}>
+                    <ReportField name="Name" value={name} />
+                    <ReportField name="Status" value={WorkflowConstants.STATUS[status]} />
+                    <ReportField name="Start At" value={parseDateTime(moment(startAt))} />
+                    <ReportField name="Completed At" value={completedAt ? parseDateTime(moment(completedAt)) : null} />
+                    <ReportField
+                        name="Creator"
+                        value={creator.user.email}
+                        redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${creator.id}`}
+                    />
+                    <ReportField name="Total Time Spend" value={parseTimeDelta(totalTimeSpend)} />
+                    <ReportField name="Number of Assignees" value={numberOfAssignees} />
+                    <ReportField name="Number of Tasks" value={numberOfTasks} />
+                    <ReportField name="Average Task Complete Time" value={parseTimeDelta(averageTaskCompleteTime)} />
+                    <ReportField
+                        name="Assignee With Minimum Time"
+                        value={assingeeWithMinTime.user.email}
+                        redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.id}`}
+                    />
+                    <ReportField
+                        name="Assignee With Maximum Time"
+                        value={assingeeWithMaxTime.user.email}
+                        redirectUrl={`${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.id}`}
+                    />
+                    <ReportField
+                        name="Unique Assignees:"
+                        value={uniqueAssignees.map(assignee => ({
+                            url: `${ApiConstants.EMPLOYEE_PAGE}/${assignee.id}`,
+                            value: assignee.user.email,
+                        }))}
+                        isList
+                    />
+                </Container>
                 <Row className="d-flex justify-content-center">
                     <LinkContainer to={backUrl}>
                         <button type="button" className="btn btn-secondary mr-3 mb-3">
                             Back to Workflow
                         </button>
                     </LinkContainer>
+                    <button type="button" className="btn btn-info mr-3 mb-3" onClick={() => saveToPNG(containerId)}>
+                        Download Report
+                    </button>
                 </Row>
             </Container>
         );

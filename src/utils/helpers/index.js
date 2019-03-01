@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import html2canvas from 'html2canvas';
+import JSPDF from 'jspdf';
 
 import ApiConstants from 'constants/api';
 import TaskConstants from 'constants/task';
@@ -152,4 +154,12 @@ export function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+
+export function saveToPNG(id) {
+    const input = document.getElementById(id);
+    html2canvas(input).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        window.open(imgData);
+    });
 }

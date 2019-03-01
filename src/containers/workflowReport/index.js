@@ -86,7 +86,10 @@ export class WorkflowReport extends React.Component {
                     <ReportField name="Name" value={name} />
                     <ReportField name="Status" value={WorkflowConstants.STATUS[status]} />
                     <ReportField name="Start At" value={parseDateTime(moment(startAt))} />
-                    <ReportField name="Completed At" value={completedAt ? parseDateTime(moment(completedAt)) : null} />
+                    <ReportField
+                        name="Completed At"
+                        value={completedAt ? parseDateTime(moment(completedAt)) : 'Not Completed'}
+                    />
                     <ReportField
                         name="Creator"
                         value={creator.user.email}
@@ -98,16 +101,32 @@ export class WorkflowReport extends React.Component {
                     <ReportField name="Average Task Complete Time" value={parseTimeDelta(averageTaskCompleteTime)} />
                     <ReportField
                         name="Assignee With Minimum Time"
-                        value={assingeeWithMinTime ? assingeeWithMinTime.user.email : 'None'}
+                        value={
+                            assingeeWithMinTime
+                                ? `${assingeeWithMinTime.assignee.user.email} -- ${parseTimeDelta(
+                                    assingeeWithMinTime.time
+                                )}`
+                                : 'None'
+                        }
                         redirectUrl={
-                            assingeeWithMinTime ? `${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.id}` : undefined
+                            assingeeWithMinTime
+                                ? `${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMinTime.assignee.id}`
+                                : undefined
                         }
                     />
                     <ReportField
                         name="Assignee With Maximum Time"
-                        value={assingeeWithMaxTime ? assingeeWithMaxTime.user.email : 'None'}
+                        value={
+                            assingeeWithMaxTime
+                                ? `${assingeeWithMaxTime.assignee.user.email} -- ${parseTimeDelta(
+                                    assingeeWithMaxTime.time
+                                )}`
+                                : 'None'
+                        }
                         redirectUrl={
-                            assingeeWithMaxTime ? `${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.id}` : undefined
+                            assingeeWithMaxTime
+                                ? `${ApiConstants.EMPLOYEE_PAGE}/${assingeeWithMaxTime.assignee.id}`
+                                : undefined
                         }
                     />
                     <ReportField

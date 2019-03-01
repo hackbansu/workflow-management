@@ -39,10 +39,6 @@ const initialState = {
         },
     },
     employees: {},
-    toast: {
-        show: false,
-        text: 'Default Text',
-    },
     modal: {
         heading: 'Default Heading',
         text: 'Default Text',

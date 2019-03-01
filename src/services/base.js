@@ -76,7 +76,7 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
         .then(({ response, body }) => {
             if (response.status >= 400) {
                 apiErrorHandler(response, body);
-                return Promise.reject();
+                // return Promise.reject();
             }
             return { response, body };
         })

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React from 'react';
 
+import { errorParser } from 'utils/helpers/errorHandler';
 import { push } from 'connected-react-router';
 import { showLoader } from 'utils/helpers/loader';
 import { makeSignupRequest } from 'services/auth';
@@ -12,6 +13,7 @@ import ApiConstants from 'constants/api';
 import SignupForm from 'components/signupForm';
 import PageBanner from 'components/pageBanner';
 import LinkButton from 'components/linkButton';
+import { toast } from 'react-toastify';
 
 /**
  * Login page component.
@@ -59,17 +61,21 @@ export class Signup extends React.Component {
         return makeSignupRequest(data)
             .then(obj => {
                 if (!obj) {
-                    return Promise.reject();
+                    return;
                 }
 
                 const { response, body } = obj;
                 if (response.status !== 201) {
-                    return Promise.reject();
-                    // showModal('Signup Failed', 'Signup request failed');
+                    const errMsg = errorParser(body, 'Signup request failed');
+                    showModal('Signup Failed', errMsg);
+                    return;
                 }
                 showModal('Signup Successful', 'Confirmation link has been sent to your email.');
                 redirect('/');
-                return Promise.resolve();
+            })
+            .catch((err) => {
+                const errMsg = errorParser(err, 'Signup error occur');
+                toast.error(errMsg);
             })
             .finally(() => {
                 showLoader(false);

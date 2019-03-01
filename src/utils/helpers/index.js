@@ -20,14 +20,9 @@ export function apiTaskFormCouple(task) {
     // workflow: 1
     const { title: taskTitle, description: taskDetail, parent_task: parentTask, completed_at: completedAt } = task;
     let { duration, start_delta: startDelta } = task;
-    console.log(startDelta);
-    console.log(typeof startDelta);
     startDelta = startDelta.match(regexConst.splitDateTime).groups;
     const taskStartDeltaDays = startDelta.days || 0;
     const taskStartDeltaTime = startDelta.time;
-
-    console.log('taskStartDeltaDays', taskStartDeltaDays);
-    console.log('taskStartDeltaTime', taskStartDeltaTime);
 
     duration = duration.match(regexConst.splitDateTime).groups;
     const taskDurationDays = duration.days || 0;

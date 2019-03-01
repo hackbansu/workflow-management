@@ -13,6 +13,7 @@ import Employee from 'containers/employee';
 import EmployeeReport from 'containers/employeeReport';
 import Employees from 'containers/employees';
 import Invite from 'containers/invite';
+import Reports from 'containers/reports';
 import Profile from 'containers/profile';
 import Workflow from 'containers/workflow';
 import WorkflowReport from 'containers/workflowReport';
@@ -255,6 +256,12 @@ export class Home extends React.Component {
                                 <PrivateRoute
                                     path={ApiConstants.INVITE_PAGE}
                                     component={Invite}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.HOME_PAGE}
+                                />
+                                <PrivateRoute
+                                    path={ApiConstants.REPORTS_PAGE}
+                                    component={Reports}
                                     condition={isAdmin}
                                     redirectUrl={ApiConstants.HOME_PAGE}
                                 />

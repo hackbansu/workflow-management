@@ -15,8 +15,7 @@ function apiErrorHandler(response, body) {
     body = body || { detail: 'Error occur' };
     let errorMsg;
     if (response.status >= 500) {
-        errorMsg = errorParser(body, 'Internal Server error occur');
-        toast.error(errorMsg);
+        store.dispatch(push(ApiConstants.ISE_PAGE));
     }
     // Logout current user if token is invalid
     if (response.status === 401) {
@@ -25,7 +24,13 @@ function apiErrorHandler(response, body) {
         toast.info('Please login');
         return null;
     }
-    if (response.status >= 405) {
+    if (response.status === 403) {
+        store.dispatch(push(ApiConstants.UNAUTHORIZED_PAGE));
+    }
+    if (response.status === 404) {
+        store.dispatch(push(ApiConstants.NOT_FOUND_PAGE));
+    }
+    if (response.status >= 405 && response.status < 500) {
         errorMsg = errorParser(body, 'Api error occur');
         toast.error(errorMsg);
     }
@@ -71,11 +76,14 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
         .then(({ response, body }) => {
             if (response.status >= 400) {
                 apiErrorHandler(response, body);
+                return Promise.reject();
             }
             return { response, body };
         })
         .catch(err => {
-            toast.error(String(err));
+            if (err) {
+                toast.error(String(err));
+            }
             return Promise.reject(err);
         });
 }

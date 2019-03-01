@@ -66,7 +66,7 @@ export class Task extends React.Component {
             await this.fetchPermissions();
             // }
         } catch (error) {
-            redirect(ApiConstants.DASHBOARD_PAGE);
+            // redirect(ApiConstants.DASHBOARD_PAGE);
         } finally {
             showLoader(false);
         }

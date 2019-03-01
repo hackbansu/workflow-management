@@ -16,11 +16,7 @@ function redirect(url) {
 export async function getWorkflowReport(workflowId) {
     showLoader(true);
     try {
-        const { response, body } = await makeApiRequest(`${report.WORKFLOW}${workflowId}/`);
-        if (!response.ok) {
-            redirect(ApiConst.DASHBOARD_PAGE);
-        }
-        return { response, body };
+        return await makeApiRequest(`${report.WORKFLOW}${workflowId}/`);
     } catch (e) {
         return Promise.reject(e);
     } finally {
@@ -31,11 +27,29 @@ export async function getWorkflowReport(workflowId) {
 export async function getEmployeeReport(employeeId) {
     showLoader(true);
     try {
-        const { response, body } = await makeApiRequest(`${report.EMPLOYEE}${employeeId}/`);
-        if (!response.ok) {
-            redirect(ApiConst.DASHBOARD_PAGE);
-        }
-        return { response, body };
+        return await makeApiRequest(`${report.EMPLOYEE}${employeeId}/`);
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
+}
+
+export async function getFavouriteEmployeesReport(months) {
+    showLoader(true);
+    try {
+        return await makeApiRequest(`${report.FAVOURITE_EMPLOYEES}${months}/`);
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
+}
+
+export async function getIJLEmployeesReport() {
+    showLoader(true);
+    try {
+        return await makeApiRequest(report.IJL_EMPLOYEE);
     } catch (e) {
         return Promise.reject(e);
     } finally {

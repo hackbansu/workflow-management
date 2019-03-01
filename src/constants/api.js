@@ -48,6 +48,8 @@ export default {
         report: {
             WORKFLOW: 'workflow-report/',
             EMPLOYEE: 'employee-report/',
+            FAVOURITE_EMPLOYEES: 'favourite-employees/',
+            IJL_EMPLOYEE: 'ijl-employees/',
         },
     },
     COMPANY_PAGE: `/${FIELD_TYPE.COMPANY}`,
@@ -60,6 +62,7 @@ export default {
     HOME_PAGE: '/',
     INVITATION_PAGE: '/invitation',
     INVITE_PAGE: `/${FIELD_TYPE.INVITE}`,
+    REPORTS_PAGE: `/${FIELD_TYPE.REPORTS}`,
     LOGIN_PAGE: '/login',
     LOGOUT_PAGE: `/${FIELD_TYPE.LOGOUT}`,
     NEW_WORKFLOW_PAGE: `/${FIELD_TYPE.WORKFLOWS}/new`,

@@ -42,3 +42,33 @@ export async function getEmployeeReport(employeeId) {
         showLoader(false);
     }
 }
+
+export async function getFavouriteEmployeesReport(months) {
+    showLoader(true);
+    try {
+        const { response, body } = await makeApiRequest(`${report.FAVOURITE_EMPLOYEES}${months}/`);
+        if (!response.ok) {
+            redirect(ApiConst.DASHBOARD_PAGE);
+        }
+        return { response, body };
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
+}
+
+export async function getIJLEmployeesReport() {
+    showLoader(true);
+    try {
+        const { response, body } = await makeApiRequest(report.IJL_EMPLOYEE);
+        if (!response.ok) {
+            redirect(ApiConst.DASHBOARD_PAGE);
+        }
+        return { response, body };
+    } catch (e) {
+        return Promise.reject(e);
+    } finally {
+        showLoader(false);
+    }
+}

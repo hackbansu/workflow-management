@@ -86,6 +86,12 @@ export class sidebar extends React.Component {
                                 redirectUrl={ApiConstants.INVITE_PAGE}
                                 isVisible={isAdmin}
                             />
+                            <SidebarField
+                                name="Reports"
+                                fieldType={FIELD_TYPE.REPORTS}
+                                redirectUrl={ApiConstants.REPORTS_PAGE}
+                                isVisible={isAdmin}
+                            />
                         </div>
                     ) : (
                         <SidebarField

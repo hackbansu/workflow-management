@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import ApiConstants from 'constants/api';
 
+import ErrorPage from 'containers/errorPage';
 import LoginPage from 'containers/loginPage';
 import Signup from 'containers/signup';
 import ForgotPassword from 'containers/forgotPassword';
@@ -32,6 +33,13 @@ export class App extends React.Component {
         return (
             <React.Fragment>
                 <Switch>
+                    <PrivateRoute
+                        exact
+                        path={`${ApiConstants.ERROR_PAGE}/:errorNumber`}
+                        component={ErrorPage}
+                        condition
+                        redirectUrl={ApiConstants.HOME_PAGE}
+                    />
                     <PrivateRoute
                         exact
                         path={ApiConstants.LOGIN_PAGE}

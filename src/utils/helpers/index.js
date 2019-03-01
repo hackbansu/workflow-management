@@ -20,12 +20,17 @@ export function apiTaskFormCouple(task) {
     // workflow: 1
     const { title: taskTitle, description: taskDetail, parent_task: parentTask, completed_at: completedAt } = task;
     let { duration, start_delta: startDelta } = task;
+    console.log(startDelta);
+    console.log(typeof startDelta);
     startDelta = startDelta.match(regexConst.splitDateTime).groups;
-    const taskStartDeltaDays = startDelta.days;
+    const taskStartDeltaDays = startDelta.days || 0;
     const taskStartDeltaTime = startDelta.time;
 
+    console.log('taskStartDeltaDays', taskStartDeltaDays);
+    console.log('taskStartDeltaTime', taskStartDeltaTime);
+
     duration = duration.match(regexConst.splitDateTime).groups;
-    const taskDurationDays = duration.days;
+    const taskDurationDays = duration.days || 0;
     const taskDurationTime = duration.time;
     ['title', 'description', 'duration', 'start_delta', 'parent_task', 'completed_at'].map(prop => delete task[prop]);
 
@@ -46,8 +51,8 @@ export function taskFormApiCouple(task) {
     // couple task form data to api format
     return {
         title: task.taskTitle,
-        start_delta: `${task.taskStartDeltaDays}:${task.taskStartDeltaTime}`,
-        duration: `${task.taskDurationDays}:${task.taskDurationTime}`,
+        start_delta: `${task.taskStartDeltaDays} ${task.taskStartDeltaTime}:00`,
+        duration: `${task.taskDurationDays} ${task.taskDurationTime}:00`,
         description: task.taskDetail,
         assignee: task.assignee,
         parent_task: task.parentTask,
@@ -133,7 +138,7 @@ export function parseWorkflow(workflows) {
 }
 
 export function parseDateTime(dateTime) {
-    return moment(dateTime).format('YYYY:MM:DD HH:MM');
+    return moment(dateTime).format('YYYY:MM:DD hh:mm');
 }
 
 export function parseTimeDelta(deltaTime) {

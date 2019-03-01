@@ -1,11 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
-import moment from 'moment';
+import Moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Container, Table } from 'react-bootstrap';
 import { push } from 'connected-react-router';
+import { LinkContainer } from 'react-router-bootstrap';
 
+import ApiConstants from 'constants/api';
 import { makeFetchWorkflowHistory } from 'services/workflow';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { toast } from 'react-toastify';
@@ -17,7 +19,6 @@ export class WorkflowsHistory extends React.Component {
         const { match } = this.props;
         const { id: workflowId } = match.params;
         this.workflowId = workflowId;
-        this.constrainStartDateTime = moment();
         this.state = {
             histories: [],
         };
@@ -42,11 +43,21 @@ export class WorkflowsHistory extends React.Component {
         }
     }
 
+    getDateTime(created) {
+        const ts = new Moment(created);
+        return ts.format('YYYY:MM:DD hh:mm');
+    }
+
     render() {
         const { histories } = this.state;
         return (
             <Container>
-                <h2>History</h2>
+                <div className="clearfix">
+                    <LinkContainer to={`${ApiConstants.WORKFLOW_PAGE}/${this.workflowId}`}>
+                        <h4 className="text-info">{'<<< Workflow'}</h4>
+                    </LinkContainer>
+                    <h2 className="float-right">History</h2>
+                </div>
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -60,13 +71,13 @@ export class WorkflowsHistory extends React.Component {
                     </thead>
                     <tbody>
                         {histories.map(history => (
-                            <tr>
+                            <tr key={`${Math.random()}-history`}>
                                 <td>{history.content_object}</td>
                                 <td>{history.action}</td>
                                 <td>{history.field_name}</td>
                                 <td>{history.prev_value}</td>
                                 <td>{history.next_value}</td>
-                                <td>{moment(history.created).format('YYYY:MM:DD HH:MM')}</td>
+                                <td>{this.getDateTime(history.created)}</td>
                             </tr>
                         ))}
                     </tbody>

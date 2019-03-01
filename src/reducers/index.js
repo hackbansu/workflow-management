@@ -38,7 +38,11 @@ const initialState = {
             links: [],
         },
     },
-    employees: {},
+    employees: {
+        activeEmployees: {},
+        inactiveEmployees: {},
+        invitedEmployees: {},
+    },
     modal: {
         heading: 'Default Heading',
         text: 'Default Text',

@@ -4,7 +4,7 @@ import JSPDF from 'jspdf';
 
 import ApiConstants from 'constants/api';
 import TaskConstants from 'constants/task';
-import { isAbsoluteUrl, regexConst } from 'constants/index.js';
+import DefaultConstants, { isAbsoluteUrl, regexConst } from 'constants/index.js';
 import moment from 'moment';
 
 export function apiTaskFormCouple(task) {
@@ -75,8 +75,8 @@ export function parseEmployeeData(emp) {
         joinAt,
         leftAt,
     };
-    data.joinAt = data.joinAt ? moment(data.joinAt).format('YYYY-MM-DD HH:mm') : '';
-    data.leftAt = data.leftAt ? moment(data.leftAt).format('YYYY-MM-DD HH:mm') : '';
+    data.joinAt = data.joinAt ? moment(data.joinAt).format(DefaultConstants.DATE_TIME_FORMAT) : '';
+    data.leftAt = data.leftAt ? moment(data.leftAt).format(DefaultConstants.DATE_TIME_FORMAT) : '';
     return data;
 }
 

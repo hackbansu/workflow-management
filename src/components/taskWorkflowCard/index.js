@@ -70,11 +70,11 @@ export default function taskWorkflowCard({ taskInformation, taskId, employees })
                     </div>
                     <div className="clearfix">
                         <small className="float-left font-weight-bold text-uppercase">Start Delta</small>
-                        <small className="float-right">{`${taskStartDeltaDays}:${taskStartDeltaTime}`}</small>
+                        <small className="float-right">{`${taskStartDeltaDays} ${taskStartDeltaTime}`}</small>
                     </div>
                     <div className="clearfix">
                         <small className="float-left font-weight-bold">Duration</small>
-                        <small className="float-right">{`${taskDurationDays}:${taskDurationTime}`}</small>
+                        <small className="float-right">{`${taskDurationDays} ${taskDurationTime}`}</small>
                     </div>
                     <div className="clearfix">
                         <small>{taskDetail}</small>

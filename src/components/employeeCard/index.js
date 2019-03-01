@@ -47,7 +47,7 @@ function isAdminMark(isAdmin) {
     if (isAdmin) {
         return (<sup className="fas fa-asterisk text-danger aster-size m-2" />);
     }
-    return <></>; 
+    return <></>;
 }
 
 /**

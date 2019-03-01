@@ -42,7 +42,7 @@ export class Workflows extends React.Component {
         };
         const workflow = workflows[this.workflowId];
         if (workflow) {
-            const { name: workflowName, startDateTime, creator } = workflow;
+            const { name: workflowName, startDateTime } = workflow;
             this.constrainStartDateTime = moment(startDateTime);
             this.state = {
                 ...this.state,
@@ -116,8 +116,10 @@ export class Workflows extends React.Component {
     }
 
     evaluatePermissions() {
-        const { redirect, currentUser } = this.props;
+        const { redirect, currentUser, workflows } = this.props;
         const { workflowPermissions } = this.state;
+        const workflow = workflows[this.workflowId];
+
         let currentPermission;
         Object.keys(workflowPermissions).map(pId => {
             const per = workflowPermissions[pId];
@@ -126,6 +128,15 @@ export class Workflows extends React.Component {
             }
             return null;
         });
+
+        const { tasks } = workflow;
+        Object.keys(tasks).forEach(tId => {
+            const task = tasks[tId];
+            if (task.assignee === currentUser.id) {
+                currentPermission = task.assignee;
+            }
+        });
+
         if (!currentUser.isAdmin && currentPermission === undefined) {
             redirect(ApiConstants.WORKFLOWS_PAGE);
         }
@@ -140,9 +151,7 @@ export class Workflows extends React.Component {
             return (
                 <React.Fragment>
                     <LinkContainer to={ApiConstants.TEMPLATES_PAGE}>
-                        <Button variant="primary">
-                            {'New Workflow'}
-                        </Button>
+                        <Button variant="primary">New Workflow</Button>
                     </LinkContainer>
                 </React.Fragment>
             );
@@ -253,12 +262,11 @@ export class Workflows extends React.Component {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col md={10} sm xs={12}>
-                        <Form onSubmit={
-                            e => {
+                        <Form
+                            onSubmit={e => {
                                 e.preventDefault();
                                 this.updateWorkflow();
-                            }
-                        }
+                            }}
                         >
                             <Form.Group as={Row} controlId="WorkflowName">
                                 <Form.Label column sm={4}>
@@ -281,7 +289,7 @@ export class Workflows extends React.Component {
                                 </Form.Label>
                                 <Col sm={8}>
                                     <DateTimeField
-                                        disabled={(startDateTime < moment()) || !editable}
+                                        disabled={startDateTime < moment() || !editable}
                                         constraintMoment={moment()}
                                         givenMoment={startDateTime}
                                         onChange={this.setStartDateTime}
@@ -310,11 +318,31 @@ export class Workflows extends React.Component {
                                 />
                             </Form.Row>
                             <Form.Row className="col-12">{this.createTasks()}</Form.Row>
-                            <Form.Group>
-                                <Col sm={8}>
-                                    <Button variant="primary" type="submit">
+                            <Form.Group className="mr-2">
+                                <Col className=" clearfix">
+                                    <Button variant="primary" type="submit" className="float-left">
                                         Update Workflow
                                     </Button>
+                                    <div className="float-right">
+                                        <LinkContainer
+                                            to={`${ApiConstants.WORKFLOW_PAGE}/${this.workflowId}${
+                                                ApiConstants.HISTORY_PAGE
+                                            }`}
+                                        >
+                                            <Button variant="secondary" type="button" className="float-left mr-2">
+                                                History
+                                            </Button>
+                                        </LinkContainer>
+                                        <LinkContainer
+                                            to={`${ApiConstants.WORKFLOW_PAGE}/${this.workflowId}${
+                                                ApiConstants.WORKFLOW_REPORT_PAGE
+                                            }`}
+                                        >
+                                            <Button variant="secondary" type="button" className="float-left">
+                                                Report
+                                            </Button>
+                                        </LinkContainer>
+                                    </div>
                                 </Col>
                             </Form.Group>
                         </Form>

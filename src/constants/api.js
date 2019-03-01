@@ -45,13 +45,19 @@ export default {
         workflow: {
             FETCH: 'workflow/',
         },
+        report: {
+            WORKFLOW: 'workflow-report/',
+            EMPLOYEE: 'employee-report/',
+        },
     },
     COMPANY_PAGE: `/${FIELD_TYPE.COMPANY}`,
     CREATE_COMPANY_PAGE: `/${FIELD_TYPE.CREATE_COMAPNY}`,
     DASHBOARD_PAGE: `/${FIELD_TYPE.DASHBOARD}`,
     EMPLOYEE_PAGE: '/employee',
+    EMPLOYEE_REPORT_PAGE: '/report',
     EMPLOYEES_PAGE: `/${FIELD_TYPE.EMPLOYEES}`,
     FORGOT_PASSWORD_PAGE: '/forgot-password',
+    HISTORY_PAGE: '/history',
     HOME_PAGE: '/',
     INVITATION_PAGE: '/invitation',
     INVITE_PAGE: `/${FIELD_TYPE.INVITE}`,
@@ -64,5 +70,6 @@ export default {
     TASK_PAGE: '/task',
     TEMPLATES_PAGE: `/${FIELD_TYPE.WORKFLOWS}/${FIELD_TYPE.TEMPLATES}`,
     WORKFLOW_PAGE: '/workflow',
+    WORKFLOW_REPORT_PAGE: '/report',
     WORKFLOWS_PAGE: `/${FIELD_TYPE.WORKFLOWS}`,
 };

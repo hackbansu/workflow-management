@@ -10,11 +10,14 @@ import CreateCompany from 'containers/createCompany';
 import CreateWorkflow from 'containers/createWorkflow';
 import Dashboard from 'containers/dashboard';
 import Employee from 'containers/employee';
+import EmployeeReport from 'containers/employeeReport';
 import Employees from 'containers/employees';
 import Invite from 'containers/invite';
 import Profile from 'containers/profile';
 import Workflow from 'containers/workflow';
+import WorkflowReport from 'containers/workflowReport';
 import Workflows from 'containers/workflows';
+import WorkflowHistory from 'containers/workflowHistory';
 import WorkflowTemplates from 'containers/workflowTemplates';
 import Task from 'containers/task';
 
@@ -75,7 +78,6 @@ export class Home extends React.Component {
 
             // dispatch action to update user token and data
             updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
-
 
             // fetch user company details.
             makeCompanyFetchRequest().then(obj => {
@@ -197,6 +199,20 @@ export class Home extends React.Component {
                                 />
                                 <PrivateRoute
                                     exact
+                                    path={`${ApiConstants.WORKFLOW_PAGE}/:id${ApiConstants.HISTORY_PAGE}`}
+                                    component={WorkflowHistory}
+                                    condition={isAdmin}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.WORKFLOW_PAGE}/:id${ApiConstants.WORKFLOW_REPORT_PAGE}`}
+                                    component={WorkflowReport}
+                                    condition={isAdmin}
+                                    redirectUrl={`${ApiConstants.WORKFLOW_PAGE}/:id`}
+                                />
+                                <PrivateRoute
+                                    exact
                                     path={`${ApiConstants.TASK_PAGE}/:id`}
                                     component={Task}
                                     condition={isPartOfComapany}
@@ -228,6 +244,13 @@ export class Home extends React.Component {
                                     component={Employee}
                                     condition={isPartOfComapany}
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.EMPLOYEE_PAGE}/:id${ApiConstants.EMPLOYEE_REPORT_PAGE}`}
+                                    component={EmployeeReport}
+                                    condition={isAdmin}
+                                    redirectUrl={`${ApiConstants.WORKFLOW_PAGE}/:id`}
                                 />
                                 <PrivateRoute
                                     path={ApiConstants.INVITE_PAGE}
@@ -270,8 +293,7 @@ Home.propTypes = {
     redirectPage: PropTypes.func.isRequired,
 };
 
-Home.defaultProps = {
-};
+Home.defaultProps = {};
 
 const mapStateToProps = state => ({
     currentUser: state.currentUser,

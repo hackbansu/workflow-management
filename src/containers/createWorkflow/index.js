@@ -89,8 +89,8 @@ export class CreateWorkflow extends React.Component {
                 const task = data.tasks[taskId];
                 return {
                     title: task.taskTitle,
-                    start_delta: `${task.taskStartDeltaDays}:${task.taskStartDeltaTime}`,
-                    duration: `${task.taskDurationDays}:${task.taskDurationTime}`,
+                    start_delta: `${task.taskStartDeltaDays} ${task.taskStartDeltaTime}:00`,
+                    duration: `${task.taskDurationDays} ${task.taskDurationTime}:00`,
                     description: task.taskDetail,
                     assignee: task.assignee,
                     parent_task: task.parentTask,

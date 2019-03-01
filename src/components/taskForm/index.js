@@ -177,9 +177,9 @@ class TaskForm extends React.Component {
         return <></>;
     }
 
-    renderCompleteBtn() {
+    renderCompleteBtn(disabled) {
         const { completeAction } = this.props;
-        if (completeAction) {
+        if (completeAction && !disabled) {
             return (
                 <Form.Group className="float-right">
                     <Button variant="success" onClick={completeAction}>Complete Task</Button>
@@ -335,7 +335,7 @@ class TaskForm extends React.Component {
                             Save Task
                         </Button>
                     </Form.Group>
-                    {this.renderCompleteBtn(taskStatus)}
+                    {this.renderCompleteBtn(disabled)}
                 </div>
             </div>
         );

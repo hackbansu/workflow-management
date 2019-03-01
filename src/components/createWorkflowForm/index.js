@@ -10,6 +10,7 @@ import TaskForm from 'components/taskForm';
 import WorkflowPermissions from 'components/workflowPermissions';
 import { validateTextString, validateDate } from 'utils/validators';
 import { toast } from 'react-toastify';
+import DefaultConstants from 'constants/index';
 
 
 export class CreateWorkflow extends React.Component {
@@ -180,7 +181,7 @@ export class CreateWorkflow extends React.Component {
                         <Form.Control
                             size="sm"
                             type="text"
-                            value={(completeAt).format('YYYY-MM-DD HH:mm')}
+                            value={(completeAt).format(DefaultConstants.DATE_TIME_FORMAT)}
                             readOnly
                         />
                     </Col>

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { DatetimePickerTrigger } from 'rc-datetime-picker';
 import { validateDate } from 'utils/validators';
 import { toast } from 'react-toastify';
+import DefaultConstants from 'constants/index';
 
 import 'rc-datetime-picker/dist/picker.css';
 
@@ -58,7 +59,7 @@ class DateTimeField extends React.Component {
                 <input
                     type="text"
                     className="form-control form-control-sm"
-                    value={currentMoment.format('YYYY-MM-DD HH:mm')}
+                    value={currentMoment.format(DefaultConstants.DATE_TIME_FORMAT)}
                     readOnly
                 />
             </DatetimePickerTrigger>

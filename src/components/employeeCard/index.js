@@ -8,7 +8,7 @@ import ApiConstants from 'constants/api';
 import './index.scss';
 
 function extraDetails({ isAdmin, email, joinAt, leftAt }) {
-    leftAt = (leftAt && leftAt.lenght) ? leftAt : 'present Day';
+    leftAt = (leftAt && leftAt.lenght) ? leftAt : 'present day';
     if (isAdmin) {
         return (
             <React.Fragment>

@@ -2,6 +2,7 @@ export default {
     PROFILE_PIC_TYPES: '.jpg,.png,.jpeg',
     COMPANY_LOGO_PIC_TYPES: '.jpg,.png,.jpeg',
     INVITE_FILE_TYPES: '.csv',
+    DATE_TIME_FORMAT: 'YYYY-MM-DD HH:mm',
 };
 
 export const regexConst = {

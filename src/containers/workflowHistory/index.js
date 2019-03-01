@@ -12,6 +12,8 @@ import { makeFetchWorkflowHistory } from 'services/workflow';
 import { errorParser } from 'utils/helpers/errorHandler';
 import { toast } from 'react-toastify';
 import { showLoader } from 'utils/helpers/loader';
+import DefaultConstants from 'constants/index';
+
 
 export class WorkflowsHistory extends React.Component {
     constructor(props) {
@@ -45,7 +47,7 @@ export class WorkflowsHistory extends React.Component {
 
     getDateTime(created) {
         const ts = new Moment(created);
-        return ts.format('YYYY:MM:DD hh:mm');
+        return ts.format(DefaultConstants.DATE_TIME_FORMAT);
     }
 
     render() {

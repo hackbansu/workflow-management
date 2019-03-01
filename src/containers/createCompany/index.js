@@ -40,22 +40,27 @@ export class CreateCompany extends React.Component {
         };
 
         // call the service function
-        makeCreateCompanyRequest(data).then(obj => {
-            showLoader(false);
-
-            if (!obj) {
-                return;
-            }
-
-            const { response, body } = obj;
-            if (response.status !== 200) {
-                const errorMsg = errorParser(body, 'Sorry, Company create request is failed.');
+        makeCreateCompanyRequest(data)
+            .then(obj => {
+                if (!obj) {
+                    return;
+                }
+                const { response, body } = obj;
+                if (response.status !== 200) {
+                    const errorMsg = errorParser(body, 'Sorry, Company create request is failed.');
+                    showModal('Create Failed', errorMsg);
+                    return;
+                }
+                showModal(
+                    'Create Successful',
+                    'You company has been submitted for verification. Please check your mail.'
+                );
+            })
+            .catch(err => {
+                const errorMsg = errorParser(err, 'Sorry, Company create request is failed.');
                 showModal('Create Failed', errorMsg);
-                return;
-            }
-
-            showModal('Create Successful', 'You company has been submitted for verification. Please check your mail.');
-        });
+            })
+            .finally(() => showLoader(false));
     };
 
     /**

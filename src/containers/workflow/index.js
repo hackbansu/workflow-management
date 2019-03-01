@@ -42,7 +42,7 @@ export class Workflows extends React.Component {
         };
         const workflow = workflows[this.workflowId];
         if (workflow) {
-            const { name: workflowName, startDateTime, creator } = workflow;
+            const { name: workflowName, startDateTime } = workflow;
             this.constrainStartDateTime = moment(startDateTime);
             this.state = {
                 ...this.state,
@@ -130,7 +130,8 @@ export class Workflows extends React.Component {
         });
 
         const { tasks } = workflow;
-        tasks.forEach(task => {
+        Object.keys(tasks).forEach(tId => {
+            const task = tasks[tId];
             if (task.assignee === currentUser.id) {
                 currentPermission = task.assignee;
             }
@@ -322,15 +323,26 @@ export class Workflows extends React.Component {
                                     <Button variant="primary" type="submit" className="float-left">
                                         Update Workflow
                                     </Button>
-                                    <LinkContainer
-                                        to={`${ApiConstants.WORKFLOW_PAGE}/${this.workflowId}${
-                                            ApiConstants.WORKFLOW_REPORT_PAGE
-                                        }`}
-                                    >
-                                        <Button variant="secondary" type="button" className="float-right">
-                                            Report
-                                        </Button>
-                                    </LinkContainer>
+                                    <div className="float-right">
+                                        <LinkContainer
+                                            to={`${ApiConstants.WORKFLOW_PAGE}/${this.workflowId}${
+                                                ApiConstants.HISTORY_PAGE
+                                            }`}
+                                        >
+                                            <Button variant="secondary" type="button" className="float-left mr-2">
+                                                History
+                                            </Button>
+                                        </LinkContainer>
+                                        <LinkContainer
+                                            to={`${ApiConstants.WORKFLOW_PAGE}/${this.workflowId}${
+                                                ApiConstants.WORKFLOW_REPORT_PAGE
+                                            }`}
+                                        >
+                                            <Button variant="secondary" type="button" className="float-left">
+                                                Report
+                                            </Button>
+                                        </LinkContainer>
+                                    </div>
                                 </Col>
                             </Form.Group>
                         </Form>

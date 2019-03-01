@@ -63,6 +63,7 @@ export default {
     EMPLOYEE_REPORT_PAGE: '/report',
     EMPLOYEES_PAGE: `/${FIELD_TYPE.EMPLOYEES}`,
     FORGOT_PASSWORD_PAGE: '/forgot-password',
+    HISTORY_PAGE: '/history',
     HOME_PAGE: '/',
     INVITATION_PAGE: '/invitation',
     INVITE_PAGE: `/${FIELD_TYPE.INVITE}`,

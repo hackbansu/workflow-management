@@ -18,6 +18,7 @@ import Profile from 'containers/profile';
 import Workflow from 'containers/workflow';
 import WorkflowReport from 'containers/workflowReport';
 import Workflows from 'containers/workflows';
+import WorkflowHistory from 'containers/workflowHistory';
 import WorkflowTemplates from 'containers/workflowTemplates';
 import Task from 'containers/task';
 
@@ -195,6 +196,13 @@ export class Home extends React.Component {
                                     path={`${ApiConstants.WORKFLOW_PAGE}/:id`}
                                     component={Workflow}
                                     condition={isPartOfComapany}
+                                    redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path={`${ApiConstants.WORKFLOW_PAGE}/:id${ApiConstants.HISTORY_PAGE}`}
+                                    component={WorkflowHistory}
+                                    condition={isAdmin}
                                     redirectUrl={ApiConstants.CREATE_COMPANY_PAGE}
                                 />
                                 <PrivateRoute

@@ -24,7 +24,7 @@ import PrivateRoute from 'components/privateRoute';
  */
 export class App extends React.Component {
     render() {
-        const { toast, token, loader, modal } = this.props;
+        const { token, loader, modal } = this.props;
         let isLoggedIn = false;
         if (token && token !== '') {
             isLoggedIn = true;
@@ -93,10 +93,6 @@ export class App extends React.Component {
 
 App.propTypes = {
     token: PropTypes.string,
-    toast: PropTypes.shape({
-        show: PropTypes.bool,
-        text: PropTypes.string,
-    }),
     modal: PropTypes.shape({
         heading: PropTypes.string,
         text: PropTypes.string,
@@ -109,10 +105,6 @@ App.propTypes = {
 
 App.defaultProps = {
     token: '',
-    toast: {
-        show: false,
-        text: 'There is no text here',
-    },
     modal: {
         heading: 'heading',
         text: 'There is no text here',

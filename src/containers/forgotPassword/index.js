@@ -50,7 +50,7 @@ export class ForgotPassword extends React.Component {
                 return;
             }
 
-            showModal('Email Sent', 'Reset link has been sent on the provided email.');
+            showModal('Email Sent', `Reset link has been sent on ${email}`);
         });
     };
 
@@ -63,7 +63,7 @@ export class ForgotPassword extends React.Component {
                 <div className="container entry-form-container">
                     <PageBanner text="Forgot Password" />
                     <ForgotPasswordForm onSubmit={this.onSubmit} />
-                    <ul className="nav justify-content-center page-nav-links">
+                    <ul className="nav justify-content-center page-nav-links text-primary">
                         <LinkButton name="Back to login" toUrl={ApiConstants.LOGIN_PAGE} />
                     </ul>
                 </div>

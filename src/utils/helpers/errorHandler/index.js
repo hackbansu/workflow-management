@@ -15,7 +15,8 @@ function errorObjectParser(errors) {
 
                 errorMsg = errorStringParser(errorMsg, msg);
             } else {
-                const msg = `${errName}: ${errorCategoriser(errors[errName])}`;
+                // const msg = `${errName}: ${errorCategoriser(errors[errName])}`;
+                const msg = `${errorCategoriser(errors[errName])}`;
                 errorMsg = errorStringParser(errorMsg, msg);
             }
         }
@@ -36,7 +37,8 @@ errorCategoriser = function errorCategoriser(errors) {
     let errorMsg = '';
     if (errors instanceof Array) {
         let msg = errorArrayParser(errors);
-        msg = `[${msg}]`;
+        // msg = `[${msg}]`;
+        msg = `${msg}`;
         errorMsg = errorStringParser(errorMsg, msg);
     } else if (errors instanceof Object) {
         const msg = errorObjectParser(errors);

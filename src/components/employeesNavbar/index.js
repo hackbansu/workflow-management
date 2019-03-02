@@ -25,13 +25,15 @@ export class EmployeesNavbar extends React.Component {
     }
 
     searchAction = searchVal => ev => {
-        const { onSearch } = this.props;
+        const { onSearch, isAdmin } = this.props;
         ev.preventDefault();
-        this.activeElement.classList.remove('active');
-        this.activeElement = document.getElementsByClassName('navbar-nav mr-auto')[0].children[0];
+        if (isAdmin) {
+            this.activeElement.classList.remove('active');
+            this.activeElement = document.getElementsByClassName('navbar-nav mr-auto')[0].children[0];
 
-        if (searchVal === '') {
-            this.activeElement.classList.add('active');
+            if (searchVal === '') {
+                this.activeElement.classList.add('active');
+            }
         }
         onSearch(searchVal.toLowerCase());
     };
@@ -62,10 +64,7 @@ export class EmployeesNavbar extends React.Component {
                 </React.Fragment>
             );
         }
-        return (
-            <React.Fragment>
-            </React.Fragment>
-        );
+        return <React.Fragment />;
     }
 
     render() {
@@ -89,7 +88,7 @@ export class EmployeesNavbar extends React.Component {
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto" onClick={this.clickAction}>
-                        { this.filterOptions() }
+                        {this.filterOptions()}
                     </ul>
                     <form className="form-inline my-2 my-lg-0" onSubmit={this.searchAction(searchVal)}>
                         <input
@@ -116,7 +115,6 @@ EmployeesNavbar.propTypes = {
     isAdmin: PropTypes.bool.isRequired,
 };
 
-EmployeesNavbar.defaultProps = {
-};
+EmployeesNavbar.defaultProps = {};
 
 export default EmployeesNavbar;

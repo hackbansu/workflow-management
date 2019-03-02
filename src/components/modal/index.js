@@ -12,7 +12,7 @@ function ModalComponent({ heading, text, showModal }) {
             {text.split('\n').map(val => {
                 val = val.trim();
                 if (val) {
-                    return <Modal.Body>{val}</Modal.Body>;
+                    return <Modal.Body key={`${Math.random()}-modal`}>{val}</Modal.Body>;
                 }
                 return '';
             })}

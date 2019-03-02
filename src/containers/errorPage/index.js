@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import { Link } from 'react-router-dom';
 
 import ApiConstants from 'constants/api';
+import ErrorComponent from 'components/errorPage';
 
 import './index.scss';
 
@@ -19,8 +20,8 @@ export class ErrorPage extends React.Component {
         };
     }
 
-    componentDidMount() {
-        const { match, redirect } = this.props;
+    componentWillMount() {
+        const { match } = this.props;
         let { errorNumber } = match.params;
         errorNumber = parseInt(errorNumber);
         let errorMsg = '';
@@ -32,8 +33,7 @@ export class ErrorPage extends React.Component {
         } else if (errorNumber >= 500) {
             errorMsg = `${errorNumber} Internal Server Error`;
         } else {
-            redirect(ApiConstants.NOT_FOUND_PAGE);
-            return;
+            errorMsg = `${errorNumber}`;
         }
 
         this.setState({
@@ -44,31 +44,12 @@ export class ErrorPage extends React.Component {
     render() {
         const { errorMsg } = this.state;
 
-        return (
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="error-template">
-                            <h1>Oops!</h1>
-                            <h2>{errorMsg}</h2>
-                            <div className="error-details">Sorry, an error has occured, Requested page not found!</div>
-                            <div className="error-actions">
-                                <Link to={ApiConstants.HOME_PAGE} className="btn btn-info btn-lg">
-                                    <span className="fa fa-home mr-3" />
-                                    Take Me Home
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        return <ErrorComponent errMsg={errorMsg} />;
     }
 }
 
 ErrorPage.propTypes = {
     match: PropTypes.object.isRequired,
-    redirect: PropTypes.func.isRequired,
 };
 
 ErrorPage.defaultProps = {};

@@ -36,7 +36,7 @@ function redirect(url) {
 }
 
 export function makefetchAllTasks() {
-    return makeApiRequest(task.FETCH);
+    return makeApiRequest(task.FETCH, 'GET');
 }
 
 export function makeFetchTaskRequest(taskId) {
@@ -88,8 +88,6 @@ export function getAllWorkflows() {
             const { response } = obj;
             let { body } = obj;
             if (response.status !== 200) {
-                const errMsg = errorParser(body);
-                toast.error(errMsg);
                 return Promise.reject();
             }
             body = parseWorkflow(body);
@@ -106,8 +104,6 @@ export async function getAllTasks() {
     try {
         const { response, body } = await makefetchAllTasks();
         if (!response.ok) {
-            const errMsg = errorParser(body);
-            toast.error(errMsg);
             return;
         }
         const tasks = formatTasks(body);

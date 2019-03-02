@@ -11,7 +11,6 @@ import WorkflowCard from 'components/workflowCard';
 import { getAllWorkflows } from 'services/workflow';
 import { getAllEmployees } from 'services/employees';
 import { Container, Row, Button } from 'react-bootstrap';
-import { parseDateTime } from 'utils/helpers';
 
 export class Workflows extends React.Component {
     constructor(props) {

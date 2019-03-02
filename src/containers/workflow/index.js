@@ -60,12 +60,9 @@ export class Workflows extends React.Component {
     }
 
     async componentDidMount() {
-        const { workflows } = this.props;
         getAllEmployees();
 
-        // if (!Object.hasOwnProperty.call(workflows, this.workflowId)) {
         showLoader(true);
-        // fetch workflow if not in store
         try {
             const workflow = await getWorkflow(this.workflowId);
             const { creator } = workflow;
@@ -79,9 +76,6 @@ export class Workflows extends React.Component {
         } catch (e) {
             return Promise.reject(e);
         }
-        // }
-        // const workflow = workflows[this.workflowId];
-        // return this.setCreator(workflow.creator);
     }
 
     async setCreator(creator) {

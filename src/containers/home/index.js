@@ -21,7 +21,6 @@ import Workflows from 'containers/workflows';
 import WorkflowHistory from 'containers/workflowHistory';
 import WorkflowTemplates from 'containers/workflowTemplates';
 import Task from 'containers/task';
-
 // import Constants from constant file.
 import UserConstants from 'constants/user';
 import ApiConstants from 'constants/api';
@@ -53,7 +52,7 @@ export class Home extends React.Component {
     }
 
     componentWillMount() {
-        const { updateProfile, updateCompany, currentUser } = this.props;
+        const { updateProfile, updateCompany, currentUser, redirectPage } = this.props;
         const { isAdmin, designation, status: userStatus } = currentUser;
 
         // fetch user details
@@ -89,6 +88,7 @@ export class Home extends React.Component {
                 const { response, body } = obj;
 
                 if (response.status === 404) {
+                    redirectPage(ApiConstants.CREATE_COMPANY_PAGE);
                     return;
                 }
 

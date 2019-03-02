@@ -25,5 +25,5 @@ export function makeUpdateRequest(address, city, state, links, logo, companyId) 
 }
 
 export function makeFetchRequest() {
-    return makeApiRequest(companyApiUrls.FETCH, 'GET');
+    return makeApiRequest(companyApiUrls.FETCH);
 }

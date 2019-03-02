@@ -27,9 +27,6 @@ function apiErrorHandler(response, body) {
     if (response.status === 403) {
         store.dispatch(push(ApiConstants.UNAUTHORIZED_PAGE));
     }
-    if (response.status === 404) {
-        store.dispatch(push(ApiConstants.NOT_FOUND_PAGE));
-    }
     if (response.status >= 405 && response.status < 500) {
         errorMsg = errorParser(body, 'Api error occur');
         toast.error(errorMsg);
@@ -44,10 +41,16 @@ function apiErrorHandler(response, body) {
  * @param {object} data - data to send in case of POST request
  * @param {string} token - token of the user to send
  */
-export function makeApiRequest(url, method = 'GET', data = undefined, contentType = 'application/json') {
+export function makeApiRequest(
+    url,
+    method = 'GET',
+    data = undefined,
+    contentType = 'application/json',
+    exceptStatus
+) {
+    exceptStatus = exceptStatus || [];
     url = ApiConstants.API_URL + url;
     const token = store.getState().currentUser.token ? `Token ${store.getState().currentUser.token}` : '';
-
     let body;
     if (data) {
         body = data;
@@ -75,8 +78,9 @@ export function makeApiRequest(url, method = 'GET', data = undefined, contentTyp
             .catch(err => ({ response, body: null })))
         .then(({ response, body }) => {
             if (response.status >= 400) {
-                apiErrorHandler(response, body);
-                // return Promise.reject();
+                if (exceptStatus.indexOf(response.status) === -1) {
+                    apiErrorHandler(response, body);
+                }
             }
             return { response, body };
         })

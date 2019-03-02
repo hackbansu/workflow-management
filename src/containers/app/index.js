@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import ApiConstants from 'constants/api';
-
+import Error from 'components/errorPage';
 import ErrorPage from 'containers/errorPage';
 import LoginPage from 'containers/loginPage';
 import Signup from 'containers/signup';
@@ -81,7 +81,9 @@ export class App extends React.Component {
                         condition={isLoggedIn}
                         redirectUrl={ApiConstants.LOGIN_PAGE}
                     />
-                    <Route component={Default} />
+                    <Route
+                        render={(props) => <Error {...props} errMsg="404 Page Not Found" />}
+                    />
                 </Switch>
                 <ToastContainer autoClose={4000} />
                 <Loader show={loader.show} />

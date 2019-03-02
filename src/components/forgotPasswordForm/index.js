@@ -51,6 +51,10 @@ export class ForgotPasswordForm extends React.Component {
         }
 
         onSubmit(email);
+
+        this.setState({
+            email: '',
+        });
     };
 
     /**

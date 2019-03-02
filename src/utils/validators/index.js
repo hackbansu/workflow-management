@@ -2,17 +2,14 @@ import constants, { regexConst } from 'constants/index.js';
 import moment from 'moment';
 
 export function validateEmail(email) {
-    // const re = /^[\w\d._]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-    // const re = /\*/;
-    // const isValid = re.test(String(email).toLowerCase());
+    const isValid = regexConst.email.test(String(email));
 
-    // if (!isValid) {
-    //     return {
-    //         isValid,
-    //         message: email.length === 0 ? 'This field is required' : 'Invalid email',
-    //     };
-    // }
-    const isValid = true;
+    if (!isValid) {
+        return {
+            isValid,
+            message: email.length === 0 ? 'This field is required' : 'Invalid email',
+        };
+    }
     return {
         isValid,
         message: '',

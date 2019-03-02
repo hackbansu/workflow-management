@@ -9,9 +9,17 @@ function ModalComponent({ heading, text, showModal }) {
             <Modal.Header closeButton>
                 <Modal.Title>{heading}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>{text}</Modal.Body>
+            {text.split('\n').map(val => {
+                val = val.trim();
+                if (val) {
+                    return <Modal.Body>{val}</Modal.Body>;
+                }
+                return '';
+            })}
             <Modal.Footer>
-                <Button variant="primary" onClick={hideModal}>Close</Button>
+                <Button variant="primary" onClick={hideModal}>
+                    Close
+                </Button>
             </Modal.Footer>
         </Modal>
     );

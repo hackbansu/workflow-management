@@ -215,7 +215,7 @@ class TaskForm extends React.Component {
 
     render() {
         // TODO:Implement to render extra field in taks using task props.
-        const { task: taskStructure, employees, taskInformation } = this.props;
+        const { task: taskStructure, employees, taskInformation, currentUser } = this.props;
         let { disabled } = this.props;
         const {
             taskTitle,
@@ -255,7 +255,7 @@ class TaskForm extends React.Component {
                         </Form.Label>
                         <Col sm={12} key={`${assignee}-assignee`}>
                             <Form.Control
-                                disabled={disabled}
+                                disabled={disabled || !currentUser.isAdmin}
                                 size="sm"
                                 as="select"
                                 value={assignee}
@@ -368,6 +368,7 @@ TaskForm.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+    currentUser: state.currentUser,
 });
 
 export default connect(mapStateToProps)(TaskForm);

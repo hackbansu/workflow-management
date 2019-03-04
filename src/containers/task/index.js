@@ -8,6 +8,7 @@ import { push } from 'connected-react-router';
 
 import TaskForm from 'components/taskForm';
 import UserConst from 'constants/user';
+import TaskConst from 'constants/task';
 import { updateWorkflowAction } from 'actions/workflow';
 import { Link } from 'react-router-dom';
 import { getTask, makeUpdateTask, makeTaskComplete, makeFetchWorkflowPermissions } from 'services/workflow';
@@ -91,7 +92,9 @@ export class Task extends React.Component {
             if (!response.ok) {
                 throw new Error(body);
             }
-            this.setState({ permissions: body }, () => { this.permission(); });
+            this.setState({ permissions: body }, () => {
+                this.permission();
+            });
             // this.permission();
         } catch (err) {
             const errMsg = errorParser(err, 'failed to fetch permission');
@@ -104,7 +107,6 @@ export class Task extends React.Component {
     permission() {
         const { currentUser, redirect } = this.props;
         const { task, permissions } = this.state;
-
 
         const userPermission = permissions.filter(perm => perm.employee === currentUser.employeeId);
         if (currentUser.employeeId !== task.assignee && !currentUser.isAdmin && !userPermission.length) {
@@ -121,6 +123,8 @@ export class Task extends React.Component {
     }
 
     submitForm(taskInformation, taskId) {
+        const { task } = this.state;
+        const { currentUser } = this.props;
         const {
             assignee,
             taskDetail,
@@ -128,7 +132,8 @@ export class Task extends React.Component {
             taskDurationTime,
             taskStartDeltaDays,
             taskStartDeltaTime,
-            taskTitle } = taskInformation;
+            taskTitle,
+        } = taskInformation;
         const submitData = {
             title: taskTitle,
             description: taskDetail,
@@ -136,6 +141,13 @@ export class Task extends React.Component {
             start_delta: `${taskStartDeltaDays}:${taskStartDeltaTime}`,
             duration: `${taskDurationDays}:${taskDurationTime}`,
         };
+        if (task.status && task.status !== TaskConst.STATUS.UPCOMMING) {
+            delete submitData.start_delta;
+        }
+        if (!currentUser.isAdmin) {
+            delete submitData.assignee;
+        }
+
         showLoader(true);
         makeUpdateTask(taskId, submitData)
             .then(res => {

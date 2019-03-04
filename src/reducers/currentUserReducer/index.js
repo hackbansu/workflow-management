@@ -32,6 +32,7 @@ export default (state = initialState, action) => {
             isAdmin: action.isAdmin,
             designation: action.designation,
             status: action.status,
+            employeeId: action.employeeId,
         };
 
     case UPDATE_COMPANY:

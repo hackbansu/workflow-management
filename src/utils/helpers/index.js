@@ -87,7 +87,7 @@ export function getRandomBorder() {
 
 export function formatTasks(tasks) {
     tasks = tasks || [];
-    const upcomming = tasks.filter(task => task.status === TaskConstants.STATUS.UPCOMMING);
+    const upcomming = tasks.filter(task => task.status === TaskConstants.STATUS.UPCOMMING || task.status === TaskConstants.STATUS.SCHEDULED);
     const ongoing = tasks.filter(task => task.status === TaskConstants.STATUS.ONGOING);
     const complete = tasks.filter(task => task.status === TaskConstants.STATUS.COMPLETE);
     return {

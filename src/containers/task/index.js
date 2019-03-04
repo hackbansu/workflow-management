@@ -24,7 +24,7 @@ export class Task extends React.Component {
         this.taskId = taskId;
         this.state = {
             task: {
-                assignee: currentUser.id,
+                assignee: currentUser.employeeId,
             },
             editable: true,
         };
@@ -53,18 +53,9 @@ export class Task extends React.Component {
         showLoader(true);
         const { redirect } = this.props;
         try {
-            // const { ongoingTasks, upcommingTasks, completeTasks } = this.props;
-            // if (Object.hasOwnProperty.call(ongoingTasks, this.taskId)) {
-            //     this.setState({ task: apiTaskFormCouple(ongoingTasks[this.taskId]) });
-            // } else if (Object.hasOwnProperty.call(upcommingTasks, this.taskId)) {
-            //     this.setState({ task: apiTaskFormCouple(upcommingTasks[this.taskId]) });
-            // } else if (Object.hasOwnProperty.call(completeTasks, this.taskId)) {
-            //     this.setState({ task: apiTaskFormCouple(completeTasks[this.taskId]) });
-            // } else {
             const task = await getTask(this.taskId);
             this.setState({ task });
             await this.fetchPermissions();
-            // }
         } catch (error) {
             // redirect(ApiConstants.DASHBOARD_PAGE);
         } finally {
@@ -115,9 +106,8 @@ export class Task extends React.Component {
         const { task, permissions } = this.state;
 
 
-        const userPermission = permissions.filter(perm => perm.employee === currentUser.id);
-
-        if (currentUser.id !== task.assignee && !currentUser.isAdmin && !userPermission.length) {
+        const userPermission = permissions.filter(perm => perm.employee === currentUser.employeeId);
+        if (currentUser.employeeId !== task.assignee && !currentUser.isAdmin && !userPermission.length) {
             redirect(ApiConstants.DASHBOARD_PAGE);
         }
 

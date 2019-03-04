@@ -100,13 +100,13 @@ export class Home extends React.Component {
                 }
 
                 const { id: companyId, name, address, city, state, logo_url: logo, status, links } = body.company;
-                const { is_admin: isAdmin, designation, status: userStatus } = body;
+                const { is_admin: isAdmin, designation, status: userStatus, id: employeeId } = body;
 
                 // dispatch action to update employees
                 updateCompany(companyId, name, address, city, state, logo, status, links);
 
                 // dispatch action to update user data in store
-                updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus);
+                updateProfile(firstName, lastName, profilePhoto, email, userId, isAdmin, designation, userStatus, employeeId);
             });
         });
     }

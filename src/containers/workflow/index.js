@@ -117,7 +117,7 @@ export class Workflows extends React.Component {
         let currentPermission;
         Object.keys(workflowPermissions).map(pId => {
             const per = workflowPermissions[pId];
-            if (per.employee === currentUser.id) {
+            if (per.employee === currentUser.employeeId) {
                 currentPermission = per;
             }
             return null;
@@ -126,7 +126,7 @@ export class Workflows extends React.Component {
         const { tasks } = workflow;
         Object.keys(tasks).forEach(tId => {
             const task = tasks[tId];
-            if (task.assignee === currentUser.id) {
+            if (task.assignee === currentUser.employeeId) {
                 currentPermission = task.assignee;
             }
         });

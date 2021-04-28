@@ -115,9 +115,10 @@ export class Workflows extends React.Component {
         const workflow = workflows[this.workflowId];
 
         let currentPermission;
+        console.log(workflowPermissions);
         Object.keys(workflowPermissions).map(pId => {
             const per = workflowPermissions[pId];
-            if (per.employee === currentUser.employeeId) {
+            if (per.employee === String(currentUser.employeeId)) {
                 currentPermission = per;
             }
             return null;
@@ -134,7 +135,8 @@ export class Workflows extends React.Component {
         if (!currentUser.isAdmin && currentPermission === undefined) {
             redirect(ApiConstants.WORKFLOWS_PAGE);
         }
-        if (currentPermission && currentPermission.permission === UserConstants.STATUS.READ) {
+
+        if (currentPermission && currentPermission.permission === String(UserConstants.PERMISSION.READ)) {
             this.setState({ editable: false });
         }
     }
@@ -314,7 +316,11 @@ export class Workflows extends React.Component {
                             <Form.Row className="col-12">{this.createTasks()}</Form.Row>
                             <Form.Group className="mr-2">
                                 <Col className=" clearfix">
-                                    <Button variant="primary" type="submit" className="float-left">
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
+                                        className={'float-left' + (!editable ? ' hide' : '')}
+                                    >
                                         Update Workflow
                                     </Button>
                                     <div className="float-right">

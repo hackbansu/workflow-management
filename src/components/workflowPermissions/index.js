@@ -69,9 +69,10 @@ class Permissions extends React.Component {
     }
 
     render() {
+        const { disabled } = this.props;
         return (
             <div className={`border ${getRandomBorder()} p-2 mb-2 col-12`}>
-                <Form.Row className="m-2">
+                <Form.Row className={'m-2' + (disabled ? ' hide' : '')}>
                     <Form.Group>
                         <Button className="float-right" variant="primary" onClick={this.addPermission}>
                             {'Add Permission'}

@@ -42,7 +42,7 @@ export class ReportField extends React.Component {
 
 ReportField.propTypes = {
     name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.object.isRequired,
     redirectUrl: PropTypes.string,
     isList: PropTypes.bool,
 };
